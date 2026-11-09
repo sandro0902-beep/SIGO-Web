@@ -4,7 +4,8 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY . /usr/share/nginx/html/
 
 RUN cp "/usr/share/nginx/html/portal_sigo_fundaci_n_peruana_de_c_ncer.html" \
-       /usr/share/nginx/html/index.html
+       /usr/share/nginx/html/index.html \
+    && rm -f /usr/share/nginx/html/nginx.conf
 
 EXPOSE 80
 
