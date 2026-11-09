@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Monitoreo Institucional MEL — FPC</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1E293B;
+    --teal-900:#0f172a;
+    --teal-800:#1E293B;
+    --teal-700:#E30613;
+    --teal-600:#E30613;
+    --cream:#f8fafc;
+    --paper:#ffffff;
+    --line:#e2e8f0;
+    --gold:#E30613;
+    --gold-soft:#FFF0F1;
+    --green:#059669;
+    --green-bg:#ecfdf5;
+    --amber:#d97706;
+    --amber-bg:#fffbeb;
+    --red:#E30613;
+    --red-bg:#FFF0F1;
+    --muted:#8A817C;
+    --red-dark:#B8020C;
+    --grey-light:#F3F2F1;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:#E30613;color:#fff;}
+  h1,h2,h3,.serif{font-family:'Fraunces',Georgia,serif;}
+  #app{display:flex;flex-direction:column;min-height:100vh;width:100%;}
+  .topbar{
+    flex:none;height:64px;background:#fff;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;padding:0 20px;gap:16px;
+  }
+  .topbar img{height:40px;width:auto;display:block;}
+  .topbar .sep{width:1px;height:28px;background:var(--line);flex:none;}
+  .topbar .product{font-size:14px;font-weight:600;color:var(--ink);}
+  .app-body{display:flex;flex:1;min-height:0;width:100%;}
+
+  /* Sidebar */
+  .sidebar{
+    width:248px;flex:none;background:var(--teal-900);color:#e2e8f0;
+    display:flex;flex-direction:column;padding:18px 16px;
+  }
+  nav.tabs{display:flex;flex-direction:column;gap:2px;}
+  nav.tabs button{
+    all:unset;cursor:pointer;padding:10px 12px;border-radius:8px;font-size:14px;
+    color:#cbd5e1;display:flex;align-items:center;gap:10px;transition:background .15s;
+  }
+  nav.tabs button:hover{background:rgba(255,255,255,.06);}
+  nav.tabs button.active{background:var(--teal-700);color:#fff;font-weight:600;}
+  nav.tabs .n{font-variant-numeric:tabular-nums;font-size:11px;color:#fecaca;width:16px;}
+  .sidebar-foot{margin-top:auto;padding:14px 10px 4px;font-size:11.5px;color:#94a3b8;line-height:1.5;border-top:1px solid rgba(255,255,255,.12);}
+
+  /* Main */
+  main{flex:1;min-width:0;padding:30px 40px 60px;max-width:1280px;}
+  .pagehead{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:22px;gap:20px;flex-wrap:wrap;}
+  .pagehead h2{font-size:26px;margin:0 0 4px;font-weight:600;}
+  .pagehead p{margin:0;color:var(--muted);font-size:14px;max-width:640px;}
+
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:20px;}
+  .grid{display:grid;gap:18px;}
+  .grid-2{grid-template-columns:1fr 1fr;}
+  .grid-3{grid-template-columns:repeat(3,1fr);}
+  .grid-4{grid-template-columns:repeat(4,1fr);}
+  @media(max-width:1000px){.grid-4{grid-template-columns:repeat(2,1fr);} .grid-3{grid-template-columns:1fr;} .grid-2{grid-template-columns:1fr;}}
+
+  .kpi{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px 18px;}
+  .kpi .label{font-size:12.5px;color:var(--muted);margin-bottom:8px;}
+  .kpi .value{font-size:30px;font-weight:600;font-family:'Fraunces',serif;}
+  .kpi .value.green{color:var(--green);}
+  .kpi .value.amber{color:var(--amber);}
+  .kpi .value.red{color:var(--red);}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  thead th{
+    text-align:left;font-weight:600;font-size:11.5px;letter-spacing:.02em;color:var(--muted);
+    padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap;
+  }
+  tbody td{padding:9px 10px;border-bottom:1px solid #f1f5f9;vertical-align:top;}
+  tbody tr:hover{background:#f8fafc;}
+  .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--paper);}
+
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap;}
+  .pill.green{background:var(--green-bg);color:var(--green);}
+  .pill.amber{background:var(--amber-bg);color:var(--amber);}
+  .pill.red{background:var(--red-bg);color:var(--red);}
+  .pill.gray{background:#F3F2F1;color:#4A4441;}
+  .dot{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block;}
+
+  label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:4px;}
+  input,select,textarea{
+    width:100%;padding:8px 10px;border:1px solid #e2e8f0;border-radius:7px;font-size:13.5px;
+    font-family:inherit;background:#fff;color:var(--ink);
+  }
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--teal-600);outline-offset:1px;border-color:var(--teal-600);}
+  .field{margin-bottom:12px;}
+  .btn{
+    all:unset;cursor:pointer;padding:9px 16px;border-radius:7px;font-size:13.5px;font-weight:600;
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .btn.primary{background:var(--red);color:#fff;}
+  .btn.primary:hover{background:var(--red-dark);}
+  .btn.gold{background:var(--red);color:#fff;}
+  .btn.gold:hover{background:var(--red-dark);}
+  .btn.ghost{background:transparent;color:var(--teal-800);border:1px solid var(--line);}
+  .btn.ghost:hover{background:var(--grey-light);}
+  .btn.danger{background:transparent;color:var(--red);}
+  .btn.small{padding:5px 10px;font-size:12px;}
+  .btn:disabled{opacity:.45;cursor:not-allowed;}
+
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px;}
+  .toolbar .field{margin-bottom:0;min-width:170px;}
+  .section-title{font-size:15px;font-weight:600;margin:0 0 12px;display:flex;align-items:center;gap:8px;}
+  .section-title .tag{font-size:11px;background:var(--gold-soft);color:var(--red-dark);padding:2px 8px;border-radius:5px;font-weight:600;}
+  .subtle{color:var(--muted);font-size:12.5px;}
+  .divider{height:1px;background:var(--line);margin:20px 0;border:none;}
+  .modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.60);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px;}
+  .modal{background:#fff;border-radius:12px;max-width:640px;width:100%;max-height:88vh;overflow:auto;padding:26px;}
+  .modal h3{margin:0 0 16px;}
+  .close-x{all:unset;cursor:pointer;float:right;color:var(--muted);font-size:20px;line-height:1;}
+  .empty{padding:30px;text-align:center;color:var(--muted);font-size:13.5px;}
+  .flag{background:var(--gold-soft);border:1px solid #fecaca;color:var(--red-dark);font-size:12.5px;padding:10px 14px;border-radius:8px;margin-bottom:18px;}
+  .chart-box{position:relative;height:280px;width:100%;}
+  .chart-box canvas{display:block;width:100% !important;height:100% !important;}
+  .treemap{display:flex;flex-wrap:nowrap;gap:6px;height:230px;width:100%;}
+  .treemap-cell{height:100%;min-width:70px;display:flex;flex-direction:column;border-radius:6px;overflow:hidden;border:1px solid var(--line);}
+  .treemap-cell-head{background:#F3F2F1;font-size:11.5px;font-weight:600;padding:4px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .treemap-cell-body{flex:1;min-height:0;display:flex;flex-direction:column;}
+  .treemap-seg{display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;font-size:11px;font-weight:600;line-height:1.2;padding:2px 4px;overflow:hidden;border-top:1px solid rgba(255,255,255,.25);}
+  .treemap-seg:first-child{border-top:none;}
+  .treemap-legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;}
+  .legend-item{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px;}
+  .legend-dot{width:9px;height:9px;border-radius:2px;display:inline-block;}
+  .two-col{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;}
+  @media(max-width:1000px){.two-col{grid-template-columns:1fr;}}
+  a.link{color:var(--teal-700);}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+
+<script>
+/* ============================================================
+   ESTADO EN MEMORIA — datos de ejemplo basados en el catálogo real.
+   Prototipo de validación: los datos viven en memoria del navegador
+   y se reinician al recargar la página (no hay backend todavía).
+   ============================================================ */
+
+let uid = 1000;
+const nextId = () => uid++;
+
+const DB = {
+  ejes: [
+    {id:1, codigo:'EJE-01', nombre:'Fortalecimiento de políticas públicas y sistemas de respuesta oncológica', descripcion:'Generación de evidencia, incidencia y articulación multisectorial para fortalecer la respuesta oncológica nacional y regional.', activo:true},
+    {id:2, codigo:'EJE-02', nombre:'Promoción de la salud, prevención y detección temprana del cáncer', descripcion:'Educación, prevención, tamizaje y alfabetización en salud en poblaciones vulnerables.', activo:true},
+    {id:3, codigo:'EJE-03', nombre:'Atención integral, navegación y acompañamiento al paciente oncológico', descripcion:'Navegación, soporte psicosocial, alojamiento y acompañamiento integral (Programa SEPA y Albergue Frieda Heller).', activo:true},
+  ],
+
+  usuarios: [
+    {id:1, nombre:'Jackie Ramos', correo:'jackie@fpc.pe', rol:'Coordinador_MEL', ejeId:1},
+    {id:2, nombre:'Equipo Promoción', correo:'promocion@fpc.pe', rol:'Responsable_Programa', ejeId:2},
+    {id:3, nombre:'Equipo SEPA / Albergue', correo:'sepa@fpc.pe', rol:'Responsable_Programa', ejeId:3},
+  ],
+
+  indicadores: [
+    {id:1,  codigo:'Incidencia-001', nombre:'# de productos técnicos y de evidencia oncológica elaborados y difundidos durante el año', ejeId:1, tipo:'Output', unidad:'Producto técnico', frecuencia:'Anual', metodo:'Conteo', sentido:'Ascendente', fuente:'Repositorio institucional, publicaciones, observatorio FPC', responsableId:1, activo:true},
+    {id:2,  codigo:'Incidencia-005', nombre:'% de iniciativas acompañadas donde se incorporan aportes técnicos promovidos por FPC', ejeId:1, tipo:'Outcome', unidad:'%', frecuencia:'Anual', metodo:'Promedio', sentido:'Ascendente', fuente:'Reportes de seguimiento, revisión documental', responsableId:1, activo:true},
+    {id:3,  codigo:'Incidencia-006', nombre:'# de alianzas estratégicas activas con instituciones públicas, privadas o académicas', ejeId:1, tipo:'Output', unidad:'Alianza activa', frecuencia:'Semestral', metodo:'Conteo', sentido:'Ascendente', fuente:'Convenios, cartas de intención', responsableId:1, activo:true},
+    {id:4,  codigo:'Incidencia-012', nombre:'% de recursos financieros asignados a iniciativas vinculadas a la respuesta oncológica', ejeId:1, tipo:'Outcome', unidad:'Soles/dólares', frecuencia:'Semestral', metodo:'Suma', sentido:'Ascendente', fuente:'Registros financieros, convenios, grants adjudicados', responsableId:1, activo:true},
+    {id:5,  codigo:'Promoción-001', nombre:'# de estrategias comunitarias de promoción de la salud implementadas en poblaciones vulnerables', ejeId:2, tipo:'Output', unidad:'Estrategia implementada', frecuencia:'Trimestral', metodo:'Conteo', sentido:'Ascendente', fuente:'Planes de intervención, informes de actividades', responsableId:2, activo:true},
+    {id:6,  codigo:'Promoción-003', nombre:'# de personas alcanzadas mediante acciones comunitarias de promoción de la salud', ejeId:2, tipo:'Output', unidad:'Persona alcanzada', frecuencia:'Trimestral', metodo:'Suma', sentido:'Ascendente', fuente:'Listas de asistencia, reportes de campañas', responsableId:2, activo:true},
+    {id:7,  codigo:'Prevención-001', nombre:'% de participantes que incrementan conocimientos sobre prevención y detección temprana del cáncer', ejeId:2, tipo:'Outcome', unidad:'Porcentaje (%)', frecuencia:'Trimestral', metodo:'Promedio', sentido:'Ascendente', fuente:'Encuestas pre y post intervención', responsableId:2, activo:true},
+    {id:8,  codigo:'Tamizaje-001', nombre:'# de personas que acceden a servicios de tamizaje o detección temprana', ejeId:2, tipo:'Outcome', unidad:'Persona que accede a tamizaje', frecuencia:'Trimestral', metodo:'Conteo', sentido:'Ascendente', fuente:'Registros de campañas, registros de IPRESS aliadas', responsableId:2, activo:true},
+    {id:9,  codigo:'AT-EST-001', nombre:'% de usuarios que reportan satisfacción general con los servicios recibidos de FPC', ejeId:3, tipo:'Outcome', unidad:'%', frecuencia:'Anual', metodo:'Promedio', sentido:'Ascendente', fuente:'Encuesta institucional', responsableId:3, activo:true},
+    {id:10, codigo:'SEPA AT-001', nombre:'% de pacientes y familias que reportan mayor comprensión sobre su enfermedad y tratamiento (Programa SEPA)', ejeId:3, tipo:'Outcome', unidad:'%', frecuencia:'Trimestral', metodo:'Promedio', sentido:'Ascendente', fuente:'Encuestas post orientación', responsableId:3, activo:true},
+    {id:11, codigo:'SEPA AT-004', nombre:'# de pacientes acompañados mediante servicios de navegación en el sistema de salud', ejeId:3, tipo:'Output', unidad:'Paciente acompañado', frecuencia:'Trimestral', metodo:'Conteo', sentido:'Ascendente', fuente:'Base de datos SEPA', responsableId:3, activo:true},
+    {id:12, codigo:'AT-EST-002', nombre:'% del abandono del tratamiento', ejeId:3, tipo:'Outcome', unidad:'%', frecuencia:'Anual', metodo:'Promedio', sentido:'Descendente', fuente:'Encuesta anual institucional', responsableId:3, activo:true},
+    {id:13, codigo:'AFH-NUT-001', nombre:'Número de beneficiarios que reciben soporte nutricional', ejeId:3, tipo:'Output', unidad:'Beneficiario', frecuencia:'Trimestral', metodo:'Conteo', sentido:'Ascendente', fuente:'Registro nutricional', responsableId:3, activo:true},
+    {id:14, codigo:'AFH-PS-002', nombre:'% de usuarios que reportan mejora en bienestar emocional (albergue)', ejeId:3, tipo:'Outcome', unidad:'%', frecuencia:'Trimestral', metodo:'Promedio', sentido:'Ascendente', fuente:'Encuestas de bienestar emocional', responsableId:3, activo:true},
+  ],
+
+  metas: [
+    {id:1, indicadorId:1, anio:2026, lineaBase:8, metaAnual:12, q1:2, q2:3, q3:3, q4:4},
+    {id:2, indicadorId:2, anio:2026, lineaBase:40, metaAnual:60, q1:45, q2:50, q3:55, q4:60},
+    {id:3, indicadorId:3, anio:2026, lineaBase:5, metaAnual:8, q1:5, q2:6, q3:7, q4:8},
+    {id:4, indicadorId:5, anio:2026, lineaBase:10, metaAnual:20, q1:4, q2:5, q3:5, q4:6},
+    {id:5, indicadorId:6, anio:2026, lineaBase:800, metaAnual:1500, q1:300, q2:350, q3:400, q4:450},
+    {id:6, indicadorId:7, anio:2026, lineaBase:55, metaAnual:75, q1:60, q2:65, q3:70, q4:75},
+    {id:7, indicadorId:8, anio:2026, lineaBase:300, metaAnual:600, q1:120, q2:140, q3:150, q4:190},
+    {id:8, indicadorId:9, anio:2026, lineaBase:80, metaAnual:88, q1:82, q2:84, q3:86, q4:88},
+    {id:9, indicadorId:10, anio:2026, lineaBase:70, metaAnual:85, q1:74, q2:78, q3:82, q4:85},
+    {id:10, indicadorId:11, anio:2026, lineaBase:150, metaAnual:280, q1:60, q2:70, q3:70, q4:80},
+    {id:11, indicadorId:12, anio:2026, lineaBase:9, metaAnual:6, q1:9, q2:8, q3:7, q4:6},
+    {id:12, indicadorId:13, anio:2026, lineaBase:120, metaAnual:220, q1:50, q2:55, q3:55, q4:60},
+    {id:13, indicadorId:14, anio:2026, lineaBase:65, metaAnual:80, q1:68, q2:72, q3:76, q4:80},
+  ],
+
+  avances: [
+    {id:1, indicadorId:1, periodo:'2026-Q1', anio:2026, trimestre:'Q1', metaPeriodo:2, valorReal:2, comentario:'Publicado boletín observatorio FPC N°1.', registradoPor:1, fecha:'2026-04-05'},
+    {id:2, indicadorId:2, periodo:'2026-Q1', anio:2026, trimestre:'Q1', metaPeriodo:45, valorReal:38, comentario:'Pendiente respuesta de 2 comisiones técnicas.', registradoPor:1, fecha:'2026-04-06'},
+    {id:3, indicadorId:3, periodo:'2026-Q1', anio:2026, trimestre:'Q1', metaPeriodo:5, valorReal:6, comentario:'', registradoPor:1, fecha:'2026-04-04'},
+    {id:4, indicadorId:5, periodo:'2026-Q1', anio:2026, trimestre:'Q1', metaPeriodo:4, valorReal:3, comentario:'Una campaña reprogramada por clima en Áncash.', registradoPor:2, fecha:'2026-04-08'},
+    {id:5, indicadorId:6, periodo:'2026-Q1', anio:2026, trimestre:'Q1', metaPeriodo:300, valorReal:340, comentario:'', registradoPor:2, fecha:'2026-04-08'},
+    {id:6, indicadorId:7, periodo:'2026-Q1', anio:2026, trimestre:'Q1', metaPeriodo:60, valorReal:52, comentario:'Se ajustará metodología de encuesta pre/post.', registradoPor:2, fecha:'2026-04-09'},
+    {id:7, indicadorId:8, periodo:'2026-Q1', anio:2026, trimestre:'Q1', metaPeriodo:120, valorReal:98, comentario:'Baja afluencia en 1 jornada de tamizaje.', registradoPor:2, fecha:'2026-04-09'},
+    {id:8, indicadorId:9, periodo:'2026-Q1', anio:2026, trimestre:'Q1', metaPeriodo:82, valorReal:83, comentario:'', registradoPor:3, fecha:'2026-04-10'},
+    {id:9, indicadorId:10, periodo:'2026-Q1', anio:2026, trimestre:'Q1', metaPeriodo:74, valorReal:70, comentario:'', registradoPor:3, fecha:'2026-04-10'},
+    {id:10, indicadorId:11, periodo:'2026-Q1', anio:2026, trimestre:'Q1', metaPeriodo:60, valorReal:64, comentario:'', registradoPor:3, fecha:'2026-04-11'},
+    {id:11, indicadorId:12, periodo:'2026-Q1', anio:2026, trimestre:'Q1', metaPeriodo:9, valorReal:11, comentario:'Aumento de abandono en región Loreto, en revisión con Trabajo Social.', registradoPor:3, fecha:'2026-04-11'},
+    {id:12, indicadorId:13, periodo:'2026-Q1', anio:2026, trimestre:'Q1', metaPeriodo:50, valorReal:53, comentario:'', registradoPor:3, fecha:'2026-04-11'},
+    {id:13, indicadorId:14, periodo:'2026-Q1', anio:2026, trimestre:'Q1', metaPeriodo:68, valorReal:71, comentario:'', registradoPor:3, fecha:'2026-04-12'},
+    // --- 2026-Q2: segundo corte trimestral, para simular la tendencia en el dashboard ---
+    {id:14, indicadorId:1, periodo:'2026-Q2', anio:2026, trimestre:'Q2', metaPeriodo:3, valorReal:3, comentario:'', registradoPor:1, fecha:'2026-07-05'},
+    {id:15, indicadorId:2, periodo:'2026-Q2', anio:2026, trimestre:'Q2', metaPeriodo:50, valorReal:47, comentario:'Mejora tras seguimiento a comisiones técnicas.', registradoPor:1, fecha:'2026-07-06'},
+    {id:16, indicadorId:3, periodo:'2026-Q2', anio:2026, trimestre:'Q2', metaPeriodo:6, valorReal:6, comentario:'', registradoPor:1, fecha:'2026-07-04'},
+    {id:17, indicadorId:5, periodo:'2026-Q2', anio:2026, trimestre:'Q2', metaPeriodo:5, valorReal:5, comentario:'', registradoPor:2, fecha:'2026-07-08'},
+    {id:18, indicadorId:6, periodo:'2026-Q2', anio:2026, trimestre:'Q2', metaPeriodo:350, valorReal:365, comentario:'', registradoPor:2, fecha:'2026-07-08'},
+    {id:19, indicadorId:7, periodo:'2026-Q2', anio:2026, trimestre:'Q2', metaPeriodo:65, valorReal:61, comentario:'Nueva metodología de encuesta ya aplicada.', registradoPor:2, fecha:'2026-07-09'},
+    {id:20, indicadorId:8, periodo:'2026-Q2', anio:2026, trimestre:'Q2', metaPeriodo:140, valorReal:129, comentario:'', registradoPor:2, fecha:'2026-07-09'},
+    {id:21, indicadorId:9, periodo:'2026-Q2', anio:2026, trimestre:'Q2', metaPeriodo:84, valorReal:85, comentario:'', registradoPor:3, fecha:'2026-07-10'},
+    {id:22, indicadorId:10, periodo:'2026-Q2', anio:2026, trimestre:'Q2', metaPeriodo:78, valorReal:76, comentario:'', registradoPor:3, fecha:'2026-07-10'},
+    {id:23, indicadorId:11, periodo:'2026-Q2', anio:2026, trimestre:'Q2', metaPeriodo:70, valorReal:75, comentario:'', registradoPor:3, fecha:'2026-07-11'},
+    {id:24, indicadorId:12, periodo:'2026-Q2', anio:2026, trimestre:'Q2', metaPeriodo:8, valorReal:9, comentario:'Mejora parcial tras intervención de Trabajo Social en Loreto.', registradoPor:3, fecha:'2026-07-11'},
+    {id:25, indicadorId:13, periodo:'2026-Q2', anio:2026, trimestre:'Q2', metaPeriodo:55, valorReal:58, comentario:'', registradoPor:3, fecha:'2026-07-11'},
+    {id:26, indicadorId:14, periodo:'2026-Q2', anio:2026, trimestre:'Q2', metaPeriodo:72, valorReal:74, comentario:'', registradoPor:3, fecha:'2026-07-12'},
+    // --- 2026-Q3: tercer corte, aún parcial (algunos programas todavía no reportan) ---
+    {id:27, indicadorId:1, periodo:'2026-Q3', anio:2026, trimestre:'Q3', metaPeriodo:3, valorReal:4, comentario:'', registradoPor:1, fecha:'2026-10-05'},
+    {id:28, indicadorId:2, periodo:'2026-Q3', anio:2026, trimestre:'Q3', metaPeriodo:55, valorReal:56, comentario:'', registradoPor:1, fecha:'2026-10-06'},
+    {id:29, indicadorId:6, periodo:'2026-Q3', anio:2026, trimestre:'Q3', metaPeriodo:400, valorReal:388, comentario:'', registradoPor:2, fecha:'2026-10-08'},
+    {id:30, indicadorId:7, periodo:'2026-Q3', anio:2026, trimestre:'Q3', metaPeriodo:70, valorReal:68, comentario:'', registradoPor:2, fecha:'2026-10-09'},
+    {id:31, indicadorId:9, periodo:'2026-Q3', anio:2026, trimestre:'Q3', metaPeriodo:86, valorReal:87, comentario:'', registradoPor:3, fecha:'2026-10-10'},
+    {id:32, indicadorId:11, periodo:'2026-Q3', anio:2026, trimestre:'Q3', metaPeriodo:70, valorReal:73, comentario:'', registradoPor:3, fecha:'2026-10-11'},
+    {id:33, indicadorId:12, periodo:'2026-Q3', anio:2026, trimestre:'Q3', metaPeriodo:7, valorReal:8, comentario:'', registradoPor:3, fecha:'2026-10-11'},
+  ],
+
+  evidencias: [
+    {id:1, avanceId:1, tipo:'Informe_Tecnico', url:'https://drive.google.com/observatorio-boletin-1', fecha:'2026-04-05'},
+    {id:2, avanceId:5, tipo:'Lista_Asistencia', url:'https://drive.google.com/promocion-q1-asistencia', fecha:'2026-04-08'},
+  ],
+
+  beneficiarios: [], // se genera abajo con generarBeneficiarios()
+};
+
+/* Matriz región × tipo de beneficiario — base para generar la data de ejemplo
+   y para alimentar el treemap territorial del dashboard (COUNT GROUP BY region, tipo). */
+const MATRIZ_BENEFICIARIOS = {
+  'Lima':    {'Paciente':19, 'Cuidador/a':15, 'Comunidad general':11, 'Personal de salud':5},
+  'Loreto':  {'Paciente':8,  'Cuidador/a':6,  'Escolar':9,  'Comunidad general':12},
+  'Áncash':  {'Escolar':10, 'Comunidad general':15, 'Docente':4},
+  'Cusco':   {'Paciente':5,  'Cuidador/a':4,  'Comunidad general':7},
+  'Piura':   {'Comunidad general':20, 'Escolar':6},
+  'Puno':    {'Paciente':3,  'Cuidador/a':2},
+};
+const PROGRAMA_POR_TIPO = {
+  'Paciente':'Atención integral, navegación y acompañamiento al paciente oncológico',
+  'Cuidador/a':'Atención integral, navegación y acompañamiento al paciente oncológico',
+  'Personal de salud':'Fortalecimiento de políticas públicas y sistemas de respuesta oncológica',
+  'Escolar':'Promoción de la salud, prevención y detección temprana del cáncer',
+  'Docente':'Promoción de la salud, prevención y detección temprana del cáncer',
+  'Comunidad general':'Promoción de la salud, prevención y detección temprana del cáncer',
+};
+function generarBeneficiarios(){
+  const filas = [];
+  let id = 1;
+  Object.entries(MATRIZ_BENEFICIARIOS).forEach(([region, tipos]) => {
+    Object.entries(tipos).forEach(([tipo, count]) => {
+      for (let k = 0; k < count; k++){
+        filas.push({
+          id: id++, anio:2026,
+          programa: PROGRAMA_POR_TIPO[tipo] || 'Promoción de la salud, prevención y detección temprana del cáncer',
+          proyecto: tipo==='Paciente'||tipo==='Cuidador/a' ? 'SEPA / Albergue Frieda Heller' : 'Estrategia comunitaria',
+          region, provincia:region, distrito:region,
+          tipo, sexo: k%2===0?'F':'M', edad: 18 + (k*7 % 45),
+          servicio: 'Servicio FPC',
+        });
+      }
+    });
+  });
+  return filas;
+}
+DB.beneficiarios = generarBeneficiarios();
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+
+const EJE = id => DB.ejes.find(e => e.id === id);
+const IND = id => DB.indicadores.find(i => i.id === id);
+const USR = id => DB.usuarios.find(u => u.id === id);
+
+function pctCumplimiento(meta, real, sentido){
+  if (meta === null || meta === undefined || real === null || real === undefined || meta === '' || real === '') return null;
+  meta = Number(meta); real = Number(real);
+  if (sentido === 'Descendente'){
+    if (real === 0) return 100;
+    return Math.min(200, (meta / real) * 100);
+  }
+  if (meta === 0) return real > 0 ? 100 : 0;
+  return (real / meta) * 100;
+}
+
+function semaforo(pct){
+  if (pct === null) return {label:'Sin dato', cls:'gray'};
+  if (pct >= 90) return {label:'Verde', cls:'green'};
+  if (pct >= 70) return {label:'Amarillo', cls:'amber'};
+  return {label:'Rojo', cls:'red'};
+}
+
+function pill(sem){
+  return `<span class="pill ${sem.cls}"><span class="dot"></span>${sem.label}</span>`;
+}
+
+function fmt(n){
+  if (n === null || n === undefined || n === '') return '—';
+  const num = Number(n);
+  if (Number.isNaN(num)) return n;
+  return num % 1 === 0 ? num.toLocaleString('es-PE') : num.toLocaleString('es-PE',{maximumFractionDigits:1});
+}
+
+function esc(s){
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ============================================================
+   ENRUTADOR SIMPLE DE PESTAÑAS
+   ============================================================ */
+
+let currentTab = 'dashboard';
+let modalContent = null; // {title, bodyHtml}
+
+const TABS = [
+  {id:'dashboard', label:'Dashboard', num:'01'},
+  {id:'maestros', label:'Config. Maestros', num:'02'},
+  {id:'metas', label:'Metas Institucionales', num:'03'},
+  {id:'avances', label:'Registro de Avances', num:'04'},
+  {id:'matriz', label:'Matriz de Control', num:'05'},
+  {id:'excel', label:'Importar / Exportar Excel', num:'06'},
+];
+
+function setTab(id){ currentTab = id; modalContent = null; render(); }
+function closeModal(){ modalContent = null; render(); }
+
+/* ============================================================
+   RENDER PRINCIPAL
+   ============================================================ */
+
+function render(){
+  const root = document.getElementById('app');
+  root.innerHTML = `
+    <header class="topbar">
+      <img src="LogoFundacion.png" alt="Fundación Peruana de Cáncer">
+      <div class="sep" aria-hidden="true"></div>
+      <div class="product">Monitoreo Institucional MEL</div>
+    </header>
+    <div class="app-body">
+      <aside class="sidebar">
+        <nav class="tabs">
+          ${TABS.map(t => `<button class="${t.id===currentTab?'active':''}" onclick="setTab('${t.id}')"><span class="n">${t.num}</span>${t.label}</button>`).join('')}
+        </nav>
+        <div class="sidebar-foot">
+          Prototipo funcional de validación.<br>Datos en memoria del navegador — se reinician al recargar.
+        </div>
+      </aside>
+      <main>${renderTab()}</main>
+    </div>
+    ${modalContent ? `<div class="modal-bg" onclick="if(event.target===this) closeModal()"><div class="modal"><button class="close-x" onclick="closeModal()">×</button><h3>${modalContent.title}</h3>${modalContent.body}</div></div>` : ''}
+  `;
+  if (currentTab === 'dashboard') requestAnimationFrame(() => requestAnimationFrame(drawDashboardCharts));
+}
+
+function renderTab(){
+  switch(currentTab){
+    case 'dashboard': return viewDashboard();
+    case 'maestros': return viewMaestros();
+    case 'metas': return viewMetas();
+    case 'avances': return viewAvances();
+    case 'matriz': return viewMatriz();
+    case 'excel': return viewExcel();
+    default: return '';
+  }
+}
+
+/* ============================================================
+   1. DASHBOARD
+   ============================================================ */
+
+function computedRows(filterEjeId){
+  return DB.avances
+    .filter(a => a.periodo === latestPeriodo())
+    .map(a => {
+      const ind = IND(a.indicadorId);
+      const pct = pctCumplimiento(a.metaPeriodo, a.valorReal, ind.sentido);
+      return {avance:a, ind, pct, sem:semaforo(pct)};
+    })
+    .filter(r => !filterEjeId || r.ind.ejeId === filterEjeId);
+}
+
+function latestPeriodo(){
+  const periodos = [...new Set(DB.avances.map(a=>a.periodo))];
+  periodos.sort();
+  return periodos[periodos.length-1] || '';
+}
+
+function viewDashboard(){
+  const rows = computedRows();
+  const total = rows.length;
+  const counts = {green:0, amber:0, red:0};
+  rows.forEach(r => { if(counts[r.sem.cls]!==undefined) counts[r.sem.cls]++; });
+  const avgPct = total ? rows.reduce((s,r)=>s+(r.pct||0),0)/total : 0;
+
+  return `
+    <div class="pagehead">
+      <div>
+        <h2>Tablero de análisis visual</h2>
+        <p>Vista agregada del período más reciente reportado (<strong>${latestPeriodo() || 'sin datos'}</strong>). Alimentado por el registro de avances.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-4" style="margin-bottom:20px;">
+      <div class="kpi"><div class="label">Indicadores monitoreados</div><div class="value">${total}</div></div>
+      <div class="kpi"><div class="label">Cumplimiento promedio</div><div class="value">${fmt(avgPct)}%</div></div>
+      <div class="kpi"><div class="label">En Verde (≥90%)</div><div class="value green">${counts.green}</div></div>
+      <div class="kpi"><div class="label">En Rojo (&lt;70%)</div><div class="value red">${counts.red}</div></div>
+    </div>
+
+    <div class="two-col" style="margin-bottom:18px;">
+      <div class="card">
+        <div class="section-title">📊 Barras agrupadas — Meta vs. Real</div>
+        <div class="subtle" style="margin:-6px 0 12px;">Fuente: <code>SUM(valor_real) vs SUM(valor_meta) GROUP BY eje</code> · Comparativa de cumplimiento por eje programático</div>
+        <div class="chart-box"><canvas id="chartBarras"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="section-title">🟢 Gráfico de anillo — Dona MEL</div>
+        <div class="subtle" style="margin:-6px 0 12px;">Fuente: <code>COUNT(estado) GROUP BY estado_semaforo</code> · Periodo ${latestPeriodo()}</div>
+        <div class="chart-box"><canvas id="chartDona"></canvas></div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="section-title">📈 Línea — Evolución del desempeño</div>
+        <div class="subtle" style="margin:-6px 0 12px;">Fuente: <code>AVG(% cumplimiento) GROUP BY periodo</code> · Tendencia trimestral 2026</div>
+        <div class="chart-box"><canvas id="chartLinea"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="section-title">🗺️ Treemap — Beneficiarios</div>
+        <div class="subtle" style="margin:-6px 0 12px;">Fuente: <code>COUNT(beneficiarios) GROUP BY region, tipo</code> · Distribución territorial y por tipo de usuario</div>
+        <div id="treemapBenef"></div>
+      </div>
+    </div>
+  `;
+}
+
+/* ---- Treemap (HTML/CSS, sin librerías externas) ----
+   Nivel 1: región (área de la celda = participación de la región en el total)
+   Nivel 2: tipo de beneficiario dentro de cada región (franjas apiladas) */
+const TIPO_COLOR = {
+  'Paciente':'#E30613', 'Cuidador/a':'#B8020C', 'Comunidad general':'#1E293B',
+  'Escolar':'#d97706', 'Docente':'#8A817C', 'Personal de salud':'#059669',
+};
+function renderTreemapBenef(){
+  const el = document.getElementById('treemapBenef');
+  if (!el) return;
+
+  const porRegion = {};
+  DB.beneficiarios.forEach(b => {
+    porRegion[b.region] = porRegion[b.region] || {};
+    porRegion[b.region][b.tipo] = (porRegion[b.region][b.tipo] || 0) + 1;
+  });
+  const totalGeneral = DB.beneficiarios.length;
+  const regiones = Object.entries(porRegion)
+    .map(([region, tipos]) => ({region, tipos, total: Object.values(tipos).reduce((s,v)=>s+v,0)}))
+    .sort((a,b) => b.total - a.total);
+
+  el.innerHTML = `
+    <div class="treemap">
+      ${regiones.map(r => {
+        const widthPct = (r.total / totalGeneral) * 100;
+        const tiposOrdenados = Object.entries(r.tipos).sort((a,b)=>b[1]-a[1]);
+        return `
+          <div class="treemap-cell" style="flex-grow:${widthPct};flex-basis:${widthPct}%;">
+            <div class="treemap-cell-head">${esc(r.region)} <span class="subtle">(${r.total})</span></div>
+            <div class="treemap-cell-body">
+              ${tiposOrdenados.map(([tipo, count]) => {
+                const heightPct = (count / r.total) * 100;
+                const showLabel = heightPct >= 14;
+                return `<div class="treemap-seg" title="${esc(tipo)}: ${count}" style="height:${heightPct}%;background:${TIPO_COLOR[tipo]||'#999'};">
+                  ${showLabel ? `<span>${esc(tipo)} · ${count}</span>` : ''}
+                </div>`;
+              }).join('')}
+            </div>
+          </div>`;
+      }).join('')}
+    </div>
+    <div class="treemap-legend">
+      ${Object.entries(TIPO_COLOR).filter(([t])=>DB.beneficiarios.some(b=>b.tipo===t)).map(([t,c])=>`<span class="legend-item"><span class="legend-dot" style="background:${c}"></span>${esc(t)}</span>`).join('')}
+    </div>
+  `;
+}
+
+let _charts = {};
+function drawDashboardCharts(){
+  if (typeof Chart === 'undefined') {
+    setTimeout(drawDashboardCharts, 200);
+    return;
+  }
+  Object.values(_charts).forEach(c => { try { c && c.destroy(); } catch(e) {} });
+  _charts = {};
+  Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+  Chart.defaults.color = '#8A817C';
+  const palette = {green:'#059669', amber:'#d97706', red:'#E30613', teal:'#1E293B', gold:'#E30613', muted:'#8A817C'};
+  const common = {responsive:true, maintainAspectRatio:false};
+
+  // Barras: meta vs real por eje (acumulado del último periodo)
+  const rows = computedRows();
+  const byEje = DB.ejes.map(e => {
+    const rs = rows.filter(r => r.ind.ejeId === e.id);
+    return {
+      nombre: e.codigo,
+      meta: rs.reduce((s,r)=>s+Number(r.avance.metaPeriodo||0),0),
+      real: rs.reduce((s,r)=>s+Number(r.avance.valorReal||0),0),
+    };
+  });
+  const ctxBar = document.getElementById('chartBarras');
+  if (ctxBar){
+    _charts.barras = new Chart(ctxBar, {
+      type:'bar',
+      data:{
+        labels: byEje.map(e=>e.nombre),
+        datasets:[
+          {label:'Meta', data:byEje.map(e=>e.meta), backgroundColor:palette.muted, borderRadius:4},
+          {label:'Real', data:byEje.map(e=>e.real), backgroundColor:palette.gold, borderRadius:4},
+        ]
+      },
+      options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom'}}, scales:{y:{beginAtZero:true}}}
+    });
+  }
+
+  // Dona: semáforo
+  const counts = {green:0, amber:0, red:0};
+  rows.forEach(r => { if(counts[r.sem.cls]!==undefined) counts[r.sem.cls]++; });
+  const ctxDona = document.getElementById('chartDona');
+  if (ctxDona){
+    _charts.dona = new Chart(ctxDona, {
+      type:'doughnut',
+      data:{
+        labels:['Verde (≥90%)','Amarillo (70–89%)','Rojo (<70%)'],
+        datasets:[{data:[counts.green,counts.amber,counts.red], backgroundColor:[palette.green,palette.amber,palette.red], borderWidth:0}]
+      },
+      options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom'}}, cutout:'62%'}
+    });
+  }
+
+  // Línea: tendencia por periodo
+  const periodos = [...new Set(DB.avances.map(a=>a.periodo))].sort();
+  const trend = periodos.map(p => {
+    const rs = DB.avances.filter(a=>a.periodo===p).map(a => pctCumplimiento(a.metaPeriodo, a.valorReal, IND(a.indicadorId)?.sentido));
+    const valid = rs.filter(v=>v!==null);
+    return valid.length ? valid.reduce((s,v)=>s+v,0)/valid.length : null;
+  });
+  const ctxLine = document.getElementById('chartLinea');
+  if (ctxLine){
+    _charts.linea = new Chart(ctxLine, {
+      type:'line',
+      data:{labels:periodos, datasets:[{label:'% cumplimiento promedio', data:trend, borderColor:palette.gold, backgroundColor:'rgba(227,6,19,.15)', fill:true, tension:.3}]},
+      options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, suggestedMax:120}}}
+    });
+  }
+
+  // Beneficiarios: treemap HTML (región → tipo)
+  renderTreemapBenef();
+}
+
+/* ============================================================
+   2. CONFIG. MAESTROS (CRUD Ejes + Indicadores)
+   ============================================================ */
+
+function viewMaestros(){
+  return `
+    <div class="pagehead">
+      <div>
+        <h2>Configuración de maestros</h2>
+        <p>Catálogo de ejes programáticos e indicadores institucionales. Base de la Capa Maestra del sistema.</p>
+      </div>
+    </div>
+
+    <div class="section-title">Ejes programáticos <span class="tag">${DB.ejes.length}</span>
+      <span style="margin-left:auto;"><button class="btn primary small" onclick="openEjeForm()">+ Nuevo eje</button></span>
+    </div>
+    <div class="table-wrap" style="margin-bottom:26px;">
+      <table>
+        <thead><tr><th>Código</th><th>Nombre</th><th>Descripción</th><th>Estado</th><th></th></tr></thead>
+        <tbody>
+          ${DB.ejes.map(e => `
+            <tr>
+              <td><strong>${esc(e.codigo)}</strong></td>
+              <td style="max-width:260px;">${esc(e.nombre)}</td>
+              <td class="subtle" style="max-width:320px;">${esc(e.descripcion||'')}</td>
+              <td>${e.activo ? '<span class="pill green">Activo</span>' : '<span class="pill gray">Inactivo</span>'}</td>
+              <td><button class="btn ghost small" onclick="openEjeForm(${e.id})">Editar</button></td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Catálogo de indicadores <span class="tag">${DB.indicadores.length}</span>
+      <span style="margin-left:auto;"><button class="btn primary small" onclick="openIndicadorForm()">+ Nuevo indicador</button></span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Código</th><th>Indicador</th><th>Eje</th><th>Tipo</th><th>Unidad</th><th>Frecuencia</th><th>Método</th><th>Sentido</th><th>Estado</th><th></th></tr></thead>
+        <tbody>
+          ${DB.indicadores.map(i => `
+            <tr>
+              <td><strong>${esc(i.codigo)}</strong></td>
+              <td style="max-width:280px;">${esc(i.nombre)}</td>
+              <td class="subtle">${esc(EJE(i.ejeId)?.codigo||'—')}</td>
+              <td><span class="pill gray">${esc(i.tipo)}</span></td>
+              <td class="subtle">${esc(i.unidad)}</td>
+              <td class="subtle">${esc(i.frecuencia)}</td>
+              <td class="subtle">${esc(i.metodo)}</td>
+              <td class="subtle">${esc(i.sentido)}</td>
+              <td>${i.activo ? '<span class="pill green">Activo</span>' : '<span class="pill gray">Inactivo</span>'}</td>
+              <td><button class="btn ghost small" onclick="openIndicadorForm(${i.id})">Editar</button></td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function openEjeForm(id){
+  const e = id ? EJE(id) : {codigo:'', nombre:'', descripcion:'', activo:true};
+  modalContent = {
+    title: id ? 'Editar eje programático' : 'Nuevo eje programático',
+    body: `
+      <div class="field"><label>Código</label><input id="f_codigo" value="${esc(e.codigo)}" placeholder="EJE-04"></div>
+      <div class="field"><label>Nombre del eje</label><input id="f_nombre" value="${esc(e.nombre)}"></div>
+      <div class="field"><label>Descripción</label><textarea id="f_desc" rows="3">${esc(e.descripcion)}</textarea></div>
+      <div class="field"><label><input type="checkbox" id="f_activo" ${e.activo?'checked':''} style="width:auto;display:inline-block;margin-right:6px;">Activo</label></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;">
+        ${id ? `<button class="btn danger" onclick="deleteEje(${id})">Eliminar</button>` : ''}
+        <button class="btn primary" onclick="saveEje(${id||'null'})">Guardar</button>
+      </div>
+    `
+  };
+  render();
+}
+function saveEje(id){
+  const data = {
+    codigo: document.getElementById('f_codigo').value.trim(),
+    nombre: document.getElementById('f_nombre').value.trim(),
+    descripcion: document.getElementById('f_desc').value.trim(),
+    activo: document.getElementById('f_activo').checked,
+  };
+  if (id){ Object.assign(EJE(id), data); }
+  else { DB.ejes.push({id:nextId(), ...data}); }
+  closeModal();
+}
+function deleteEje(id){
+  DB.ejes = DB.ejes.filter(e=>e.id!==id);
+  closeModal();
+}
+
+function openIndicadorForm(id){
+  const i = id ? IND(id) : {codigo:'', nombre:'', ejeId:DB.ejes[0]?.id, tipo:'Output', unidad:'', frecuencia:'Mensual', metodo:'Conteo', sentido:'Ascendente', fuente:'', responsableId:DB.usuarios[0]?.id, activo:true};
+  modalContent = {
+    title: id ? 'Editar indicador' : 'Nuevo indicador',
+    body: `
+      <div class="grid grid-2">
+        <div class="field"><label>Código</label><input id="f_codigo" value="${esc(i.codigo)}" placeholder="Ej: Promocion-005"></div>
+        <div class="field"><label>Eje programático</label><select id="f_eje">${DB.ejes.map(e=>`<option value="${e.id}" ${e.id===i.ejeId?'selected':''}>${esc(e.codigo)} — ${esc(e.nombre)}</option>`).join('')}</select></div>
+      </div>
+      <div class="field"><label>Nombre / definición del indicador</label><textarea id="f_nombre" rows="2">${esc(i.nombre)}</textarea></div>
+      <div class="grid grid-3">
+        <div class="field"><label>Tipo</label><select id="f_tipo">${['Output','Outcome','Impact'].map(o=>`<option ${o===i.tipo?'selected':''}>${o}</option>`).join('')}</select></div>
+        <div class="field"><label>Unidad de medida</label><input id="f_unidad" value="${esc(i.unidad)}"></div>
+        <div class="field"><label>Frecuencia</label><select id="f_frecuencia">${['Mensual','Trimestral','Semestral','Anual'].map(o=>`<option ${o===i.frecuencia?'selected':''}>${o}</option>`).join('')}</select></div>
+      </div>
+      <div class="grid grid-3">
+        <div class="field"><label>Método de cálculo</label><select id="f_metodo">${['Suma','Promedio','Conteo','Conteo_Unico','Ultimo_Valor'].map(o=>`<option ${o===i.metodo?'selected':''}>${o}</option>`).join('')}</select></div>
+        <div class="field"><label>Sentido</label><select id="f_sentido">${['Ascendente','Descendente'].map(o=>`<option ${o===i.sentido?'selected':''}>${o}</option>`).join('')}</select></div>
+        <div class="field"><label>Responsable</label><select id="f_resp">${DB.usuarios.map(u=>`<option value="${u.id}" ${u.id===i.responsableId?'selected':''}>${esc(u.nombre)}</option>`).join('')}</select></div>
+      </div>
+      <div class="field"><label>Fuente de datos</label><input id="f_fuente" value="${esc(i.fuente)}"></div>
+      <div class="field"><label><input type="checkbox" id="f_activo" ${i.activo?'checked':''} style="width:auto;display:inline-block;margin-right:6px;">Activo</label></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;">
+        ${id ? `<button class="btn danger" onclick="deleteIndicador(${id})">Eliminar</button>` : ''}
+        <button class="btn primary" onclick="saveIndicador(${id||'null'})">Guardar</button>
+      </div>
+    `
+  };
+  render();
+}
+function saveIndicador(id){
+  const data = {
+    codigo: document.getElementById('f_codigo').value.trim(),
+    nombre: document.getElementById('f_nombre').value.trim(),
+    ejeId: Number(document.getElementById('f_eje').value),
+    tipo: document.getElementById('f_tipo').value,
+    unidad: document.getElementById('f_unidad').value.trim(),
+    frecuencia: document.getElementById('f_frecuencia').value,
+    metodo: document.getElementById('f_metodo').value,
+    sentido: document.getElementById('f_sentido').value,
+    responsableId: Number(document.getElementById('f_resp').value),
+    fuente: document.getElementById('f_fuente').value.trim(),
+    activo: document.getElementById('f_activo').checked,
+  };
+  if (id){ Object.assign(IND(id), data); }
+  else { DB.indicadores.push({id:nextId(), ...data}); }
+  closeModal();
+}
+function deleteIndicador(id){
+  DB.indicadores = DB.indicadores.filter(i=>i.id!==id);
+  closeModal();
+}
+
+/* ============================================================
+   3. METAS INSTITUCIONALES
+   ============================================================ */
+
+function viewMetas(){
+  return `
+    <div class="pagehead">
+      <div>
+        <h2>Programación de metas institucionales</h2>
+        <p>Metas anuales y su distribución trimestral, por indicador. Referencia para calcular el cumplimiento en el registro de avances.</p>
+      </div>
+      <button class="btn primary" onclick="openMetaForm()">+ Nueva meta</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Código</th><th>Indicador</th><th>Año</th><th>Línea base</th><th>Meta anual</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th></th></tr></thead>
+        <tbody>
+          ${DB.metas.map(m => {
+            const ind = IND(m.indicadorId);
+            return `<tr>
+              <td><strong>${esc(ind?.codigo||'—')}</strong></td>
+              <td style="max-width:280px;">${esc(ind?.nombre||'')}</td>
+              <td>${m.anio}</td>
+              <td>${fmt(m.lineaBase)}</td>
+              <td><strong>${fmt(m.metaAnual)}</strong></td>
+              <td>${fmt(m.q1)}</td><td>${fmt(m.q2)}</td><td>${fmt(m.q3)}</td><td>${fmt(m.q4)}</td>
+              <td><button class="btn ghost small" onclick="openMetaForm(${m.id})">Editar</button></td>
+            </tr>`;
+          }).join('') || `<tr><td colspan="10" class="empty">Aún no hay metas registradas.</td></tr>`}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function openMetaForm(id){
+  const m = id ? DB.metas.find(x=>x.id===id) : {indicadorId:DB.indicadores[0]?.id, anio:2026, lineaBase:0, metaAnual:0, q1:0,q2:0,q3:0,q4:0};
+  modalContent = {
+    title: id ? 'Editar meta institucional' : 'Nueva meta institucional',
+    body: `
+      <div class="grid grid-2">
+        <div class="field"><label>Indicador</label><select id="f_ind">${DB.indicadores.map(i=>`<option value="${i.id}" ${i.id===m.indicadorId?'selected':''}>${esc(i.codigo)}</option>`).join('')}</select></div>
+        <div class="field"><label>Año</label><input id="f_anio" type="number" value="${m.anio}"></div>
+      </div>
+      <div class="grid grid-2">
+        <div class="field"><label>Línea base</label><input id="f_base" type="number" value="${m.lineaBase}"></div>
+        <div class="field"><label>Meta anual</label><input id="f_meta" type="number" value="${m.metaAnual}"></div>
+      </div>
+      <div class="grid grid-4">
+        <div class="field"><label>Meta Q1</label><input id="f_q1" type="number" value="${m.q1}"></div>
+        <div class="field"><label>Meta Q2</label><input id="f_q2" type="number" value="${m.q2}"></div>
+        <div class="field"><label>Meta Q3</label><input id="f_q3" type="number" value="${m.q3}"></div>
+        <div class="field"><label>Meta Q4</label><input id="f_q4" type="number" value="${m.q4}"></div>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;">
+        ${id ? `<button class="btn danger" onclick="deleteMeta(${id})">Eliminar</button>` : ''}
+        <button class="btn primary" onclick="saveMeta(${id||'null'})">Guardar</button>
+      </div>
+    `
+  };
+  render();
+}
+function saveMeta(id){
+  const data = {
+    indicadorId: Number(document.getElementById('f_ind').value),
+    anio: Number(document.getElementById('f_anio').value),
+    lineaBase: Number(document.getElementById('f_base').value),
+    metaAnual: Number(document.getElementById('f_meta').value),
+    q1: Number(document.getElementById('f_q1').value),
+    q2: Number(document.getElementById('f_q2').value),
+    q3: Number(document.getElementById('f_q3').value),
+    q4: Number(document.getElementById('f_q4').value),
+  };
+  if (id){ Object.assign(DB.metas.find(x=>x.id===id), data); }
+  else { DB.metas.push({id:nextId(), ...data}); }
+  closeModal();
+}
+function deleteMeta(id){
+  DB.metas = DB.metas.filter(m=>m.id!==id);
+  closeModal();
+}
+
+/* ============================================================
+   4. REGISTRO DE AVANCES (transaccional)
+   ============================================================ */
+
+function viewAvances(){
+  const rows = [...DB.avances].sort((a,b)=> b.periodo.localeCompare(a.periodo));
+  return `
+    <div class="pagehead">
+      <div>
+        <h2>Registro de avances</h2>
+        <p>Carga operativa por periodo: el responsable ingresa el valor ejecutado y adjunta evidencia. El % de cumplimiento y el semáforo se calculan automáticamente.</p>
+      </div>
+      <button class="btn primary" onclick="openAvanceForm()">+ Registrar avance</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Periodo</th><th>Código</th><th>Indicador</th><th>Meta</th><th>Real</th><th>% Cumpl.</th><th>Semáforo</th><th>Responsable</th><th>Comentario</th><th></th></tr></thead>
+        <tbody>
+          ${rows.map(a => {
+            const ind = IND(a.indicadorId);
+            const pct = pctCumplimiento(a.metaPeriodo, a.valorReal, ind?.sentido);
+            const sem = semaforo(pct);
+            return `<tr>
+              <td><strong>${a.periodo}</strong></td>
+              <td>${esc(ind?.codigo||'—')}</td>
+              <td style="max-width:220px;">${esc(ind?.nombre||'')}</td>
+              <td>${fmt(a.metaPeriodo)}</td>
+              <td>${fmt(a.valorReal)}</td>
+              <td>${pct===null?'—':fmt(pct)+'%'}</td>
+              <td>${pill(sem)}</td>
+              <td class="subtle">${esc(USR(a.registradoPor)?.nombre||'—')}</td>
+              <td class="subtle" style="max-width:200px;">${esc(a.comentario||'')}</td>
+              <td><button class="btn ghost small" onclick="openAvanceForm(${a.id})">Editar</button></td>
+            </tr>`;
+          }).join('') || `<tr><td colspan="10" class="empty">Aún no hay avances registrados.</td></tr>`}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function openAvanceForm(id){
+  const a = id ? DB.avances.find(x=>x.id===id) : {indicadorId:DB.indicadores[0]?.id, periodo:'2026-Q2', anio:2026, trimestre:'Q2', metaPeriodo:0, valorReal:0, comentario:'', registradoPor:DB.usuarios[0]?.id, fecha:new Date().toISOString().slice(0,10)};
+  modalContent = {
+    title: id ? 'Editar avance' : 'Registrar avance de indicador',
+    body: `
+      <div class="grid grid-2">
+        <div class="field"><label>Indicador</label><select id="f_ind">${DB.indicadores.map(i=>`<option value="${i.id}" ${i.id===a.indicadorId?'selected':''}>${esc(i.codigo)} — ${esc(i.nombre.slice(0,40))}</option>`).join('')}</select></div>
+        <div class="field"><label>Periodo (ej: 2026-Q2 / 2026-M06)</label><input id="f_periodo" value="${esc(a.periodo)}"></div>
+      </div>
+      <div class="grid grid-2">
+        <div class="field"><label>Valor meta del periodo</label><input id="f_metaP" type="number" value="${a.metaPeriodo}"></div>
+        <div class="field"><label>Valor real ejecutado</label><input id="f_real" type="number" value="${a.valorReal}"></div>
+      </div>
+      <div class="grid grid-2">
+        <div class="field"><label>Responsable que registra</label><select id="f_resp">${DB.usuarios.map(u=>`<option value="${u.id}" ${u.id===a.registradoPor?'selected':''}>${esc(u.nombre)}</option>`).join('')}</select></div>
+        <div class="field"><label>Fecha de registro</label><input id="f_fecha" type="date" value="${a.fecha}"></div>
+      </div>
+      <div class="field"><label>Comentarios / justificación (obligatorio si el semáforo cae en Rojo o Amarillo)</label><textarea id="f_coment" rows="2">${esc(a.comentario||'')}</textarea></div>
+      <div class="field"><label>Evidencia (link a Drive / repositorio)</label><input id="f_evidencia" placeholder="https://drive.google.com/..." value="${(DB.evidencias.find(e=>e.avanceId===id)||{}).url||''}"></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;">
+        ${id ? `<button class="btn danger" onclick="deleteAvance(${id})">Eliminar</button>` : ''}
+        <button class="btn primary" onclick="saveAvance(${id||'null'})">Guardar</button>
+      </div>
+    `
+  };
+  render();
+}
+function saveAvance(id){
+  const indicadorId = Number(document.getElementById('f_ind').value);
+  const data = {
+    indicadorId,
+    periodo: document.getElementById('f_periodo').value.trim(),
+    anio: Number(document.getElementById('f_periodo').value.slice(0,4)) || new Date().getFullYear(),
+    metaPeriodo: Number(document.getElementById('f_metaP').value),
+    valorReal: Number(document.getElementById('f_real').value),
+    registradoPor: Number(document.getElementById('f_resp').value),
+    fecha: document.getElementById('f_fecha').value,
+    comentario: document.getElementById('f_coment').value.trim(),
+  };
+  let avanceId = id;
+  if (id){ Object.assign(DB.avances.find(x=>x.id===id), data); }
+  else { avanceId = nextId(); DB.avances.push({id:avanceId, ...data}); }
+
+  const evidenciaUrl = document.getElementById('f_evidencia').value.trim();
+  if (evidenciaUrl){
+    const existing = DB.evidencias.find(e=>e.avanceId===avanceId);
+    if (existing){ existing.url = evidenciaUrl; }
+    else { DB.evidencias.push({id:nextId(), avanceId, tipo:'Informe_Tecnico', url:evidenciaUrl, fecha:data.fecha}); }
+  }
+  closeModal();
+}
+function deleteAvance(id){
+  DB.avances = DB.avances.filter(a=>a.id!==id);
+  closeModal();
+}
+
+/* ============================================================
+   5. MATRIZ DE CONTROL (consolidada, con filtros)
+   ============================================================ */
+
+let matrizFiltros = {eje:'', frecuencia:'', semaforo:'', responsable:''};
+
+function viewMatriz(){
+  let rows = DB.indicadores.map(ind => {
+    const avancesInd = DB.avances.filter(a=>a.indicadorId===ind.id).sort((a,b)=>b.periodo.localeCompare(a.periodo));
+    const ultimo = avancesInd[0];
+    const pct = ultimo ? pctCumplimiento(ultimo.metaPeriodo, ultimo.valorReal, ind.sentido) : null;
+    const sem = semaforo(pct);
+    return {ind, ultimo, pct, sem};
+  });
+
+  if (matrizFiltros.eje) rows = rows.filter(r => String(r.ind.ejeId) === matrizFiltros.eje);
+  if (matrizFiltros.frecuencia) rows = rows.filter(r => r.ind.frecuencia === matrizFiltros.frecuencia);
+  if (matrizFiltros.semaforo) rows = rows.filter(r => r.sem.cls === matrizFiltros.semaforo);
+  if (matrizFiltros.responsable) rows = rows.filter(r => String(r.ind.responsableId) === matrizFiltros.responsable);
+
+  return `
+    <div class="pagehead">
+      <div>
+        <h2>Matriz de control institucional</h2>
+        <p>Tabla dinámica consolidada para auditar datos antes de la presentación directiva. Usa los filtros multi-criterio.</p>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="field">
+        <label>Eje programático</label>
+        <select onchange="matrizFiltros.eje=this.value; render()">
+          <option value="">Todos</option>
+          ${DB.ejes.map(e=>`<option value="${e.id}" ${matrizFiltros.eje==String(e.id)?'selected':''}>${esc(e.codigo)}</option>`).join('')}
+        </select>
+      </div>
+      <div class="field">
+        <label>Frecuencia</label>
+        <select onchange="matrizFiltros.frecuencia=this.value; render()">
+          <option value="">Todas</option>
+          ${['Mensual','Trimestral','Semestral','Anual'].map(f=>`<option ${matrizFiltros.frecuencia===f?'selected':''}>${f}</option>`).join('')}
+        </select>
+      </div>
+      <div class="field">
+        <label>Estado semáforo</label>
+        <select onchange="matrizFiltros.semaforo=this.value; render()">
+          <option value="">Todos</option>
+          <option value="green" ${matrizFiltros.semaforo==='green'?'selected':''}>Verde</option>
+          <option value="amber" ${matrizFiltros.semaforo==='amber'?'selected':''}>Amarillo</option>
+          <option value="red" ${matrizFiltros.semaforo==='red'?'selected':''}>Rojo</option>
+          <option value="gray" ${matrizFiltros.semaforo==='gray'?'selected':''}>Sin dato</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Responsable</label>
+        <select onchange="matrizFiltros.responsable=this.value; render()">
+          <option value="">Todos</option>
+          ${DB.usuarios.map(u=>`<option value="${u.id}" ${matrizFiltros.responsable==String(u.id)?'selected':''}>${esc(u.nombre)}</option>`).join('')}
+        </select>
+      </div>
+      <button class="btn ghost" onclick="matrizFiltros={eje:'',frecuencia:'',semaforo:'',responsable:''}; render()">Limpiar filtros</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Código</th><th>Indicador</th><th>Eje</th><th>Frecuencia</th><th>Último periodo</th><th>Meta</th><th>Real</th><th>% Cumpl.</th><th>Semáforo</th><th>Responsable</th></tr></thead>
+        <tbody>
+          ${rows.map(r => `
+            <tr>
+              <td><strong>${esc(r.ind.codigo)}</strong></td>
+              <td style="max-width:260px;">${esc(r.ind.nombre)}</td>
+              <td class="subtle">${esc(EJE(r.ind.ejeId)?.codigo||'—')}</td>
+              <td class="subtle">${esc(r.ind.frecuencia)}</td>
+              <td class="subtle">${r.ultimo? r.ultimo.periodo : '—'}</td>
+              <td>${r.ultimo? fmt(r.ultimo.metaPeriodo) : '—'}</td>
+              <td>${r.ultimo? fmt(r.ultimo.valorReal) : '—'}</td>
+              <td>${r.pct===null?'—':fmt(r.pct)+'%'}</td>
+              <td>${pill(r.sem)}</td>
+              <td class="subtle">${esc(USR(r.ind.responsableId)?.nombre||'—')}</td>
+            </tr>`).join('') || `<tr><td colspan="10" class="empty">Ningún indicador coincide con los filtros seleccionados.</td></tr>`}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+/* ============================================================
+   6. IMPORTAR / EXPORTAR EXCEL
+   ============================================================ */
+
+let importLog = null;
+
+function viewExcel(){
+  return `
+    <div class="pagehead">
+      <div>
+        <h2>Importar / exportar Excel</h2>
+        <p>Carga masiva de avances desde una plantilla Excel, y exportación del estado actual del sistema para respaldo o reportes offline.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="section-title">⬆️ Importar avances desde Excel</div>
+        <p class="subtle">La plantilla debe tener una hoja llamada <strong>Avances</strong> con columnas: <code>codigo_indicador, periodo, meta, real, comentario, responsable, fecha</code>.</p>
+        <div class="field" style="margin-top:14px;"><input type="file" id="fileImport" accept=".xlsx,.xls"></div>
+        <button class="btn primary" onclick="handleImport()">Procesar archivo</button>
+        <button class="btn ghost" onclick="downloadTemplate()">Descargar plantilla</button>
+        ${importLog ? `<div class="flag" style="margin-top:14px;">${importLog}</div>` : ''}
+      </div>
+      <div class="card">
+        <div class="section-title">⬇️ Exportar estado actual</div>
+        <p class="subtle">Genera un libro Excel con las hojas: Ejes, Indicadores, Metas, Avances y Beneficiarios, tal como están en este momento.</p>
+        <button class="btn gold" onclick="exportAll()" style="margin-top:14px;">Exportar a Excel</button>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-title">Registro de evidencias</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Fecha</th><th>Avance vinculado</th><th>Tipo</th><th>Link</th></tr></thead>
+        <tbody>
+          ${DB.evidencias.map(ev => {
+            const av = DB.avances.find(a=>a.id===ev.avanceId);
+            const ind = av ? IND(av.indicadorId) : null;
+            return `<tr><td>${ev.fecha}</td><td>${esc(ind?.codigo||'—')} (${av?av.periodo:'—'})</td><td class="subtle">${esc(ev.tipo)}</td><td><a class="link" href="${esc(ev.url)}" target="_blank">${esc(ev.url)}</a></td></tr>`;
+          }).join('') || `<tr><td colspan="4" class="empty">Sin evidencias registradas.</td></tr>`}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function downloadTemplate(){
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet([
+    ['codigo_indicador','periodo','meta','real','comentario','responsable','fecha'],
+    ['Promoción-001','2026-Q2', 5, 4, 'Ejemplo de fila — reemplazar por datos reales','Equipo Promoción','2026-07-05'],
+  ]);
+  XLSX.utils.book_append_sheet(wb, ws, 'Avances');
+  XLSX.writeFile(wb, 'plantilla_avances.xlsx');
+}
+
+function handleImport(){
+  const input = document.getElementById('fileImport');
+  const file = input.files[0];
+  if (!file){ importLog = 'Selecciona un archivo .xlsx primero.'; render(); return; }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try{
+      const wb = XLSX.read(e.target.result, {type:'array'});
+      const sheetName = wb.SheetNames.find(n => n.toLowerCase().includes('avance')) || wb.SheetNames[0];
+      const sheet = wb.Sheets[sheetName];
+      const rows = XLSX.utils.sheet_to_json(sheet, {defval:''});
+      let added = 0, skipped = 0;
+      rows.forEach(r => {
+        const codigo = String(r.codigo_indicador||r.Codigo||r['Código']||'').trim();
+        const ind = DB.indicadores.find(i=>i.codigo.toLowerCase()===codigo.toLowerCase());
+        if (!ind){ skipped++; return; }
+        const periodo = String(r.periodo||r.Periodo||'').trim();
+        if (!periodo){ skipped++; return; }
+        DB.avances.push({
+          id: nextId(),
+          indicadorId: ind.id,
+          periodo,
+          anio: Number(periodo.slice(0,4)) || new Date().getFullYear(),
+          metaPeriodo: Number(r.meta||r.Meta||0),
+          valorReal: Number(r.real||r.Real||0),
+          comentario: String(r.comentario||r.Comentario||''),
+          registradoPor: DB.usuarios[0]?.id,
+          fecha: String(r.fecha||r.Fecha|| new Date().toISOString().slice(0,10)),
+        });
+        added++;
+      });
+      importLog = `Importación completa: ${added} avance(s) agregado(s), ${skipped} fila(s) omitida(s) (indicador no encontrado o periodo vacío).`;
+    }catch(err){
+      importLog = 'No se pudo leer el archivo. Verifica que sea un .xlsx válido con la hoja "Avances".';
+    }
+    render();
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function exportAll(){
+  const wb = XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.ejes.map(e=>({
+    codigo:e.codigo, nombre:e.nombre, descripcion:e.descripcion, activo:e.activo
+  }))), 'Ejes');
+
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.indicadores.map(i=>({
+    codigo:i.codigo, nombre:i.nombre, eje:EJE(i.ejeId)?.codigo, tipo:i.tipo, unidad:i.unidad,
+    frecuencia:i.frecuencia, metodo:i.metodo, sentido:i.sentido, fuente:i.fuente,
+    responsable:USR(i.responsableId)?.nombre, activo:i.activo
+  }))), 'Indicadores');
+
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.metas.map(m=>({
+    codigo:IND(m.indicadorId)?.codigo, anio:m.anio, linea_base:m.lineaBase, meta_anual:m.metaAnual,
+    meta_q1:m.q1, meta_q2:m.q2, meta_q3:m.q3, meta_q4:m.q4
+  }))), 'Metas');
+
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.avances.map(a=>{
+    const ind = IND(a.indicadorId);
+    const pct = pctCumplimiento(a.metaPeriodo, a.valorReal, ind?.sentido);
+    return {
+      codigo:ind?.codigo, periodo:a.periodo, meta:a.metaPeriodo, real:a.valorReal,
+      pct_cumplimiento: pct===null?'':Math.round(pct*10)/10, semaforo: semaforo(pct).label,
+      comentario:a.comentario, responsable:USR(a.registradoPor)?.nombre, fecha:a.fecha
+    };
+  })), 'Avances');
+
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.beneficiarios.map(b=>({
+    anio:b.anio, programa:b.programa, proyecto:b.proyecto, region:b.region, provincia:b.provincia,
+    distrito:b.distrito, tipo:b.tipo, sexo:b.sexo, edad:b.edad, servicio:b.servicio
+  }))), 'Beneficiarios');
+
+  XLSX.writeFile(wb, `monitoreo_MEL_export_${new Date().toISOString().slice(0,10)}.xlsx`);
+}
+
+/* ============================================================
+   INICIO
+   ============================================================ */
+render();
+</script>
+</body>
+</html>

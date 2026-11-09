@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Prototipo · App móvil de campañas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --plum-900:#4A1016; --plum-800:#6B1218; --plum-700:#9B151C; --plum-600:#E30613;
+    --plum-100:#FADDE0; --plum-50:#FFF0F1;
+    --teal-700:#0F6E56; --teal-500:#1D9E75; --teal-100:#E1F5EE;
+    --coral-600:#C9552E; --coral-100:#FAECE7;
+    --amber-600:#8A5A0B; --amber-100:#FBEEDA;
+    --ink:#23181A; --ink-soft:#5C5052; --ink-faint:#8F8486;
+    --line:#EDE4E5; --line-soft:#F5EEEE; --bg:#FBF8F8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);}
+  h1,h2,h3,.display{font-family:'Manrope',system-ui,sans-serif;margin:0;}
+  button{font-family:inherit;cursor:pointer;}
+  :focus-visible{outline:2px solid var(--plum-600);outline-offset:2px;}
+
+  .proto-head{max-width:1100px;margin:0 auto;padding:20px 24px 0;display:flex;align-items:center;gap:16px;}
+  .proto-head img{height:40px;width:auto;display:block;}
+  .proto-head .sep{width:1px;height:28px;background:var(--line);flex:none;}
+  .proto-head .product{font-family:'Manrope',system-ui,sans-serif;font-weight:700;font-size:14px;color:var(--plum-900);}
+
+  /* ---------- stage (desktop) ---------- */
+  .stage{max-width:1100px;margin:0 auto;padding:20px 24px 56px;display:grid;grid-template-columns:200px 352px minmax(240px,1fr);gap:28px;align-items:start;}
+  .rail{display:flex;flex-direction:column;gap:8px;}
+  .rail .rail-title{font-family:'Manrope';font-weight:700;font-size:13px;color:var(--plum-900);margin:0 0 4px;}
+  .rail button{display:flex;align-items:center;gap:9px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 11px;font-size:12.5px;font-weight:600;color:var(--ink-soft);}
+  .rail button .n{flex:none;width:18px;height:18px;border-radius:50%;background:var(--line);color:var(--ink-soft);font-size:10.5px;display:flex;align-items:center;justify-content:center;font-weight:700;}
+  .rail button.on{border-color:var(--plum-600);background:var(--plum-50);color:var(--plum-700);}
+  .rail button.on .n{background:var(--plum-600);color:#fff;}
+  .rail button.feature{border-style:dashed;}
+
+  .phone{width:352px;height:720px;background:#1a1012;border-radius:44px;padding:12px;box-shadow:0 20px 44px rgba(227,6,19,.18);}
+  .screen{position:relative;width:100%;height:100%;background:#fff;border-radius:33px;overflow:hidden;display:flex;flex-direction:column;}
+
+  .note{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;}
+  .note h3{font-size:15px;color:var(--plum-800);margin-bottom:8px;}
+  .note p{margin:0 0 10px;font-size:13px;line-height:1.6;color:var(--ink-soft);}
+  .note ul{margin:0 0 4px;padding-left:18px;font-size:12.5px;line-height:1.8;color:var(--ink-soft);}
+  .note .tools{margin-top:14px;padding-top:14px;border-top:1px solid var(--line-soft);display:flex;flex-direction:column;gap:8px;}
+  .note .tools button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 12px;font-size:12.5px;font-weight:600;color:var(--plum-700);text-align:left;}
+  .note .tools button:hover{background:var(--plum-50);}
+
+  /* ---------- app chrome ---------- */
+  .appbar{flex:none;display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;}
+  .who{display:flex;align-items:center;gap:9px;}
+  .who .mark{display:none;}
+  .who .brand-mark{height:26px;width:auto;display:block;flex:none;}
+  .who .nm{font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.2;}
+  .who .rl{font-size:11px;color:var(--ink-soft);}
+  .conn{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:600;color:var(--teal-700);}
+  .conn .dot{width:8px;height:8px;border-radius:50%;background:var(--teal-500);}
+  .conn.off{color:var(--amber-600);background:var(--amber-100);border-color:#F1D9AE;}
+  .conn.off .dot{background:#D9951B;}
+
+  .views{flex:1;min-height:0;position:relative;}
+  .view{display:none;flex-direction:column;height:100%;}
+  .view.on{display:flex;}
+  .vhead{flex:none;padding:4px 18px 12px;border-bottom:1px solid var(--line-soft);}
+  .vhead h2{font-size:18px;color:var(--plum-900);}
+  .vhead .sub{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+  .chip-camp{display:inline-block;margin-top:8px;font-size:11px;font-weight:600;color:var(--plum-700);background:var(--plum-100);border-radius:999px;padding:3px 10px;}
+  .progress{display:flex;gap:4px;margin-top:10px;}
+  .progress i{flex:1;height:4px;border-radius:2px;background:var(--line);}
+  .progress i.done{background:var(--plum-600);}
+  .body{flex:1;min-height:0;overflow-y:auto;padding:16px 18px;}
+  .body::-webkit-scrollbar{width:0;}
+  .actions{flex:none;display:flex;gap:8px;padding:12px 18px 14px;border-top:1px solid var(--line-soft);background:#fff;}
+  .btn{flex:1;border-radius:11px;padding:13px 12px;font-size:14px;font-weight:600;border:1px solid var(--plum-600);background:var(--plum-600);color:#fff;}
+  .btn.ghost{background:#fff;color:var(--plum-700);}
+  .btn.quiet{flex:none;border-color:var(--line);color:var(--ink-soft);background:#fff;}
+  .btn.danger-ghost{background:#fff;color:var(--ink-soft);border-color:var(--line);}
+
+  .tabbar{flex:none;display:flex;border-top:1px solid var(--line-soft);background:#fff;padding:6px 0 10px;}
+  .tabbar button{flex:1;border:none;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--ink-faint);padding:6px 0;position:relative;}
+  .tabbar button.on{color:var(--plum-700);}
+  .tabbar svg{width:20px;height:20px;}
+  .badge-n{position:absolute;top:2px;left:calc(50% + 6px);background:var(--coral-600);color:#fff;border-radius:999px;min-width:16px;height:16px;font-size:10px;display:flex;align-items:center;justify-content:center;padding:0 4px;}
+
+  /* ---------- forms ---------- */
+  .field{margin-bottom:14px;}
+  .field>label,.flabel{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:5px;line-height:1.35;}
+  .opt{font-weight:400;color:var(--ink-faint);}
+  input[type=text],input[type=tel],input[type=number],input[type=email],input[type=password],textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 12px;font:inherit;font-size:14px;color:var(--ink);background:#fff;}
+  input::placeholder,textarea::placeholder{color:var(--ink-faint);}
+  textarea{resize:none;line-height:1.5;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600;color:var(--ink-soft);}
+  .chip[aria-checked=true]{background:var(--plum-600);border-color:var(--plum-600);color:#fff;}
+  .err{display:none;font-size:12px;color:var(--coral-600);margin-top:5px;line-height:1.4;}
+  .err.show{display:block;}
+  .field.bad input,.field.bad textarea{border-color:var(--coral-600);}
+
+  .consent-row{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--plum-50);}
+  .consent-row .t{font-size:12.5px;font-weight:600;color:var(--plum-800);}
+  .consent-row .d{font-size:12px;color:var(--ink-soft);margin:3px 0 10px;line-height:1.45;}
+  .consent-row.signed{background:var(--teal-100);}
+  .consent-row.signed .t{color:var(--teal-700);}
+  .consent-row.refused{background:var(--amber-100);}
+  .consent-row.refused .t{color:var(--amber-600);}
+  .consent-row .sigrow{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .consent-row img{height:38px;background:#fff;border-radius:6px;border:1px solid var(--line);padding:2px 6px;}
+  .mini{border:1px solid var(--plum-600);background:#fff;color:var(--plum-700);border-radius:9px;padding:8px 13px;font-size:12.5px;font-weight:600;}
+
+  /* campañas */
+  .camp{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:16px;margin-bottom:10px;}
+  .camp:hover{border-color:var(--plum-600);background:var(--plum-50);}
+  .camp .nm{font-weight:700;font-size:14.5px;color:var(--ink);font-family:'Manrope';}
+  .camp .tp{font-size:12px;color:var(--ink-soft);margin-top:3px;}
+  .camp svg{flex:none;width:18px;height:18px;color:var(--plum-600);}
+  .hint{font-size:12px;color:var(--ink-soft);line-height:1.5;margin:4px 2px 14px;}
+
+  /* alarmas */
+  .counter{display:flex;align-items:center;justify-content:space-between;background:var(--plum-50);border-radius:10px;padding:9px 12px;margin-bottom:12px;font-size:12px;color:var(--plum-800);font-weight:600;}
+  .counter button{border:none;background:none;color:var(--plum-700);font-weight:600;font-size:12px;text-decoration:underline;}
+  .q{display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-bottom:1px solid var(--line-soft);}
+  .q .n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--line-soft);color:var(--ink-soft);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+  .q .tx{flex:1;font-size:13px;line-height:1.4;color:var(--ink);}
+  .seg{flex:none;display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;}
+  .seg button{border:none;background:#fff;padding:7px 11px;font-size:12px;font-weight:600;color:var(--ink-soft);}
+  .seg button+button{border-left:1px solid var(--line);}
+  .seg button[aria-checked=true].si{background:var(--coral-600);color:#fff;}
+  .seg button[aria-checked=true].no{background:var(--teal-500);color:#fff;}
+
+  /* voz */
+  .voice{border:1.5px dashed var(--plum-600);border-radius:16px;background:var(--plum-50);padding:18px 14px;text-align:center;}
+  .mic{width:62px;height:62px;border-radius:50%;border:none;background:var(--plum-600);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 6px 14px rgba(227,6,19,.3);}
+  .mic svg{width:26px;height:26px;}
+  .mic.rec{background:var(--coral-600);box-shadow:0 6px 14px rgba(201,85,46,.35);}
+  @media (prefers-reduced-motion:no-preference){.mic.rec{animation:pulse 1.3s ease-in-out infinite;}}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+  .voice .st{font-size:12.5px;font-weight:600;color:var(--plum-700);}
+
+  /* enrolamiento */
+  .switch-row{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:8px;}
+  .switch-row .t{font-size:13.5px;font-weight:600;}
+  .switch-row .d{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+  .sw{flex:none;width:46px;height:26px;border-radius:999px;border:none;background:#E0D4D5;position:relative;padding:0;}
+  .sw::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .15s;}
+  .sw[aria-checked=true]{background:var(--teal-500);}
+  .sw[aria-checked=true]::after{left:23px;}
+  .alert{font-size:12.5px;line-height:1.45;border-radius:10px;padding:10px 12px;margin-bottom:12px;}
+  .alert.warn{background:var(--amber-100);color:var(--amber-600);}
+  .alert.info{background:var(--plum-50);color:var(--plum-800);}
+  .sumcard{border:1px solid var(--line);border-radius:12px;padding:4px 14px;margin-top:6px;}
+  .sumcard .r{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line-soft);font-size:12.5px;}
+  .sumcard .r:last-child{border-bottom:none;}
+  .sumcard .r span:first-child{color:var(--ink-soft);}
+  .sumcard .r span:last-child{font-weight:600;text-align:right;}
+
+  /* consentimiento */
+  .handover{display:flex;gap:10px;align-items:center;background:var(--plum-800);color:#fff;border-radius:12px;padding:11px 13px;font-size:12.5px;font-weight:600;line-height:1.35;margin-bottom:14px;}
+  .handover svg{flex:none;width:22px;height:22px;}
+  .paper{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff;font-size:15px;line-height:1.6;color:var(--ink);}
+  .paper b{color:var(--plum-800);}
+  .plain{margin:12px 0 14px;background:var(--plum-50);border-radius:12px;padding:12px 14px;}
+  .plain .t{font-size:12px;font-weight:700;color:var(--plum-700);margin-bottom:4px;}
+  .plain .d{font-size:13.5px;line-height:1.55;color:var(--plum-900);}
+  .sigwrap{position:relative;border:1.5px solid var(--plum-600);border-radius:12px;background:#fff;height:150px;touch-action:none;}
+  .sigwrap canvas{position:absolute;inset:0;width:100%;height:100%;border-radius:12px;touch-action:none;cursor:crosshair;}
+  .sigwrap .base{position:absolute;left:16px;right:16px;bottom:34px;border-bottom:1.5px solid var(--line);pointer-events:none;}
+  .sigwrap .x{position:absolute;left:16px;bottom:38px;font-size:16px;color:var(--ink-faint);pointer-events:none;}
+  .sigwrap .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--ink-faint);pointer-events:none;}
+  .sigwrap .who2{position:absolute;left:16px;bottom:10px;font-size:11.5px;color:var(--ink-soft);pointer-events:none;}
+  .sigtools{display:flex;justify-content:space-between;align-items:center;margin:8px 2px 14px;font-size:12px;color:var(--ink-soft);}
+  .sigtools button{border:none;background:none;color:var(--plum-700);font-weight:600;font-size:12.5px;text-decoration:underline;}
+  .check{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.45;color:var(--ink);}
+  .check input{flex:none;width:22px;height:22px;margin:1px 0 0;accent-color:var(--plum-600);}
+
+  /* confirmación */
+  .okmark{width:64px;height:64px;border-radius:50%;background:var(--teal-100);color:var(--teal-700);display:flex;align-items:center;justify-content:center;margin:6px auto 12px;}
+  .okmark svg{width:30px;height:30px;}
+  .center{text-align:center;}
+  .center h2{font-size:19px;color:var(--plum-900);}
+  .center p{font-size:12.5px;color:var(--ink-soft);margin:4px 0 14px;line-height:1.5;}
+  .sigthumb{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:12px;color:var(--ink-soft);}
+  .sigthumb img{height:40px;border:1px solid var(--line);border-radius:6px;padding:2px 6px;background:#fff;}
+
+  /* registros */
+  .rec-item{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:9px;}
+  .rec-item .top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;}
+  .rec-item .nm{font-size:13.5px;font-weight:600;}
+  .rec-item .meta{font-size:12px;color:var(--ink-soft);margin-top:3px;line-height:1.5;}
+  .tag{flex:none;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;}
+  .tag.sync{background:var(--teal-100);color:var(--teal-700);}
+  .tag.pend{background:var(--amber-100);color:var(--amber-600);}
+  .syncbar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--plum-50);border-radius:12px;padding:11px 13px;margin-bottom:12px;font-size:12.5px;color:var(--plum-800);line-height:1.4;}
+  .syncbar .mini{flex:none;}
+
+  .toast{position:absolute;left:16px;right:16px;top:64px;background:var(--plum-900);color:#fff;border-radius:11px;padding:11px 14px;font-size:13px;font-weight:500;opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity .2s,transform .2s;z-index:5;}
+  .toast.show{opacity:1;transform:none;}
+
+  /* ---------- acceso ---------- */
+  .auth{display:flex;flex-direction:column;height:100%;min-height:0;}
+  .auth .btn,.sheet .btn{flex:none;display:block;width:100%;}
+  .auth-top{flex:none;position:relative;background:linear-gradient(155deg,#E30613 0%,#9B151C 100%);color:#fff;padding:30px 22px 22px;border-radius:0 0 26px 26px;}
+  .auth-top .mark{display:none;}
+  .auth-logo{background:#fff;border-radius:12px;padding:8px 10px;display:inline-block;margin-bottom:14px;box-shadow:0 6px 14px rgba(0,0,0,.18);}
+  .auth-logo img{height:32px;width:auto;display:block;}
+  .auth-top h2{font-size:21px;color:#fff;}
+  .auth-top p{font-size:12.5px;color:rgba(255,255,255,.86);margin:6px 0 0;line-height:1.45;}
+  .auth-steps{display:flex;gap:6px;margin-top:16px;}
+  .auth-steps span{flex:1;display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:rgba(255,255,255,.7);}
+  .auth-steps span::before{content:'';flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.3);order:2;}
+  .auth-steps span.on{color:#fff;}
+  .auth-steps span.on::before{background:#fff;}
+  .auth-body{flex:1;min-height:0;overflow-y:auto;padding:20px 22px 18px;display:flex;flex-direction:column;}
+  .auth-body::-webkit-scrollbar{width:0;}
+  .auth-body input[type=email],.auth-body input[type=password]{height:48px;border:1.5px solid #DDCFD1;border-radius:12px;font-size:14.5px;}
+  .auth-body input:focus{outline:none;border-color:var(--plum-600);box-shadow:0 0 0 3px rgba(227,6,19,.14);}
+  .auth-foot{margin-top:auto;padding-top:14px;font-size:11.5px;color:var(--ink-faint);line-height:1.5;text-align:center;}
+  .auth-foot b{color:var(--ink-soft);}
+
+  .mailnote{display:flex;gap:11px;align-items:flex-start;border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff;box-shadow:0 8px 20px rgba(35,24,26,.08);margin-bottom:16px;}
+  .mailnote .ic{flex:none;width:34px;height:34px;border-radius:10px;background:var(--plum-50);color:var(--plum-600);display:flex;align-items:center;justify-content:center;}
+  .mailnote .ic svg{width:18px;height:18px;}
+  .mailnote .from{font-size:11px;color:var(--ink-faint);font-weight:600;}
+  .mailnote .subj{font-size:12.5px;color:var(--ink);font-weight:600;margin-top:1px;}
+  .mailnote .msg{font-size:12px;color:var(--ink-soft);margin-top:3px;line-height:1.45;}
+  .mailnote .msg b{font-family:'Manrope';font-size:14px;letter-spacing:2px;color:var(--plum-800);}
+  .mailnote .use{margin-top:8px;border:1px solid var(--plum-600);background:var(--plum-50);color:var(--plum-700);border-radius:8px;padding:6px 11px;font-size:12px;font-weight:700;}
+  @media (prefers-reduced-motion:no-preference){ .mailnote{animation:dropin .35s ease-out both .25s;} }
+  @keyframes dropin{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+
+  .otp-label{font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:8px;}
+  .otp-row{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:6px;}
+  .otp-row input{width:100%;height:54px;min-width:0;text-align:center;font-size:22px;font-weight:800;font-family:'Manrope';color:var(--plum-900);padding:0;border:1.5px solid #D9CACC;border-radius:12px;background:#FBF7F7;caret-color:var(--plum-600);}
+  .otp-row input:focus{outline:none;border-color:var(--plum-600);background:#fff;box-shadow:0 0 0 3px rgba(227,6,19,.14);}
+  .otp-row input.filled{border-color:var(--plum-700);background:#fff;}
+  .otp-row.bad input{border-color:var(--coral-600);background:var(--coral-100);}
+  .otp-meta{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--ink-soft);margin:4px 0 16px;}
+  .linkish{border:none;background:none;color:var(--plum-700);font-weight:700;font-size:12.5px;text-decoration:underline;padding:4px 0;}
+  .linkish:disabled{color:var(--ink-faint);text-decoration:none;cursor:default;}
+  .screen.authmode .toast{top:auto;bottom:22px;}
+
+  /* ---------- jornada / slider ---------- */
+  .jbox{border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:14px;background:#fff;}
+  .sync-cta{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px dashed var(--plum-600);background:var(--plum-50);border-radius:12px;padding:11px 12px;margin-bottom:12px;text-align:left;}
+  .sync-cta .t{font-size:13px;font-weight:700;color:var(--plum-800);font-family:'Manrope';}
+  .sync-cta .d{font-size:11.5px;color:var(--ink-soft);margin-top:2px;}
+  .sync-cta.done{border-style:solid;border-color:#B8E4D4;background:var(--teal-100);}
+  .sync-cta.done .t{color:var(--teal-700);}
+  .sync-cta .pill{flex:none;border-radius:9px;padding:8px 11px;font-size:12px;font-weight:700;border:none;background:var(--plum-600);color:#fff;}
+  .sync-cta.done .pill{background:var(--teal-500);}
+  .slide{position:relative;height:56px;border-radius:999px;background:var(--plum-600);overflow:hidden;user-select:none;touch-action:none;}
+  .slide.open{background:var(--teal-500);}
+  .slide-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;color:#fff;padding:0 52px;pointer-events:none;text-align:center;line-height:1.25;}
+  .slide-knob{position:absolute;top:4px;left:4px;width:48px;height:48px;border-radius:50%;border:none;background:#fff;box-shadow:0 4px 10px rgba(0,0,0,.16);display:flex;align-items:center;justify-content:center;color:var(--plum-600);padding:0;z-index:1;}
+  .slide.open .slide-knob{color:var(--teal-700);}
+  .slide-knob svg{width:22px;height:22px;pointer-events:none;}
+  .jst{font-size:12px;color:var(--ink-soft);margin:8px 2px 0;line-height:1.45;}
+  .camps.locked .camp{opacity:.45;pointer-events:none;}
+  .locknote{font-size:12.5px;color:var(--amber-600);background:var(--amber-100);border-radius:10px;padding:10px 12px;margin-bottom:12px;line-height:1.45;}
+
+  .sheet{position:absolute;inset:0;background:rgba(26,16,18,.46);display:none;align-items:flex-end;z-index:8;}
+  .sheet.on{display:flex;}
+  .sheet .card{width:100%;background:#fff;border-radius:22px 22px 0 0;padding:20px 18px 28px;}
+  .sheet h3{font-size:16px;color:var(--plum-900);margin-bottom:6px;}
+  .sheet p{margin:0 0 14px;font-size:13px;line-height:1.55;color:var(--ink-soft);}
+  .bar{height:6px;border-radius:99px;background:var(--line);overflow:hidden;margin:4px 0 16px;}
+  .bar i{display:block;height:100%;width:0;background:var(--teal-500);border-radius:99px;transition:width .25s;}
+  @media (prefers-reduced-motion:no-preference){
+    .bar.run i{animation:grow 1.6s ease forwards;}
+  }
+  @keyframes grow{from{width:8%}to{width:100%}}
+
+  /* ---------- pantallas chicas ---------- */
+  @media (max-width:980px){
+    .stage{grid-template-columns:1fr;justify-items:center;}
+    .rail{flex-direction:row;flex-wrap:wrap;justify-content:center;}
+    .note{width:100%;max-width:560px;}
+  }
+  @media (max-width:480px){
+    body{background:#fff;}
+    .stage{display:block;padding:0;max-width:none;}
+    .proto-head,.rail,.note{display:none;}
+    .phone{width:100%;height:100vh;height:100dvh;border-radius:0;padding:0;background:none;box-shadow:none;}
+    .screen{border-radius:0;}
+  }
+</style>
+</head>
+<body>
+<h1 class="sr" style="position:absolute;left:-9999px">Prototipo de la aplicación móvil de campañas de salud</h1>
+<header class="proto-head">
+  <img src="LogoFundacion.png" alt="Fundación Peruana de Cáncer">
+  <div class="sep" aria-hidden="true"></div>
+  <div class="product">Prototipo · App móvil de campañas</div>
+</header>
+<div class="stage">
+
+  <nav class="rail" id="rail" aria-label="Pantallas del prototipo"></nav>
+
+  <div class="phone">
+    <div class="screen" id="screen">
+
+      <div class="appbar" id="appbar">
+        <div class="who"><img class="brand-mark" src="LogoFundacion.png" alt="Fundación Peruana de Cáncer"><div><div class="nm">Dra. Rosa Medina</div><div class="rl">Médico tratante</div></div></div>
+        <button class="conn" id="conn" type="button" aria-live="polite"><span class="dot"></span><span id="connTxt">En línea</span></button>
+      </div>
+
+      <div class="views">
+
+        <!-- acceso -->
+        <section class="view" id="v-login">
+          <div class="auth">
+            <div class="auth-top">
+              <div class="auth-logo"><img src="LogoFundacion.png" alt="Fundación Peruana de Cáncer"></div>
+              <h2>Iniciar sesión</h2>
+              <p>Fundación Peruana de Cáncer · Campañas de salud</p>
+              <div class="auth-steps"><span class="on">1 Credenciales</span><span>2 Código</span></div>
+            </div>
+            <div class="auth-body">
+              <div class="field" id="fld-mail">
+                <label for="loginMail">Correo institucional</label>
+                <input id="loginMail" type="email" autocomplete="username" placeholder="nombre@fpc.org.pe" value="rosa.medina@fpc.org.pe">
+                <div class="err" id="e-mail" role="alert"></div>
+              </div>
+              <div class="field" id="fld-pass">
+                <label for="loginPass">Contraseña</label>
+                <input id="loginPass" type="password" autocomplete="current-password" placeholder="Su contraseña" value="sepa2026">
+                <div class="err" id="e-pass" role="alert"></div>
+              </div>
+              <button class="btn" type="button" id="loginGo">Continuar</button>
+              <p class="hint" style="margin:12px 2px 0;text-align:center">Le enviaremos un código de verificación a su correo.</p>
+              <div class="auth-foot">Prototipo: contraseña <b>sepa2026</b></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="v-otp">
+          <div class="auth">
+            <div class="auth-top">
+              <div class="auth-logo"><img src="LogoFundacion.png" alt="Fundación Peruana de Cáncer"></div>
+              <h2>Verifique su identidad</h2>
+              <p id="otpTo">Ingrese el código de 6 dígitos enviado a su correo.</p>
+              <div class="auth-steps"><span class="on">1 Credenciales</span><span class="on">2 Código</span></div>
+            </div>
+            <div class="auth-body">
+              <div class="mailnote" id="mailNote">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg></div>
+                <div>
+                  <div class="from">Correo · FPC Accesos · ahora</div>
+                  <div class="subj">Su código de verificación</div>
+                  <div class="msg">Use <b id="mailCode">482910</b> para ingresar. Vence en 5 minutos.</div>
+                  <button class="use" type="button" id="otpAutofill">Usar este código</button>
+                </div>
+              </div>
+              <div class="otp-label" id="otpLbl">Código de verificación</div>
+              <div class="otp-row" id="otpRow" role="group" aria-labelledby="otpLbl">
+                <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" aria-label="Dígito 1" data-otp="0">
+                <input type="text" inputmode="numeric" maxlength="1" aria-label="Dígito 2" data-otp="1">
+                <input type="text" inputmode="numeric" maxlength="1" aria-label="Dígito 3" data-otp="2">
+                <input type="text" inputmode="numeric" maxlength="1" aria-label="Dígito 4" data-otp="3">
+                <input type="text" inputmode="numeric" maxlength="1" aria-label="Dígito 5" data-otp="4">
+                <input type="text" inputmode="numeric" maxlength="1" aria-label="Dígito 6" data-otp="5">
+              </div>
+              <div class="err" id="e-otp" role="alert"></div>
+              <div class="otp-meta"><span id="otpTimer">Reenviar en 0:30</span><button class="linkish" type="button" id="otpResend" disabled>Reenviar código</button></div>
+              <button class="btn" type="button" id="otpGo">Verificar e ingresar</button>
+              <button class="btn quiet" type="button" id="otpBack" style="margin-top:8px">Cambiar correo</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- campañas -->
+        <section class="view" id="v-campanas">
+          <div class="vhead"><h2>Mis campañas</h2><div class="sub" id="campSub">Sincronice y abra la jornada para registrar</div></div>
+          <div class="body">
+            <div class="jbox">
+              <button class="sync-cta" id="syncCta" type="button">
+                <div><div class="t" id="syncCtaT">Sincronizar campañas</div><div class="d" id="syncCtaD">Obligatorio al abrir la jornada. Descarga fichas y catálogos.</div></div>
+                <span class="pill" id="syncCtaP">Sincronizar</span>
+              </button>
+              <div class="slide" id="slide" role="slider" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0" aria-label="Abrir o cerrar jornada">
+                <span class="slide-hint" id="slideHint">Deslice a la derecha para iniciar</span>
+                <button type="button" class="slide-knob" id="slideKnob" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+                </button>
+              </div>
+              <p class="jst" id="jst">La jornada está cerrada. Sincronice y deslice el control a la derecha para iniciar registros.</p>
+            </div>
+            <div id="lockNote" class="locknote">El registro permanece bloqueado hasta que la jornada esté abierta (control en verde).</div>
+            <div class="camps locked" id="camps">
+              <button class="camp" data-ficha="cuello" type="button">
+                <div><div class="nm">Detección de cáncer de cuello uterino</div><div class="tp">Ficha de cuello uterino</div></div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+              <button class="camp" data-ficha="infantil" type="button">
+                <div><div class="nm">Detección temprana de cáncer infantil</div><div class="tp">Ficha de cáncer infantil</div></div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+            </div>
+            <p class="hint">Las campañas se descargan en la sincronización al abrir la jornada y quedan disponibles sin internet.</p>
+          </div>
+        </section>
+
+        <!-- datos -->
+        <section class="view" id="v-datos">
+          <div class="vhead">
+            <h2 id="datosTitle">Datos del beneficiario</h2>
+            <span class="chip-camp" id="datosCamp"></span>
+            <div class="progress" id="prog-datos"></div>
+          </div>
+          <div class="body" id="datosBody"></div>
+          <div class="actions">
+            <button class="btn quiet" type="button" data-go="campanas">Atrás</button>
+            <button class="btn" type="button" id="datosNext">Continuar</button>
+          </div>
+        </section>
+
+        <!-- consentimiento -->
+        <section class="view" id="v-consent">
+          <div class="vhead"><h2>Autorización de contacto</h2><div class="sub">Lea el texto y firme con el dedo</div></div>
+          <div class="body" id="consentBody">
+            <div class="handover">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>
+              <span id="handoverTxt">Entregue el celular a la paciente para que lea y firme.</span>
+            </div>
+            <div class="paper" id="paperTxt"></div>
+            <div class="plain"><div class="t">En palabras simples, usted está autorizando que:</div><div class="d" id="plainTxt"></div></div>
+            <div class="flabel">Firma</div>
+            <div class="sigwrap" id="sigwrap">
+              <canvas id="sig" aria-label="Recuadro de firma"></canvas>
+              <div class="ph" id="sigPh">Firme aquí con el dedo</div>
+              <div class="x">✕</div><div class="base"></div>
+              <div class="who2" id="sigWho"></div>
+            </div>
+            <div class="sigtools"><span id="sigStamp"></span><button type="button" id="sigClear">Borrar firma</button></div>
+            <div class="err" id="e-sig" role="alert"></div>
+            <label class="check"><input type="checkbox" id="readChk"><span>Leí y entendí lo que estoy firmando.</span></label>
+            <div class="err" id="e-read" role="alert" style="margin-top:8px"></div>
+          </div>
+          <div class="actions" style="flex-direction:column">
+            <button class="btn" type="button" id="signOk">Firmar y autorizar</button>
+            <div style="display:flex;gap:8px">
+              <button class="btn quiet" type="button" data-go="datos" style="flex:1">Volver</button>
+              <button class="btn danger-ghost" type="button" id="signNo" style="flex:1.6">No autorizo el contacto</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- alarmas -->
+        <section class="view" id="v-alarma">
+          <div class="vhead">
+            <h2>Señales de alarma</h2>
+            <span class="chip-camp" id="alarmaCamp"></span>
+            <div class="progress" id="prog-alarma"></div>
+          </div>
+          <div class="body" id="alarmaBody"></div>
+          <div class="actions">
+            <button class="btn quiet" type="button" data-go="datos">Atrás</button>
+            <button class="btn" type="button" id="alarmaNext">Continuar</button>
+          </div>
+        </section>
+
+        <!-- observación -->
+        <section class="view" id="v-obs">
+          <div class="vhead">
+            <h2>Observación del tratante</h2>
+            <span class="chip-camp" id="obsCamp"></span>
+            <div class="progress" id="prog-obs"></div>
+          </div>
+          <div class="body">
+            <div class="voice">
+              <button class="mic" id="mic" type="button" aria-label="Dictar observación"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5 11.5a7 7 0 0014 0M12 18.5v3"/></svg></button>
+              <div class="st" id="micSt">Toque para dictar</div>
+            </div>
+            <div class="field" style="margin-top:14px">
+              <label for="obsTxt">Observación <span class="opt">(editable)</span></label>
+              <textarea id="obsTxt" rows="6" placeholder="Lo que dicte aparecerá aquí. También puede escribir."></textarea>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn quiet" type="button" id="obsBack">Atrás</button>
+            <button class="btn" type="button" id="obsNext">Continuar</button>
+          </div>
+        </section>
+
+        <!-- enrolamiento -->
+        <section class="view" id="v-enrol">
+          <div class="vhead">
+            <h2 id="enrolTitle">Enrolamiento y resultado</h2>
+            <span class="chip-camp" id="enrolCamp"></span>
+            <div class="progress" id="prog-enrol"></div>
+          </div>
+          <div class="body" id="enrolBody"></div>
+          <div class="actions">
+            <button class="btn quiet" type="button" id="enrolBack">Atrás</button>
+            <button class="btn" type="button" id="enrolSave">Guardar registro</button>
+          </div>
+        </section>
+
+        <!-- listo -->
+        <section class="view" id="v-listo">
+          <div class="body" id="listoBody"></div>
+          <div class="actions" style="flex-direction:column">
+            <button class="btn" type="button" id="again">Registrar otro beneficiario</button>
+            <button class="btn ghost" type="button" data-go="registros">Ver registros del dispositivo</button>
+          </div>
+        </section>
+
+        <!-- registros -->
+        <section class="view" id="v-registros">
+          <div class="vhead"><h2>Registros del dispositivo</h2><div class="sub">Lo que registró y su estado de envío</div></div>
+          <div class="body" id="registrosBody"></div>
+        </section>
+
+      </div>
+
+      <nav class="tabbar" id="tabbar" aria-label="Navegación principal">
+        <button type="button" data-go="campanas" id="tab-campanas">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3.5" width="16" height="17" rx="2.5"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>Campañas
+        </button>
+        <button type="button" data-go="registros" id="tab-registros">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg>Registros<span class="badge-n" id="pendBadge" style="display:none"></span>
+        </button>
+      </nav>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      <div class="sheet" id="syncSheet" role="dialog" aria-labelledby="syncSheetT" aria-modal="true">
+        <div class="card">
+          <h3 id="syncSheetT">Sincronización requerida</h3>
+          <p id="syncSheetP">Para abrir la jornada debe sincronizar ahora: se descargan las campañas asignadas y quedan listas para registrar sin internet.</p>
+          <div class="bar" id="syncBar"><i></i></div>
+          <button class="btn" type="button" id="syncDo" style="width:100%">Sincronizar ahora</button>
+          <button class="btn quiet" type="button" id="syncCancel" style="width:100%;margin-top:8px">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <aside class="note" id="note"></aside>
+</div>
+
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+  const esc = t => String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const fmt = d => new Date(d).toLocaleString('es-PE',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+
+  const ALARMS = [
+    '¿Fiebre por más de 7 días sin causa aparente?',
+    '¿Dolor de cabeza persistente y progresivo?',
+    '¿Dolor óseo (dolor en los huesos) que ha aumentado?',
+    '¿Puntos rojos en la piel (petequias), moretones y/o sangrado?',
+    '¿Palidez palmar o conjuntival?',
+    '¿Leucocoria (mancha blanca en el ojo)?',
+    '¿Estrabismo (los ojos miran en diferente dirección)?',
+    '¿Ganglios mayores de 2.5 cm de diámetro (bultos duros, no dolorosos), con evaluación a 4 semanas?',
+    '¿Convulsión sin fiebre ni enfermedad neurológica de base?',
+    '¿Dificultad para hablar?',
+    '¿Debilidad unilateral (de una extremidad o de un lado del cuerpo)?',
+    '¿Asimetría física (facial)?',
+    '¿Cambios del estado de conciencia o mental (comportamiento, confusión)?',
+    '¿Pérdida del equilibrio al caminar?',
+    '¿Cojea por el dolor?',
+    '¿Alteraciones en la visión (borrosa, doble, ceguera súbita)?',
+    '¿Masa palpable en abdomen?',
+    '¿Pérdida de apetito en los últimos 3 meses?',
+    '¿Cansancio o fatiga en los últimos 3 meses?',
+    '¿Pérdida de peso en los últimos 3 meses?',
+    '¿Sudoración nocturna importante, sin causa aparente?'
+  ];
+  const CAMP = {
+    cuello:{name:'Cuello uterino', full:'Detección de cáncer de cuello uterino'},
+    infantil:{name:'Cáncer infantil', full:'Detección temprana de cáncer infantil'}
+  };
+  const SAMPLE = {
+    cuello:{nombre:'Marisol Huamán Torres',dni:'45231678',edad:'39',cel:'987654321',cel2name:'Rosa Huamán · hermana',cel2:'912345678',seguro:'SIS',prueba:'Sí'},
+    infantil:{nombre:'Renzo Castillo Paredes',dni:'71234567',peso:'26',talla:'125',tutor:'Lucía Paredes Rojas',cel:'987123456',cel2name:'',cel2:'',seguro:'SIS',sintoma:'Dolor en la pierna al caminar desde hace tres semanas.'}
+  };
+  const DICTADO = {
+    cuello:'Paciente refiere sangrado leve postcoital de dos semanas de evolución. Se recomienda evaluación colposcópica y control en 30 días.',
+    infantil:'Se palpa ganglio cervical duro de aproximadamente 3 cm, no doloroso. Se indica evaluación en oncología pediátrica en 4 semanas.'
+  };
+
+  const blank = () => ({
+    ficha:'cuello', f:{}, alarm:Array(21).fill(null), obs:'', enrol:false, result:'Pendiente', indic:'',
+    consent:{status:'pending',sig:null,at:null,by:''}
+  });
+  const OTP_DEMO = '482910';
+  const S = Object.assign(blank(),{
+    conn:true, last:null, auth:false, mail:'rosa.medina@fpc.org.pe',
+    synced:false, syncedAt:null, jornada:false, pendingOpen:false,
+    records:[
+      {id:1,name:'Jazmín Rojas Del Carpio',ficha:'cuello',consent:'signed',enrol:false,sync:true,at:Date.now()-86400000*1.2},
+      {id:2,name:'Elena Farfán Quispe',ficha:'cuello',consent:'refused',enrol:false,sync:false,at:Date.now()-3600000*5}
+    ]
+  });
+  let current = 'login';
+
+  /* ---------- notas laterales ---------- */
+  const NOTES = {
+    login:['Acceso del tratante','Correo y contraseña, luego un código OTP enviado al correo institucional (doble factor). Sin verificar el código no entra a la app.',['Prototipo: rosa.medina@fpc.org.pe / sepa2026','Código OTP de demostración: 482910']],
+    otp:['Doble factor (OTP)','El segundo paso pide el código de 6 dígitos del correo. Así se evita que alguien use el celular si solo conoce la contraseña.',['Reenviar código al correo','Volver cambia el correo si está mal escrito']],
+    campanas:['Mis campañas','Al entrar, primero sincroniza. Luego desliza el control a la derecha (verde) para abrir la jornada. Solo entonces puede registrar. Deslizar a la izquierda (rojo) cierra la jornada.',['Sincronización obligatoria al abrir la jornada','Registro bloqueado si el control está en rojo']],
+    datos:['Datos del beneficiario','Formulario según la ficha de la campaña. La autorización de contacto de la ficha en papel pasa a ser una fila que abre la pantalla de firma.',['Valida DNI (8 dígitos) y celular (9 dígitos)','Cuello uterino: edad y si recibió la prueba','Infantil: peso, talla y datos del tutor']],
+    consent:['Consentimiento con firma','El texto se muestra completo, con el nombre de quien firma, más una versión en palabras simples para que sepa qué está firmando. Se firma con el dedo; también se puede registrar que no autoriza.',['Se entrega el celular al paciente (o al tutor si es menor)','No se puede firmar sin dibujar la firma y marcar que leyó','La firma queda guardada con fecha y hora']],
+    alarma:['Señales de alarma','Las 21 preguntas Sí/No de la ficha de cáncer infantil, en una sola lista. Se puede marcar el resto en No para ir más rápido.',['Cuenta cuántas señales se marcaron','Sugiere evaluar enrolamiento si hay alertas']],
+    obs:['Observación por voz','El tratante dicta y el texto aparece en el campo, editable antes de guardar. Si el dispositivo no tiene dictado, también se puede escribir.',['Usa el reconocimiento de voz del teléfono','En este prototipo, sin micrófono disponible se simula un dictado']],
+    enrol:['Enrolamiento y resultado','Se indica si el caso aplica para enrolamiento (seguimiento posterior). Cuello uterino registra el resultado si hubo prueba; infantil registra la indicación médica.',['Avisa si no hay autorización firmada','El registro no se guarda sin decidir el consentimiento']],
+    listo:['Registro guardado','Queda guardado en el dispositivo, con la firma, y se envía a la plataforma web cuando haya conexión.',['Sin internet: pendiente de sincronizar','Con internet: se sincroniza automáticamente']],
+    registros:['Registros del dispositivo','Lista de lo registrado en este celular con su estado de envío. Alterne «En línea / Sin conexión» arriba para ver cómo se sincroniza.',['Al recuperar conexión se envían los pendientes']]
+  };
+  const RAIL = [
+    ['login','Acceso y OTP'],['campanas','Campañas'],['datos','Datos del beneficiario'],['consent','Consentimiento y firma','feature'],
+    ['alarma','Señales de alarma (infantil)'],['obs','Observación por voz'],['enrol','Enrolamiento y examen'],
+    ['listo','Confirmación'],['registros','Registros y sincronización']
+  ];
+  function buildRail(){
+    $('#rail').innerHTML = '<p class="rail-title">Pantallas</p>' + RAIL.map((r,i)=>
+      `<button type="button" data-rail="${r[0]}" class="${r[2]||''}"><span class="n">${i+1}</span>${r[1]}</button>`).join('');
+  }
+  function renderNote(id){
+    const n = NOTES[id];
+    $('#note').innerHTML = `<h3>${n[0]}</h3><p>${n[1]}</p><ul>${n[2].map(x=>`<li>${x}</li>`).join('')}</ul>
+      <div class="tools"><button type="button" id="fill">Cargar datos de ejemplo</button><button type="button" id="reset">Reiniciar demostración</button></div>`;
+  }
+
+  /* ---------- navegación ---------- */
+  function steps(){ return S.ficha==='infantil' ? ['datos','alarma','obs','enrol'] : ['datos','obs','enrol']; }
+  function progress(view){
+    const el = $('#prog-'+view); if(!el) return;
+    const st = steps(), idx = st.indexOf(view);
+    el.innerHTML = st.map((s,i)=>`<i class="${i<=idx?'done':''}"></i>`).join('');
+  }
+  function go(id){
+    current = id;
+    $$('.view').forEach(v=>v.classList.toggle('on', v.id==='v-'+id));
+    $$('[data-rail]').forEach(b=>b.classList.toggle('on', b.dataset.rail===id || (id==='otp' && b.dataset.rail==='login')));
+    const gated = !['login','otp'].includes(id);
+    $('#appbar').style.display = gated ? 'flex' : 'none';
+    const showTabs = gated && ['campanas','registros','listo'].includes(id);
+    $('#tabbar').style.display = showTabs ? 'flex' : 'none';
+    $('#tab-campanas').classList.toggle('on', id==='campanas' || id==='listo');
+    $('#tab-registros').classList.toggle('on', id==='registros');
+    if(id==='campanas'){ applyJornada(); requestAnimationFrame(placeKnob); }
+    $('#screen').classList.toggle('authmode', !gated);
+    if(id==='otp'){ $('#otpTo').innerHTML = `Enviamos un código de 6 dígitos a <b>${esc(S.mail)}</b>.`; resetOtp(); }
+    else stopOtpTimer();
+    if(id==='datos') renderDatos();
+    if(id==='alarma') renderAlarma();
+    if(id==='enrol') renderEnrol();
+    if(id==='obs') { $('#obsTxt').value = S.obs; $('#micSt').textContent='Toque para dictar'; $('#mic').classList.remove('rec'); }
+    if(id==='consent') initConsent();
+    if(id==='listo') renderListo();
+    if(id==='registros') renderRegistros();
+    ['datos','alarma','obs','enrol'].forEach(v=>{ if(id===v){ progress(v); $('#'+v+'Camp').textContent = CAMP[S.ficha].full; } });
+    const body = document.querySelector('#v-'+id+' .body') || document.querySelector('#v-'+id+' .auth-body');
+    if(body) body.scrollTop = 0;
+    renderNote(id==='otp'?'otp':id);
+    updateBadge();
+  }
+
+  /* ---------- campos ---------- */
+  function fText(k,label,o={}){
+    return `<div class="field" id="fld-${k}"><label for="f-${k}">${label}${o.opt?' <span class="opt">(opcional)</span>':''}</label>
+      <input id="f-${k}" data-k="${k}" type="${o.type||'text'}" ${o.mode?`inputmode="${o.mode}"`:''} ${o.digits?'data-digits="1"':''} ${o.max?`maxlength="${o.max}"`:''} placeholder="${o.ph||''}" autocomplete="off" value="${esc(S.f[k]||'')}">
+      <div class="err" id="e-${k}" role="alert"></div></div>`;
+  }
+  function fArea(k,label,o={}){
+    return `<div class="field" id="fld-${k}"><label for="f-${k}">${label}${o.opt?' <span class="opt">(opcional)</span>':''}</label>
+      <textarea id="f-${k}" data-k="${k}" rows="${o.rows||3}" placeholder="${o.ph||''}">${esc(S.f[k]||'')}</textarea><div class="err" id="e-${k}" role="alert"></div></div>`;
+  }
+  function fChips(k,label,opts){
+    return `<div class="field" id="fld-${k}"><div class="flabel" id="l-${k}">${label}</div>
+      <div class="chips" role="radiogroup" aria-labelledby="l-${k}">${opts.map(o=>`<button type="button" class="chip" role="radio" data-chip="${k}" data-v="${o}" aria-checked="${S.f[k]===o}">${o}</button>`).join('')}</div>
+      <div class="err" id="e-${k}" role="alert"></div></div>`;
+  }
+
+  function renderDatos(){
+    const inf = S.ficha==='infantil';
+    $('#datosTitle').textContent = inf ? 'Datos del niño o niña' : 'Datos de la beneficiaria';
+    let h = '';
+    if(inf){
+      h += fText('nombre','Nombres y apellidos del niño/a',{ph:'Como figura en su DNI'});
+      h += fText('dni','DNI del menor',{mode:'numeric',digits:1,max:8,ph:'8 dígitos'});
+      h += `<div class="row2">${fText('peso','Peso (kg)',{mode:'decimal',ph:'26'})}${fText('talla','Talla (cm)',{mode:'numeric',digits:1,ph:'125'})}</div>`;
+      h += fText('tutor','Nombres y apellidos del padre, tutor o cuidador',{ph:'Quien firma la autorización'});
+      h += fText('cel','Celular del contacto principal',{type:'tel',mode:'numeric',digits:1,max:9,ph:'9 dígitos'});
+    } else {
+      h += fText('nombre','Nombres y apellidos',{ph:'Como figura en su DNI'});
+      h += `<div class="row2">${fText('dni','DNI',{mode:'numeric',digits:1,max:8,ph:'8 dígitos'})}${fText('edad','Edad',{mode:'numeric',digits:1,max:3,ph:'39'})}</div>`;
+      h += fText('cel','Celular de contacto principal',{type:'tel',mode:'numeric',digits:1,max:9,ph:'9 dígitos'});
+    }
+    h += fText('cel2name','Nombre y parentesco del contacto adicional',{opt:1,ph:'Rosa Huamán · hermana'});
+    h += fText('cel2','Celular adicional',{type:'tel',mode:'numeric',digits:1,max:9,opt:1,ph:'9 dígitos'});
+    h += fChips('seguro','Seguro de salud',['SIS','ESSALUD','Otro']);
+    if(inf) h += fArea('sintoma','¿Presentó algún síntoma antes del ingreso a consulta con oncología pediátrica?',{opt:1,rows:3,ph:'Describa brevemente'});
+    else h += fChips('prueba','¿Recibió la prueba?',['Sí','No']);
+    h += `<div class="field" id="fld-consent"><div class="flabel">Autorización de contacto</div><div id="consentRow"></div><div class="err" id="e-consent" role="alert"></div></div>`;
+    $('#datosBody').innerHTML = h;
+    renderConsentRow();
+  }
+  function renderConsentRow(){
+    const c = S.consent, el = $('#consentRow'); if(!el) return;
+    const who = S.ficha==='infantil' ? 'el padre, madre o tutor' : 'la paciente';
+    if(c.status==='signed'){
+      el.className='consent-row signed';
+      el.innerHTML = `<div class="t">Autorización firmada</div><div class="d">${esc(c.by)} · ${fmt(c.at)}</div><div class="sigrow"><img src="${c.sig}" alt="Firma registrada"></div><button class="mini" type="button" data-go="consent">Volver a firmar</button>`;
+    } else if(c.status==='refused'){
+      el.className='consent-row refused';
+      el.innerHTML = `<div class="t">No autoriza el contacto</div><div class="d">Quedó registrado el ${fmt(c.at)}. No se podrá contactar para seguimiento.</div><button class="mini" type="button" data-go="consent">Cambiar</button>`;
+    } else {
+      el.className='consent-row';
+      el.innerHTML = `<div class="t">Pendiente de firma</div><div class="d">Autoriza a la Fundación Peruana de Cáncer, a través del Programa SEPA, a contactarlo para el seguimiento. Debe firmar ${who}.</div><button class="mini" type="button" data-go="consent">Leer y firmar</button>`;
+    }
+  }
+
+  /* ---------- validación ---------- */
+  function setErr(k,msg){
+    const e = $('#e-'+k), f = $('#fld-'+k);
+    if(!e) return;
+    e.textContent = msg||''; e.classList.toggle('show',!!msg);
+    if(f) f.classList.toggle('bad',!!msg);
+  }
+  function validateIdentity(){
+    const f = S.f, inf = S.ficha==='infantil'; let ok = true;
+    if(!(f.nombre||'').trim()){ setErr('nombre', inf?'Escriba el nombre del niño o niña.':'Escriba el nombre completo.'); ok=false; }
+    if(!/^\d{8}$/.test(f.dni||'')){ setErr('dni','El DNI debe tener 8 dígitos.'); ok=false; }
+    if(inf && !(f.tutor||'').trim()){ setErr('tutor','Escriba el nombre de quien firmará.'); ok=false; }
+    return ok;
+  }
+  function validateDatos(){
+    const f = S.f, inf = S.ficha==='infantil'; let ok = validateIdentity();
+    if(!inf){ const e=+f.edad; if(!(e>0&&e<120)){ setErr('edad','Indique la edad.'); ok=false; } }
+    if(inf){
+      if(!(parseFloat(f.peso)>0)){ setErr('peso','Indique el peso.'); ok=false; }
+      if(!(parseInt(f.talla)>0)){ setErr('talla','Indique la talla.'); ok=false; }
+    }
+    if(!/^\d{9}$/.test(f.cel||'')){ setErr('cel','El celular debe tener 9 dígitos.'); ok=false; }
+    if(f.cel2 && !/^\d{9}$/.test(f.cel2)){ setErr('cel2','El celular adicional debe tener 9 dígitos.'); ok=false; }
+    if(!f.seguro){ setErr('seguro','Elija el seguro de salud.'); ok=false; }
+    if(!inf && !f.prueba){ setErr('prueba','Indique si recibió la prueba.'); ok=false; }
+    if(S.consent.status==='pending'){ setErr('consent','Falta la autorización: pida que firme o registre que no autoriza.'); ok=false; }
+    if(!ok){ const first = $('#datosBody .err.show'); if(first) first.scrollIntoView({block:'center',behavior:'smooth'}); }
+    return ok;
+  }
+
+  /* ---------- señales de alarma ---------- */
+  function alarmCounts(){
+    const a = S.alarm; return {done:a.filter(x=>x!==null).length, yes:a.filter(x=>x===true).length};
+  }
+  function renderAlarma(){
+    const c = alarmCounts();
+    $('#alarmaBody').innerHTML = `<div class="counter"><span id="alarmCount">${c.done} de 21 respondidas · ${c.yes} con alerta</span><button type="button" id="restNo">Marcar el resto en No</button></div>
+      <div class="err" id="e-alarm" role="alert" style="margin:-4px 0 10px"></div>` +
+      ALARMS.map((q,i)=>`<div class="q"><div class="n">${i+1}</div><div class="tx" id="q${i}">${q}</div>
+        <div class="seg" role="radiogroup" aria-labelledby="q${i}">
+          <button type="button" class="si" role="radio" data-q="${i}" data-v="1" aria-checked="${S.alarm[i]===true}">Sí</button>
+          <button type="button" class="no" role="radio" data-q="${i}" data-v="0" aria-checked="${S.alarm[i]===false}">No</button>
+        </div></div>`).join('');
+  }
+  function refreshAlarmCount(){ const c = alarmCounts(); const el=$('#alarmCount'); if(el) el.textContent = `${c.done} de 21 respondidas · ${c.yes} con alerta`; setErr('alarm',''); $('#e-alarm').classList.remove('show'); }
+
+  /* ---------- enrolamiento ---------- */
+  function renderEnrol(){
+    const inf = S.ficha==='infantil', f = S.f, c = alarmCounts();
+    let h = `<div class="switch-row"><div><div class="t" id="enrolLbl">¿Aplica para enrolamiento?</div><div class="d">El equipo de seguimiento se comunicará con el paciente.</div></div>
+      <button type="button" class="sw" id="enrolSw" role="switch" aria-labelledby="enrolLbl" aria-checked="${S.enrol}"></button></div>`;
+    h += `<div id="enrolMsg"></div>`;
+    if(inf){
+      h += fArea('indic','Indicación médica',{opt:1,rows:4,ph:'Indicación para la familia'});
+    } else if(f.prueba==='Sí'){
+      h += fChips('result','Resultado del examen',['Normal','Anormal','Pendiente']);
+    } else {
+      h += `<div class="alert info">No se tomó la prueba, así que no hay resultado que registrar.</div>`;
+    }
+    h += `<div class="flabel" style="margin-top:6px">Resumen</div><div class="sumcard">
+      <div class="r"><span>Beneficiario</span><span>${esc(f.nombre||'—')}</span></div>
+      <div class="r"><span>Campaña</span><span>${CAMP[S.ficha].name}</span></div>
+      ${inf?`<div class="r"><span>Señales de alarma</span><span>${c.yes} marcadas</span></div>`:''}
+      <div class="r"><span>Observación</span><span>${S.obs.trim()?'Registrada':'Sin observación'}</span></div>
+      <div class="r"><span>Autorización de contacto</span><span>${S.consent.status==='signed'?'Firmada':S.consent.status==='refused'?'No autoriza':'Pendiente'}</span></div></div>`;
+    $('#enrolBody').innerHTML = h;
+    if(S.ficha==='cuello' && f.prueba==='Sí' && !f.result) S.f.result = 'Pendiente';
+    if(S.ficha==='cuello' && f.prueba==='Sí') document.querySelectorAll('[data-chip="result"]').forEach(b=>b.setAttribute('aria-checked', String(S.f.result===b.dataset.v)));
+    enrolMsg();
+  }
+  function enrolMsg(){
+    const m = $('#enrolMsg'); if(!m) return; let h='';
+    const c = alarmCounts();
+    if(S.ficha==='infantil' && c.yes>0 && !S.enrol) h += `<div class="alert info">Hay ${c.yes} señal${c.yes>1?'es':''} de alarma marcada${c.yes>1?'s':''}. Evalúe si aplica enrolamiento.</div>`;
+    if(S.enrol && S.consent.status!=='signed') h += `<div class="alert warn">Sin autorización firmada, el equipo de seguimiento no podrá contactar al paciente.</div>`;
+    m.innerHTML = h;
+  }
+
+  /* ---------- consentimiento y firma ---------- */
+  const pad = {ctx:null,drawing:false,has:false,w:0,h:0};
+  function consentCopy(){
+    const f = S.f, inf = S.ficha==='infantil';
+    if(inf) return {
+      signer:f.tutor, handover:'Entregue el celular al padre, madre o tutor para que lea y firme.',
+      paper:`Yo, <b>${esc(f.tutor)}</b>, como padre, madre, tutor o cuidador de <b>${esc(f.nombre)}</b>, <b>autorizo</b> a la Fundación Peruana de Cáncer, a través del Programa SEPA, a contactarme para el seguimiento y acompañamiento sobre los pasos a seguir para la atención de salud.`,
+      plain:`la Fundación Peruana de Cáncer, a través del Programa SEPA, lo o la llame a los celulares que usted registró, para acompañar a ${esc(f.nombre)} en los pasos de su atención de salud.`
+    };
+    return {
+      signer:f.nombre, handover:'Entregue el celular a la paciente para que lea y firme.',
+      paper:`Yo, <b>${esc(f.nombre)}</b>, con DNI <b>${esc(f.dni)}</b>, <b>autorizo</b> a la Fundación Peruana de Cáncer, a través del Programa SEPA, a contactarme para el seguimiento y acompañamiento sobre los pasos a seguir para la atención de salud.`,
+      plain:`la Fundación Peruana de Cáncer, a través del Programa SEPA, la llame al celular que usted registró, para acompañarla en los pasos de su atención de salud.`
+    };
+  }
+  function openConsent(){
+    if(!validateIdentity()){
+      setErr('consent','Complete primero los datos de identidad para poder mostrar el texto.');
+      const first = $('#datosBody .err.show'); if(first) first.scrollIntoView({block:'center',behavior:'smooth'});
+      return;
+    }
+    setErr('consent','');
+    go('consent');
+  }
+  function initConsent(){
+    const c = consentCopy();
+    $('#handoverTxt').textContent = c.handover;
+    $('#paperTxt').innerHTML = c.paper;
+    $('#plainTxt').innerHTML = c.plain;
+    $('#sigWho').textContent = c.signer;
+    $('#sigStamp').textContent = fmt(Date.now());
+    $('#readChk').checked = false;
+    setErr('sig',''); $('#e-sig').classList.remove('show'); $('#e-read').classList.remove('show');
+    requestAnimationFrame(()=>{ sizePad(); clearPad(); });
+  }
+  function sizePad(){
+    const c = $('#sig'), r = c.getBoundingClientRect(), dpr = window.devicePixelRatio||1;
+    pad.w = r.width; pad.h = r.height;
+    c.width = Math.max(1,Math.round(r.width*dpr)); c.height = Math.max(1,Math.round(r.height*dpr));
+    pad.ctx = c.getContext('2d'); pad.ctx.setTransform(dpr,0,0,dpr,0,0);
+    pad.ctx.lineWidth = 2.6; pad.ctx.lineCap = 'round'; pad.ctx.lineJoin = 'round'; pad.ctx.strokeStyle = '#23181A';
+  }
+  function clearPad(){
+    if(pad.ctx) pad.ctx.clearRect(0,0,pad.w,pad.h);
+    pad.has = false; $('#sigPh').style.display = 'flex';
+  }
+  function padPos(e){ const r = $('#sig').getBoundingClientRect(); return {x:e.clientX-r.left, y:e.clientY-r.top}; }
+  (function bindPad(){
+    const c = $('#sig');
+    c.addEventListener('pointerdown',e=>{
+      if(!pad.ctx) sizePad();
+      e.preventDefault(); c.setPointerCapture(e.pointerId); pad.drawing = true;
+      const p = padPos(e); pad.ctx.beginPath(); pad.ctx.moveTo(p.x,p.y); pad.ctx.lineTo(p.x+.1,p.y+.1); pad.ctx.stroke();
+      pad.has = true; $('#sigPh').style.display='none'; $('#e-sig').classList.remove('show');
+    });
+    c.addEventListener('pointermove',e=>{
+      if(!pad.drawing) return; e.preventDefault();
+      const p = padPos(e); pad.ctx.lineTo(p.x,p.y); pad.ctx.stroke(); pad.ctx.beginPath(); pad.ctx.moveTo(p.x,p.y);
+    });
+    const end = e=>{ pad.drawing=false; };
+    c.addEventListener('pointerup',end); c.addEventListener('pointercancel',end); c.addEventListener('pointerleave',end);
+    window.addEventListener('resize',()=>{ if(current==='consent'){ const keep = pad.has; if(!keep){ sizePad(); } } });
+  })();
+  function signOk(){
+    let ok = true;
+    if(!pad.has){ setErr('sig','Falta la firma. Pida que firme dentro del recuadro.'); ok=false; }
+    if(!$('#readChk').checked){ const e=$('#e-read'); e.textContent='Marque que leyó y entendió el texto.'; e.classList.add('show'); ok=false; }
+    else $('#e-read').classList.remove('show');
+    if(!ok) return;
+    S.consent = {status:'signed', sig:$('#sig').toDataURL('image/png'), at:Date.now(), by:consentCopy().signer};
+    go('datos'); toast('Autorización firmada');
+  }
+  function signNo(){
+    S.consent = {status:'refused', sig:null, at:Date.now(), by:consentCopy().signer};
+    go('datos'); toast('Se registró que no autoriza el contacto');
+  }
+
+  /* ---------- dictado ---------- */
+  let rec = null, simTimer = null;
+  function stopDictado(){
+    if(rec){ try{rec.stop();}catch(e){} rec=null; }
+    if(simTimer){ clearInterval(simTimer); simTimer=null; }
+    $('#mic').classList.remove('rec'); $('#micSt').textContent = 'Toque para dictar';
+  }
+  function simulate(){
+    const words = DICTADO[S.ficha].split(' '); let i = 0;
+    const base = $('#obsTxt').value.trim(); const ta = $('#obsTxt');
+    $('#micSt').textContent = 'Escuchando… (dictado simulado)';
+    simTimer = setInterval(()=>{
+      i++; ta.value = (base?base+' ':'') + words.slice(0,i).join(' '); S.obs = ta.value;
+      if(i>=words.length) stopDictado();
+    },170);
+  }
+  function toggleDictado(){
+    if($('#mic').classList.contains('rec')){ stopDictado(); return; }
+    $('#mic').classList.add('rec'); $('#micSt').textContent = 'Escuchando…';
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR){ simulate(); return; }
+    try{
+      rec = new SR(); rec.lang = 'es-PE'; rec.interimResults = true; rec.continuous = true;
+      const ta = $('#obsTxt'), base = ta.value.trim();
+      rec.onresult = e=>{ let t=''; for(let i=0;i<e.results.length;i++) t += e.results[i][0].transcript; ta.value = (base?base+' ':'') + t; S.obs = ta.value; };
+      rec.onerror = ()=>{ rec=null; $('#mic').classList.remove('rec'); simulate(); $('#mic').classList.add('rec'); };
+      rec.onend = ()=>{ if(rec){ rec=null; $('#mic').classList.remove('rec'); $('#micSt').textContent='Toque para dictar'; } };
+      rec.start();
+    }catch(err){ rec=null; simulate(); }
+  }
+
+  /* ---------- guardar / confirmación / registros ---------- */
+  function save(){
+    if(S.consent.status==='pending'){ toast('Falta decidir la autorización de contacto'); go('datos'); setErr('consent','Falta la autorización: pida que firme o registre que no autoriza.'); return; }
+    const rc = {id:Date.now(), name:S.f.nombre, ficha:S.ficha, consent:S.consent.status, enrol:S.enrol, sync:false, at:Date.now(), sig:S.consent.sig};
+    if(S.conn) rc.sync = true;
+    S.records.unshift(rc); S.last = rc;
+    go('listo');
+  }
+  function renderListo(){
+    const r = S.last; if(!r){ $('#listoBody').innerHTML=''; return; }
+    $('#listoBody').innerHTML = `<div class="okmark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <div class="center"><h2>Registro guardado</h2><p>${r.sync?'Enviado a la plataforma web.':'Guardado en este celular. Se enviará cuando haya conexión.'}</p></div>
+      <div class="sumcard">
+        <div class="r"><span>Beneficiario</span><span>${esc(r.name)}</span></div>
+        <div class="r"><span>Campaña</span><span>${CAMP[r.ficha].name}</span></div>
+        <div class="r"><span>Enrolamiento</span><span>${r.enrol?'Sí aplica':'No aplica'}</span></div>
+        <div class="r"><span>Autorización</span><span>${r.consent==='signed'?'Firmada':'No autoriza'}</span></div>
+        <div class="r"><span>Envío</span><span>${r.sync?'Sincronizado':'Pendiente'}</span></div></div>
+      ${r.sig?`<div class="sigthumb"><img src="${r.sig}" alt="Firma del paciente"><span>Firma guardada ${fmt(r.at)}</span></div>`:''}`;
+  }
+  function pending(){ return S.records.filter(r=>!r.sync).length; }
+  function updateBadge(){ const n = pending(), b = $('#pendBadge'); b.style.display = n?'flex':'none'; b.textContent = n; }
+  function renderRegistros(){
+    const n = pending();
+    let h = n ? `<div class="syncbar"><span>${n} registro${n>1?'s':''} por enviar${S.conn?'':'. Sin conexión'}.</span><button class="mini" type="button" id="syncNow">Sincronizar</button></div>`
+              : `<div class="syncbar"><span>Todo está sincronizado.</span></div>`;
+    h += S.records.map(r=>`<div class="rec-item"><div class="top"><div class="nm">${esc(r.name)}</div><span class="tag ${r.sync?'sync':'pend'}">${r.sync?'Enviado':'Pendiente'}</span></div>
+      <div class="meta">${CAMP[r.ficha].name} · ${fmt(r.at)}<br>${r.consent==='signed'?'Autorización firmada':'No autoriza contacto'} · ${r.enrol?'Con enrolamiento':'Sin enrolamiento'}</div></div>`).join('');
+    $('#registrosBody').innerHTML = h;
+  }
+  function syncAll(silent){
+    const n = pending(); if(!n) return;
+    if(!S.conn){ toast('Sin conexión. Se enviará al recuperar señal.'); return; }
+    S.records.forEach(r=>r.sync=true); updateBadge();
+    if(current==='registros') renderRegistros();
+    if(current==='listo') renderListo();
+    toast(`${n} registro${n>1?'s':''} sincronizado${n>1?'s':''}`);
+  }
+  function setConn(on){
+    S.conn = on; $('#conn').classList.toggle('off',!on); $('#connTxt').textContent = on?'En línea':'Sin conexión';
+    if(on && pending()) setTimeout(()=>syncAll(),600);
+    if(current==='registros') renderRegistros();
+  }
+
+  let tt; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),2400); }
+
+  function newRegistration(ficha){
+    stopDictado();
+    const keep = {conn:S.conn, records:S.records, last:S.last, auth:S.auth, mail:S.mail, synced:S.synced, syncedAt:S.syncedAt, jornada:S.jornada};
+    Object.assign(S, blank(), keep, {ficha});
+  }
+
+  /* ---------- acceso OTP ---------- */
+  function loginContinue(){
+    const mail = ($('#loginMail').value||'').trim();
+    const pass = $('#loginPass').value||'';
+    let ok = true;
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)){ setErr('mail','Escriba un correo válido.'); ok=false; } else setErr('mail','');
+    if(pass.length<6){ setErr('pass','La contraseña debe tener al menos 6 caracteres.'); ok=false; } else setErr('pass','');
+    if(!ok) return;
+    S.mail = mail;
+    go('otp');
+    toast('Código enviado a '+mail);
+    requestAnimationFrame(()=>{ const a=$('#otpRow input'); if(a) a.focus(); });
+  }
+  let otpTimer = null;
+  function stopOtpTimer(){ if(otpTimer){ clearInterval(otpTimer); otpTimer=null; } }
+  function startOtpTimer(){
+    stopOtpTimer();
+    let left = 30;
+    const paint = ()=>{
+      $('#otpTimer').textContent = left>0 ? `Reenviar en 0:${String(left).padStart(2,'0')}` : '¿No le llegó el correo?';
+      $('#otpResend').disabled = left>0;
+    };
+    paint();
+    otpTimer = setInterval(()=>{ left--; paint(); if(left<=0) stopOtpTimer(); },1000);
+  }
+  function otpError(msg){
+    const e=$('#e-otp'); e.textContent=msg||''; e.classList.toggle('show',!!msg);
+    $('#otpRow').classList.toggle('bad',!!msg);
+  }
+  function paintOtp(){ $$('#otpRow input').forEach(i=>i.classList.toggle('filled',!!i.value)); }
+  function resetOtp(){
+    $$('#otpRow input').forEach(i=>i.value='');
+    paintOtp(); otpError('');
+    const n = $('#mailNote'); n.style.animation='none'; void n.offsetWidth; n.style.animation='';
+    startOtpTimer();
+  }
+  function autofillOtp(){
+    const ins = $$('#otpRow input'); otpError('');
+    ins.forEach(i=>i.value='');
+    OTP_DEMO.split('').forEach((d,n)=>setTimeout(()=>{
+      ins[n].value = d; paintOtp();
+      if(n===ins.length-1) ins[n].focus();
+    }, n*90));
+  }
+  function otpCode(){ return $$('#otpRow input').map(i=>i.value).join(''); }
+  function verifyOtp(){
+    const code = otpCode();
+    if(!/^\d{6}$/.test(code)){ otpError('Ingrese los 6 dígitos del correo.'); return; }
+    if(code!==OTP_DEMO){ otpError('El código no coincide. Revise el correo e intente de nuevo.'); return; }
+    otpError(''); stopOtpTimer();
+    S.auth = true; S.jornada = false; S.synced = false; S.syncedAt = null;
+    toast('Acceso verificado');
+    go('campanas');
+  }
+
+  /* ---------- jornada / sincronización / slider ---------- */
+  function applyJornada(){
+    const open = S.jornada;
+    $('#slide').classList.toggle('open', open);
+    $('#slide').setAttribute('aria-valuenow', open?'1':'0');
+    $('#slideHint').textContent = open ? 'Jornada abierta · deslice a la izquierda para cerrar' : 'Deslice a la derecha para iniciar';
+    $('#jst').textContent = open
+      ? 'Jornada abierta. Puede registrar beneficiarios. Deslice a la izquierda (rojo) para cerrarla.'
+      : (S.synced
+        ? 'Sincronizado. Deslice el control a la derecha (verde) para abrir la jornada.'
+        : 'La jornada está cerrada. Sincronice y deslice el control a la derecha para iniciar registros.');
+    $('#campSub').textContent = open ? 'Elija la campaña para registrar a un beneficiario' : 'Sincronice y abra la jornada para registrar';
+    $('#camps').classList.toggle('locked', !open);
+    $('#lockNote').style.display = open ? 'none' : 'block';
+    $('#syncCta').classList.toggle('done', S.synced);
+    $('#syncCtaT').textContent = S.synced ? 'Campañas sincronizadas' : 'Sincronizar campañas';
+    $('#syncCtaD').textContent = S.synced
+      ? ('Última descarga: ' + fmt(S.syncedAt) + '. Puede volver a sincronizar.')
+      : 'Obligatorio al abrir la jornada. Descarga fichas y catálogos.';
+    $('#syncCtaP').textContent = S.synced ? 'Listo' : 'Sincronizar';
+    const svg = $('#slideKnob svg path');
+    if(svg) svg.setAttribute('d', open ? 'M15 6l-6 6 6 6' : 'M9 6l6 6-6 6');
+    placeKnob();
+  }
+  function maxSlide(){ const t=$('#slide'); return Math.max(0, t.clientWidth - 56); }
+  function placeKnob(){
+    const k=$('#slideKnob'); if(!k) return;
+    k.style.left = (S.jornada ? 4+maxSlide() : 4) + 'px';
+  }
+  function setKnobX(x){
+    const m = maxSlide();
+    x = Math.max(0, Math.min(m, x));
+    $('#slideKnob').style.left = (4+x)+'px';
+    const p = m? x/m : 0;
+    $('#slide').classList.toggle('open', p>0.55);
+    return p;
+  }
+  function closeSheet(){
+    $('#syncSheet').classList.remove('on');
+    $('#syncBar').classList.remove('run');
+    $('#syncDo').disabled = false;
+    $('#syncDo').textContent = 'Sincronizar ahora';
+    S.pendingOpen = false;
+  }
+  function askSyncToOpen(){
+    if(!S.conn){ toast('Sin conexión. Conéctese para sincronizar y abrir la jornada.'); placeKnob(); return; }
+    S.pendingOpen = true;
+    $('#syncSheetT').textContent = 'Sincronización requerida';
+    $('#syncSheetP').textContent = 'Para abrir la jornada debe sincronizar ahora: se descargan las campañas asignadas y quedan listas para registrar sin internet.';
+    $('#syncBar').classList.remove('run'); $('#syncBar i').style.width='0';
+    $('#syncDo').disabled=false; $('#syncDo').textContent='Sincronizar ahora';
+    $('#syncSheet').classList.add('on');
+  }
+  function runSync(thenOpen){
+    if(!S.conn){ toast('Sin conexión. No se puede sincronizar.'); return; }
+    $('#syncDo').disabled = true; $('#syncDo').textContent = 'Sincronizando…';
+    $('#syncBar').classList.remove('run'); void $('#syncBar').offsetWidth; $('#syncBar').classList.add('run');
+    setTimeout(()=>{
+      S.synced = true; S.syncedAt = Date.now();
+      if(thenOpen || S.pendingOpen){ S.jornada = true; S.pendingOpen = false; }
+      closeSheet();
+      applyJornada();
+      if(pending()) syncAll(true);
+      toast(S.jornada ? 'Sincronizado. Jornada abierta.' : 'Campañas sincronizadas.');
+    }, 1700);
+  }
+  function tryOpenJornada(){
+    if(S.synced){ S.jornada = true; applyJornada(); toast('Jornada abierta'); }
+    else askSyncToOpen();
+  }
+  function closeJornada(){
+    S.jornada = false; applyJornada(); toast('Jornada cerrada. El registro quedó bloqueado.');
+  }
+  (function bindSlide(){
+    const knob = $('#slideKnob'), track = $('#slide');
+    let drag=false, start=0, origin=0;
+    const pos = e => (e.clientX!==undefined?e.clientX:0) - track.getBoundingClientRect().left - 28;
+    knob.addEventListener('pointerdown', e=>{
+      e.preventDefault(); knob.setPointerCapture(e.pointerId); drag=true; start=e.clientX; origin=parseFloat(knob.style.left||'4')-4; knob.style.transition='none';
+    });
+    track.addEventListener('pointermove', e=>{
+      if(!drag) return; e.preventDefault();
+      setKnobX(origin + (e.clientX-start));
+    });
+    const end = ()=>{
+      if(!drag) return; drag=false; knob.style.transition='left .22s ease';
+      const p = setKnobX(parseFloat(knob.style.left||'4')-4);
+      if(!S.jornada){
+        if(p>0.72) tryOpenJornada();
+        else { S.jornada=false; applyJornada(); }
+      } else {
+        if(p<0.28) closeJornada();
+        else { S.jornada=true; applyJornada(); }
+      }
+    };
+    track.addEventListener('pointerup', end);
+    track.addEventListener('pointercancel', end);
+    window.addEventListener('resize', ()=>{ if(current==='campanas') placeKnob(); });
+  })();
+
+  /* ---------- eventos ---------- */
+  document.addEventListener('click',e=>{
+    const t = e.target.closest('button,[data-go],[data-rail],.camp'); if(!t) return;
+    if(t.dataset.rail){
+      const id=t.dataset.rail; stopDictado();
+      if(id==='login'){ S.auth=false; S.jornada=false; go('login'); return; }
+      if(!S.auth){ S.auth=true; }
+      if(['datos','consent','alarma','obs','enrol','listo'].includes(id) && !S.jornada){
+        S.synced = true; S.syncedAt = S.syncedAt||Date.now(); S.jornada = true;
+      }
+      if(id==='alarma' && S.ficha!=='infantil'){ newRegistration('infantil'); }
+      if(['consent','alarma','obs','enrol','listo'].includes(id) && !(S.f.nombre||'').trim()){
+        S.f = Object.assign({}, SAMPLE[S.ficha]);
+        if(S.ficha==='infantil'){ S.alarm = Array(21).fill(false); S.alarm[7]=true; S.alarm[18]=true; }
+      }
+      if(id==='listo' && !S.last) S.last = S.records[0];
+      go(id); return;
+    }
+    if(t.classList.contains('camp')){
+      if(!S.jornada){ toast('Abra la jornada (deslice a la derecha) para registrar.'); return; }
+      newRegistration(t.dataset.ficha); go('datos'); return;
+    }
+    if(t.dataset.go==='consent'){ stopDictado(); openConsent(); return; }
+    if(t.dataset.go==='campanas' || t.dataset.go==='registros'){
+      if(!S.auth){ go('login'); return; }
+      stopDictado(); go(t.dataset.go); return;
+    }
+    if(t.dataset.go){ stopDictado(); go(t.dataset.go); return; }
+    if(t.id==='conn') setConn(!S.conn);
+    else if(t.id==='datosNext'){ if(validateDatos()) go(S.ficha==='infantil'?'alarma':'obs'); }
+    else if(t.id==='alarmaNext'){
+      const c=alarmCounts();
+      if(c.done<21){ const el=$('#e-alarm'); el.textContent=`Faltan ${21-c.done} pregunta${21-c.done>1?'s':''} por responder.`; el.classList.add('show'); el.scrollIntoView({block:'center',behavior:'smooth'}); }
+      else go('obs');
+    }
+    else if(t.id==='restNo'){ S.alarm = S.alarm.map(x=>x===null?false:x); renderAlarma(); }
+    else if(t.dataset.q!==undefined){ S.alarm[+t.dataset.q] = t.dataset.v==='1'; const row=t.closest('.seg'); row.querySelectorAll('button').forEach(b=>b.setAttribute('aria-checked',String(b===t))); refreshAlarmCount(); }
+    else if(t.id==='mic') toggleDictado();
+    else if(t.id==='obsNext'){ stopDictado(); S.obs=$('#obsTxt').value; go('enrol'); }
+    else if(t.id==='obsBack'){ stopDictado(); S.obs=$('#obsTxt').value; go(S.ficha==='infantil'?'alarma':'datos'); }
+    else if(t.id==='enrolBack') go('obs');
+    else if(t.id==='enrolSw'){ S.enrol=!S.enrol; t.setAttribute('aria-checked',String(S.enrol)); enrolMsg(); }
+    else if(t.id==='enrolSave') save();
+    else if(t.id==='sigClear') clearPad();
+    else if(t.id==='signOk') signOk();
+    else if(t.id==='signNo') signNo();
+    else if(t.id==='again'){
+      if(!S.jornada){ go('campanas'); toast('La jornada está cerrada. Ábrala para registrar otro.'); return; }
+      newRegistration(S.ficha); go('datos');
+    }
+    else if(t.id==='syncNow') syncAll();
+    else if(t.id==='syncCta'){
+      if(!S.conn){ toast('Sin conexión. Conéctese para sincronizar.'); return; }
+      S.pendingOpen = false;
+      $('#syncSheetT').textContent = 'Sincronizar campañas';
+      $('#syncSheetP').textContent = 'Se descargarán las campañas asignadas y el catálogo. Es el paso previo para abrir la jornada.';
+      $('#syncBar').classList.remove('run'); $('#syncBar i').style.width='0';
+      $('#syncDo').disabled=false; $('#syncDo').textContent='Sincronizar ahora';
+      $('#syncSheet').classList.add('on');
+    }
+    else if(t.id==='syncDo') runSync(S.pendingOpen);
+    else if(t.id==='syncCancel'){ closeSheet(); applyJornada(); }
+    else if(t.id==='loginGo') loginContinue();
+    else if(t.id==='otpGo') verifyOtp();
+    else if(t.id==='otpResend'){ resetOtp(); toast('Se reenvió el código a '+S.mail); }
+    else if(t.id==='otpAutofill') autofillOtp();
+    else if(t.id==='otpBack') go('login');
+    else if(t.id==='fill'){ fillSample(); }
+    else if(t.id==='reset'){ location.reload(); }
+    else if(t.dataset.chip){ S.f[t.dataset.chip]=t.dataset.v; t.parentElement.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-checked',String(b===t))); setErr(t.dataset.chip,''); if(t.dataset.chip==='result'||t.dataset.chip==='prueba'){} }
+  });
+  document.addEventListener('input',e=>{
+    const el = e.target;
+    if(el.dataset && el.dataset.k){
+      if(el.dataset.digits) el.value = el.value.replace(/\D/g,'');
+      S.f[el.dataset.k] = el.value; setErr(el.dataset.k,'');
+    }
+    if(el.id==='obsTxt') S.obs = el.value;
+    if(el.dataset && el.dataset.otp!==undefined){
+      el.value = el.value.replace(/\D/g,'').slice(-1);
+      otpError(''); paintOtp();
+      if(el.value && el.nextElementSibling) el.nextElementSibling.focus();
+    }
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.target.dataset && e.target.dataset.otp!==undefined && e.key==='Backspace' && !e.target.value && e.target.previousElementSibling){
+      e.target.previousElementSibling.focus();
+    }
+  });
+  document.addEventListener('paste',e=>{
+    if(!(e.target.dataset && e.target.dataset.otp!==undefined)) return;
+    const t = (e.clipboardData.getData('text')||'').replace(/\D/g,'').slice(0,6);
+    if(!t) return; e.preventDefault();
+    $$('#otpRow input').forEach((i,n)=> i.value = t[n]||'');
+    paintOtp(); otpError('');
+    const next = $$('#otpRow input')[Math.min(t.length,5)]; if(next) next.focus();
+  });
+  document.addEventListener('change',e=>{ if(e.target.id==='readChk') $('#e-read').classList.remove('show'); });
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Enter' && e.target.matches('input')){
+      e.preventDefault();
+      if(current==='login') loginContinue();
+      else if(current==='otp') verifyOtp();
+    }
+  });
+
+  function fillSample(){
+    if(!S.auth){ S.auth=true; }
+    if(!S.jornada){ S.synced=true; S.syncedAt=Date.now(); S.jornada=true; }
+    const keep = {records:S.records,conn:S.conn,last:S.last,ficha:S.ficha,auth:S.auth,mail:S.mail,synced:S.synced,syncedAt:S.syncedAt,jornada:S.jornada};
+    if(!['datos','consent','alarma','obs','enrol'].includes(current)){ go('datos'); }
+    S.f = Object.assign({}, SAMPLE[S.ficha]);
+    if(S.ficha==='infantil'){ S.alarm = Array(21).fill(false); S.alarm[7]=true; S.alarm[18]=true; S.f.indic='Evaluación en oncología pediátrica en 4 semanas.'; }
+    S.obs = DICTADO[S.ficha];
+    if(current==='datos') renderDatos(); else if(current==='alarma') renderAlarma(); else if(current==='obs') $('#obsTxt').value=S.obs; else if(current==='enrol') renderEnrol(); else if(current==='consent') initConsent();
+    toast('Datos de ejemplo cargados');
+  }
+
+  buildRail(); go('login');
+})();
+</script>
+</body>
+</html>
