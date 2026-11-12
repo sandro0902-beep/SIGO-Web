@@ -38,6 +38,16 @@ label{display:block;margin:0 0 6px;font-weight:600;font-size:13px}
 .toast.show{display:block}
 .actions{display:flex;gap:6px;flex-wrap:wrap}
 .hint{font-size:12px;color:var(--muted);margin:4px 0 0;font-weight:400}
+.suggest-wrap{position:relative}
+.suggest{position:absolute;left:0;right:0;top:100%;z-index:30;background:#fff;border:1px solid var(--line);border-radius:8px;max-height:240px;overflow:auto;margin-top:4px;box-shadow:0 10px 28px rgba(15,23,42,.14)}
+.suggest button{display:block;width:100%;text-align:left;border:0;background:#fff;padding:10px 12px;cursor:pointer;font:inherit;border-bottom:1px solid var(--line)}
+.suggest button:last-child{border-bottom:0}
+.suggest button:hover,.suggest button.active{background:var(--red-light)}
+.suggest .meta{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.suggest .empty{padding:12px;color:var(--muted)}
+.centro-asignado{margin-top:12px;padding:12px 14px;border:1px solid #bbf7d0;background:#ecfdf5;border-radius:10px;display:none;justify-content:space-between;align-items:flex-start;gap:12px}
+.centro-asignado.show{display:flex}
+.centro-asignado b{display:block;margin:2px 0}
 @media(max-width:900px){aside{display:none}main{margin:0}.grid{grid-template-columns:1fr 1fr}.split{grid-template-columns:1fr}}
 </style>
 </head>
@@ -176,17 +186,98 @@ const UBIGEO={
   Ucayali:{'Coronel Portillo':['Callería','Yarinacocha','Manantay']}
 };
 
+const CENTROS_SALUD=[
+  {id:'CS-LIM-001',region:'Lima',provincia:'Lima',distrito:'San Juan de Lurigancho',nombre:'Centro de Salud San Juan de Lurigancho'},
+  {id:'CS-LIM-002',region:'Lima',provincia:'Lima',distrito:'San Juan de Lurigancho',nombre:'Centro de Salud Caja de Agua'},
+  {id:'CS-LIM-003',region:'Lima',provincia:'Lima',distrito:'San Juan de Lurigancho',nombre:'Centro de Salud Zárate'},
+  {id:'CS-LIM-004',region:'Lima',provincia:'Lima',distrito:'San Juan de Lurigancho',nombre:'Centro de Salud Huáscar'},
+  {id:'CS-LIM-005',region:'Lima',provincia:'Lima',distrito:'El Agustino',nombre:'Centro de Salud El Agustino'},
+  {id:'CS-LIM-006',region:'Lima',provincia:'Lima',distrito:'Villa El Salvador',nombre:'Centro de Salud Villa El Salvador'},
+  {id:'CS-LIM-007',region:'Lima',provincia:'Lima',distrito:'Comas',nombre:'Centro de Salud Tahuantinsuyo'},
+  {id:'CS-LIM-008',region:'Lima',provincia:'Lima',distrito:'Independencia',nombre:'Centro de Salud Independencia'},
+  {id:'CS-LIM-009',region:'Lima',provincia:'Lima',distrito:'Los Olivos',nombre:'Centro de Salud Los Olivos'},
+  {id:'CS-LIM-010',region:'Lima',provincia:'Lima',distrito:'San Martín de Porres',nombre:'Centro de Salud Perú-Corea'},
+  {id:'CS-LIM-011',region:'Lima',provincia:'Lima',distrito:'Rímac',nombre:'Centro de Salud Rímac'},
+  {id:'CS-LIM-012',region:'Lima',provincia:'Lima',distrito:'Surquillo',nombre:'Centro de Salud Surquillo'},
+  {id:'CS-LIM-013',region:'Lima',provincia:'Lima',distrito:'Chorrillos',nombre:'Centro de Salud Chorrillos'},
+  {id:'CS-LIM-014',region:'Lima',provincia:'Lima',distrito:'Ate',nombre:'Centro de Salud Huaycán'},
+  {id:'CS-LIM-015',region:'Lima',provincia:'Lima',distrito:'Ate',nombre:'Centro de Salud Valdiviezo'},
+  {id:'CS-LIM-016',region:'Lima',provincia:'Lima',distrito:'San Juan de Miraflores',nombre:'Centro de Salud San Juan de Miraflores'},
+  {id:'CS-LIM-017',region:'Lima',provincia:'Lima',distrito:'Villa María del Triunfo',nombre:'Centro de Salud Tablada de Lurín'},
+  {id:'CS-LIM-018',region:'Lima',provincia:'Lima',distrito:'Carabayllo',nombre:'Centro de Salud El Progreso'},
+  {id:'CS-LIM-019',region:'Lima',provincia:'Lima',distrito:'Puente Piedra',nombre:'Centro de Salud Puente Piedra'},
+  {id:'CS-LIM-020',region:'Lima',provincia:'Lima',distrito:'Lima',nombre:'Centro de Salud Conde de la Vega Baja'},
+  {id:'CS-LIM-021',region:'Lima',provincia:'Lima',distrito:'Breña',nombre:'Centro de Salud Breña'},
+  {id:'CS-LIM-022',region:'Lima',provincia:'Lima',distrito:'Jesús María',nombre:'Centro de Salud San Felipe'},
+  {id:'CS-LIM-023',region:'Lima',provincia:'Huaral',distrito:'Huaral',nombre:'Centro de Salud Huaral'},
+  {id:'CS-LIM-024',region:'Lima',provincia:'Huaral',distrito:'Chancay',nombre:'Centro de Salud Chancay'},
+  {id:'CS-LIM-025',region:'Lima',provincia:'Cañete',distrito:'San Vicente de Cañete',nombre:'Centro de Salud San Vicente de Cañete'},
+  {id:'CS-CAL-001',region:'Callao',provincia:'Callao',distrito:'Callao',nombre:'Centro de Salud Perú-Corea Callao'},
+  {id:'CS-CAL-002',region:'Callao',provincia:'Callao',distrito:'Ventanilla',nombre:'Centro de Salud Ventanilla'},
+  {id:'CS-CAL-003',region:'Callao',provincia:'Callao',distrito:'Callao',nombre:'Centro de Salud Ramón Castilla'},
+  {id:'CS-CAL-004',region:'Callao',provincia:'Callao',distrito:'Bellavista',nombre:'Centro de Salud Bellavista'},
+  {id:'CS-CAL-005',region:'Callao',provincia:'Callao',distrito:'La Perla',nombre:'Centro de Salud La Perla'},
+  {id:'CS-ARE-001',region:'Arequipa',provincia:'Arequipa',distrito:'Paucarpata',nombre:'Centro de Salud Ampliación Paucarpata'},
+  {id:'CS-ARE-002',region:'Arequipa',provincia:'Arequipa',distrito:'Cayma',nombre:'Centro de Salud Cayma'},
+  {id:'CS-ARE-003',region:'Arequipa',provincia:'Arequipa',distrito:'Cerro Colorado',nombre:'Centro de Salud Cerro Colorado'},
+  {id:'CS-ARE-004',region:'Arequipa',provincia:'Arequipa',distrito:'Hunter',nombre:'Centro de Salud Hunter'},
+  {id:'CS-ARE-005',region:'Arequipa',provincia:'Arequipa',distrito:'Socabaya',nombre:'Centro de Salud Socabaya'},
+  {id:'CS-ARE-006',region:'Arequipa',provincia:'Camaná',distrito:'Camaná',nombre:'Centro de Salud Camaná'},
+  {id:'CS-CUS-001',region:'Cusco',provincia:'Cusco',distrito:'San Jerónimo',nombre:'Centro de Salud San Jerónimo'},
+  {id:'CS-CUS-002',region:'Cusco',provincia:'Cusco',distrito:'Santiago',nombre:'Centro de Salud Santiago'},
+  {id:'CS-CUS-003',region:'Cusco',provincia:'Cusco',distrito:'Wanchaq',nombre:'Centro de Salud Wanchaq'},
+  {id:'CS-CUS-004',region:'Cusco',provincia:'Cusco',distrito:'Cusco',nombre:'Centro de Salud Cusco'},
+  {id:'CS-LLI-001',region:'La Libertad',provincia:'Trujillo',distrito:'La Esperanza',nombre:'Centro de Salud La Esperanza'},
+  {id:'CS-LLI-002',region:'La Libertad',provincia:'Trujillo',distrito:'El Porvenir',nombre:'Centro de Salud El Porvenir'},
+  {id:'CS-LLI-003',region:'La Libertad',provincia:'Trujillo',distrito:'Florencia de Mora',nombre:'Centro de Salud Florencia de Mora'},
+  {id:'CS-LLI-004',region:'La Libertad',provincia:'Víctor Larco Herrera',distrito:'Víctor Larco Herrera',nombre:'Centro de Salud Buenos Aires'},
+  {id:'CS-LAM-001',region:'Lambayeque',provincia:'Chiclayo',distrito:'Chiclayo',nombre:'Centro de Salud Chiclayo'},
+  {id:'CS-LAM-002',region:'Lambayeque',provincia:'Chiclayo',distrito:'José Leonardo Ortiz',nombre:'Centro de Salud Leonardo Ortiz'},
+  {id:'CS-LAM-003',region:'Lambayeque',provincia:'Ferreñafe',distrito:'Ferreñafe',nombre:'Centro de Salud Ferreñafe'},
+  {id:'CS-PIU-001',region:'Piura',provincia:'Piura',distrito:'Piura',nombre:'Centro de Salud San Martín'},
+  {id:'CS-PIU-002',region:'Piura',provincia:'Piura',distrito:'Castilla',nombre:'Centro de Salud Castilla'},
+  {id:'CS-PIU-003',region:'Piura',provincia:'Sullana',distrito:'Sullana',nombre:'Centro de Salud Sullana'},
+  {id:'CS-ICA-001',region:'Ica',provincia:'Ica',distrito:'Ica',nombre:'Centro de Salud San Juan Bautista'},
+  {id:'CS-ICA-002',region:'Ica',provincia:'Chincha',distrito:'Chincha Alta',nombre:'Centro de Salud Chincha'},
+  {id:'CS-JUN-001',region:'Junín',provincia:'Huancayo',distrito:'El Tambo',nombre:'Centro de Salud El Tambo'},
+  {id:'CS-JUN-002',region:'Junín',provincia:'Huancayo',distrito:'Chilca',nombre:'Centro de Salud Chilca'},
+  {id:'CS-JUN-003',region:'Junín',provincia:'Tarma',distrito:'Tarma',nombre:'Centro de Salud Tarma'},
+  {id:'CS-PUN-001',region:'Puno',provincia:'Puno',distrito:'Puno',nombre:'Centro de Salud Puno'},
+  {id:'CS-PUN-002',region:'Puno',provincia:'San Román',distrito:'Juliaca',nombre:'Centro de Salud Juliaca'},
+  {id:'CS-ANC-001',region:'Áncash',provincia:'Huaraz',distrito:'Huaraz',nombre:'Centro de Salud Huaraz'},
+  {id:'CS-ANC-002',region:'Áncash',provincia:'Santa',distrito:'Chimbote',nombre:'Centro de Salud Chimbote'},
+  {id:'CS-CAJ-001',region:'Cajamarca',provincia:'Cajamarca',distrito:'Cajamarca',nombre:'Centro de Salud Cajamarca'},
+  {id:'CS-CAJ-002',region:'Cajamarca',provincia:'Jaén',distrito:'Jaén',nombre:'Centro de Salud Jaén'},
+  {id:'CS-LOR-001',region:'Loreto',provincia:'Maynas',distrito:'San Juan Bautista',nombre:'Centro de Salud San Juan Bautista Iquitos'},
+  {id:'CS-SMR-001',region:'San Martín',provincia:'San Martín',distrito:'Tarapoto',nombre:'Centro de Salud Tarapoto'},
+  {id:'CS-SMR-002',region:'San Martín',provincia:'Moyobamba',distrito:'Moyobamba',nombre:'Centro de Salud Moyobamba'},
+  {id:'CS-TAC-001',region:'Tacna',provincia:'Tacna',distrito:'Ciudad Nueva',nombre:'Centro de Salud Ciudad Nueva'},
+  {id:'CS-TAC-002',region:'Tacna',provincia:'Tacna',distrito:'Tacna',nombre:'Centro de Salud Tacna'},
+  {id:'CS-TUM-001',region:'Tumbes',provincia:'Tumbes',distrito:'Tumbes',nombre:'Centro de Salud Tumbes'},
+  {id:'CS-UCA-001',region:'Ucayali',provincia:'Coronel Portillo',distrito:'Callería',nombre:'Centro de Salud Pucallpa'},
+  {id:'CS-AYA-001',region:'Ayacucho',provincia:'Huamanga',distrito:'San Juan Bautista',nombre:'Centro de Salud San Juan Bautista Ayacucho'},
+  {id:'CS-APU-001',region:'Apurímac',provincia:'Abancay',distrito:'Abancay',nombre:'Centro de Salud Abancay'},
+  {id:'CS-APU-002',region:'Apurímac',provincia:'Andahuaylas',distrito:'Andahuaylas',nombre:'Centro de Salud Andahuaylas'},
+  {id:'CS-HUA-001',region:'Huánuco',provincia:'Huánuco',distrito:'Huánuco',nombre:'Centro de Salud Huánuco'},
+  {id:'CS-HVC-001',region:'Huancavelica',provincia:'Huancavelica',distrito:'Huancavelica',nombre:'Centro de Salud Huancavelica'},
+  {id:'CS-PAS-001',region:'Pasco',provincia:'Pasco',distrito:'Yanacancha',nombre:'Centro de Salud Cerro de Pasco'},
+  {id:'CS-MOQ-001',region:'Moquegua',provincia:'Mariscal Nieto',distrito:'Moquegua',nombre:'Centro de Salud Moquegua'},
+  {id:'CS-MDD-001',region:'Madre de Dios',provincia:'Tambopata',distrito:'Tambopata',nombre:'Centro de Salud Puerto Maldonado'},
+  {id:'CS-AMA-001',region:'Amazonas',provincia:'Chachapoyas',distrito:'Chachapoyas',nombre:'Centro de Salud Chachapoyas'},
+  {id:'CS-AMA-002',region:'Amazonas',provincia:'Bagua',distrito:'Bagua',nombre:'Centro de Salud Bagua'}
+];
+
 const CAMPANAS=[
-  {id:'CAM-026',nombre:'Prevención Integral 2026',tipo:'Campaña de salud',intervenciones:['Tamizaje','Sensibilización y Concientización'],tamizajes:{'Cuello Uterino':['PAP','Prueba VPH'],Mama:['Examen clínico','Mamografía']},tamizajeLibre:{},region:'Lima',provincia:'Lima',distrito:'San Juan de Lurigancho',centroPoblado:'',ceco:'ASPERSUD - 804',inicio:'2026-09-01',fin:'2026-09-30',estado:'Activa',participantes:1482,registroBeneficiarios:true,consentimiento:true,resultados:true},
-  {id:'CAM-025',nombre:'Nutrición Familiar',tipo:'Talleres y/o charlas',intervenciones:['Sensibilización y Concientización'],tamizajes:{},tamizajeLibre:{},region:'Arequipa',provincia:'Arequipa',distrito:'Paucarpata',centroPoblado:'',ceco:'MSD - 802',inicio:'2026-08-01',fin:'2026-08-31',estado:'Cerrada',participantes:864,registroBeneficiarios:true,consentimiento:false,resultados:false},
-  {id:'CAM-024',nombre:'Educación y Prevención',tipo:'Talleres y/o charlas',intervenciones:['Sensibilización y Concientización'],tamizajes:{},tamizajeLibre:{},region:'Cusco',provincia:'Cusco',distrito:'Cusco',centroPoblado:'',ceco:'ASPERSUD - 804',inicio:'2026-08-15',fin:'2026-10-15',estado:'Activa',participantes:1126,registroBeneficiarios:true,consentimiento:false,resultados:false},
-  {id:'CAM-023',nombre:'Caravana Norte',tipo:'Caravanas',intervenciones:['Tamizaje'],tamizajes:{Próstata:['PSA'],Colon:['FIT']},tamizajeLibre:{},region:'Piura',provincia:'Piura',distrito:'Piura',centroPoblado:'',ceco:'MSD - 802',inicio:'2026-09-10',fin:'2026-09-20',estado:'Activa',participantes:640,registroBeneficiarios:true,consentimiento:true,resultados:true},
-  {id:'CAM-022',nombre:'Feria Salud Callao',tipo:'Ferias multisectoriales',intervenciones:['Tamizaje','Sensibilización y Concientización'],tamizajes:{'Cuello Uterino':['IVAA'],Mama:['Examen clínico']},tamizajeLibre:{},region:'Callao',provincia:'Callao',distrito:'Ventanilla',centroPoblado:'',ceco:'FPC - 801',inicio:'2026-09-05',fin:'2026-09-12',estado:'Activa',participantes:512,registroBeneficiarios:true,consentimiento:true,resultados:true},
-  {id:'CAM-021',nombre:'Tamizaje Mama SJL',tipo:'Campaña de salud',intervenciones:['Tamizaje'],tamizajes:{Mama:['Ecografía de mama','Mamografía']},tamizajeLibre:{},region:'Lima',provincia:'Lima',distrito:'San Juan de Lurigancho',centroPoblado:'Huáscar',ceco:'ASPERSUD - 804',inicio:'2026-10-01',fin:'2026-10-15',estado:'Activa',participantes:430,registroBeneficiarios:true,consentimiento:true,resultados:true},
-  {id:'CAM-020',nombre:'Charlas Comunitarias',tipo:'Talleres y/o charlas',intervenciones:['Sensibilización y Concientización'],tamizajes:{},tamizajeLibre:{},region:'La Libertad',provincia:'Trujillo',distrito:'La Esperanza',centroPoblado:'',ceco:'MSD - 802',inicio:'2026-09-01',fin:'2026-11-30',estado:'Activa',participantes:780,registroBeneficiarios:true,consentimiento:false,resultados:false},
-  {id:'CAM-019',nombre:'Caravana Sur',tipo:'Caravanas',intervenciones:['Tamizaje'],tamizajes:{'Cuello Uterino':['PAP']},tamizajeLibre:{Infantil:'Control de crecimiento y signos de alarma'},region:'Tacna',provincia:'Tacna',distrito:'Ciudad Nueva',centroPoblado:'',ceco:'ASPERSUD - 804',inicio:'2026-10-05',fin:'2026-10-18',estado:'Activa',participantes:355,registroBeneficiarios:true,consentimiento:true,resultados:true},
-  {id:'CAM-018',nombre:'Campaña Piel Verano',tipo:'Campaña de salud',intervenciones:['Tamizaje'],tamizajes:{},tamizajeLibre:{Piel:'Inspección de lunares y lesiones'},region:'Ica',provincia:'Ica',distrito:'Ica',centroPoblado:'',ceco:'FPC - 801',inicio:'2026-02-01',fin:'2026-03-15',estado:'Cerrada',participantes:290,registroBeneficiarios:true,consentimiento:true,resultados:true},
-  {id:'CAM-017',nombre:'Feria Multisectorial Junín',tipo:'Ferias multisectoriales',intervenciones:['Sensibilización y Concientización'],tamizajes:{},tamizajeLibre:{},region:'Junín',provincia:'Huancayo',distrito:'El Tambo',centroPoblado:'',ceco:'MSD - 802',inicio:'2026-09-20',fin:'2026-09-22',estado:'Activa',participantes:410,registroBeneficiarios:true,consentimiento:false,resultados:false}
+  {id:'CAM-026',nombre:'Prevención Integral 2026',tipo:'Campaña de salud',intervenciones:['Tamizaje','Sensibilización y Concientización'],tamizajes:{'Cuello Uterino':['PAP','Prueba VPH'],Mama:['Examen clínico','Mamografía']},tamizajeLibre:{},region:'Lima',provincia:'Lima',distrito:'San Juan de Lurigancho',centroId:'CS-LIM-001',centroPoblado:'',ceco:'ASPERSUD - 804',inicio:'2026-09-01',fin:'2026-09-30',estado:'Activa',participantes:1482,registroBeneficiarios:true,consentimiento:true,resultados:true},
+  {id:'CAM-025',nombre:'Nutrición Familiar',tipo:'Talleres y/o charlas',intervenciones:['Sensibilización y Concientización'],tamizajes:{},tamizajeLibre:{},region:'Arequipa',provincia:'Arequipa',distrito:'Paucarpata',centroId:'CS-ARE-001',centroPoblado:'',ceco:'MSD - 802',inicio:'2026-08-01',fin:'2026-08-31',estado:'Cerrada',participantes:864,registroBeneficiarios:true,consentimiento:false,resultados:false},
+  {id:'CAM-024',nombre:'Educación y Prevención',tipo:'Talleres y/o charlas',intervenciones:['Sensibilización y Concientización'],tamizajes:{},tamizajeLibre:{},region:'Cusco',provincia:'Cusco',distrito:'Cusco',centroId:'CS-CUS-004',centroPoblado:'',ceco:'ASPERSUD - 804',inicio:'2026-08-15',fin:'2026-10-15',estado:'Activa',participantes:1126,registroBeneficiarios:true,consentimiento:false,resultados:false},
+  {id:'CAM-023',nombre:'Caravana Norte',tipo:'Caravanas',intervenciones:['Tamizaje'],tamizajes:{Próstata:['PSA'],Colon:['FIT']},tamizajeLibre:{},region:'Piura',provincia:'Piura',distrito:'Piura',centroId:'CS-PIU-001',centroPoblado:'',ceco:'MSD - 802',inicio:'2026-09-10',fin:'2026-09-20',estado:'Activa',participantes:640,registroBeneficiarios:true,consentimiento:true,resultados:true},
+  {id:'CAM-022',nombre:'Feria Salud Callao',tipo:'Ferias multisectoriales',intervenciones:['Tamizaje','Sensibilización y Concientización'],tamizajes:{'Cuello Uterino':['IVAA'],Mama:['Examen clínico']},tamizajeLibre:{},region:'Callao',provincia:'Callao',distrito:'Ventanilla',centroId:'CS-CAL-002',centroPoblado:'',ceco:'FPC - 801',inicio:'2026-09-05',fin:'2026-09-12',estado:'Activa',participantes:512,registroBeneficiarios:true,consentimiento:true,resultados:true},
+  {id:'CAM-021',nombre:'Tamizaje Mama SJL',tipo:'Campaña de salud',intervenciones:['Tamizaje'],tamizajes:{Mama:['Ecografía de mama','Mamografía']},tamizajeLibre:{},region:'Lima',provincia:'Lima',distrito:'San Juan de Lurigancho',centroId:'CS-LIM-004',centroPoblado:'Huáscar',ceco:'ASPERSUD - 804',inicio:'2026-10-01',fin:'2026-10-15',estado:'Activa',participantes:430,registroBeneficiarios:true,consentimiento:true,resultados:true},
+  {id:'CAM-020',nombre:'Charlas Comunitarias',tipo:'Talleres y/o charlas',intervenciones:['Sensibilización y Concientización'],tamizajes:{},tamizajeLibre:{},region:'La Libertad',provincia:'Trujillo',distrito:'La Esperanza',centroId:'CS-LLI-001',centroPoblado:'',ceco:'MSD - 802',inicio:'2026-09-01',fin:'2026-11-30',estado:'Activa',participantes:780,registroBeneficiarios:true,consentimiento:false,resultados:false},
+  {id:'CAM-019',nombre:'Caravana Sur',tipo:'Caravanas',intervenciones:['Tamizaje'],tamizajes:{'Cuello Uterino':['PAP']},tamizajeLibre:{Infantil:'Control de crecimiento y signos de alarma'},region:'Tacna',provincia:'Tacna',distrito:'Ciudad Nueva',centroId:'CS-TAC-001',centroPoblado:'',ceco:'ASPERSUD - 804',inicio:'2026-10-05',fin:'2026-10-18',estado:'Activa',participantes:355,registroBeneficiarios:true,consentimiento:true,resultados:true},
+  {id:'CAM-018',nombre:'Campaña Piel Verano',tipo:'Campaña de salud',intervenciones:['Tamizaje'],tamizajes:{},tamizajeLibre:{Piel:'Inspección de lunares y lesiones'},region:'Ica',provincia:'Ica',distrito:'Ica',centroId:'CS-ICA-001',centroPoblado:'',ceco:'FPC - 801',inicio:'2026-02-01',fin:'2026-03-15',estado:'Cerrada',participantes:290,registroBeneficiarios:true,consentimiento:true,resultados:true},
+  {id:'CAM-017',nombre:'Feria Multisectorial Junín',tipo:'Ferias multisectoriales',intervenciones:['Sensibilización y Concientización'],tamizajes:{},tamizajeLibre:{},region:'Junín',provincia:'Huancayo',distrito:'El Tambo',centroId:'CS-JUN-001',centroPoblado:'',ceco:'MSD - 802',inicio:'2026-09-20',fin:'2026-09-22',estado:'Activa',participantes:410,registroBeneficiarios:true,consentimiento:false,resultados:false}
 ];
 
 const BENEFICIARIOS=[
@@ -208,10 +299,14 @@ const BENEFICIARIOS=[
 ];
 
 let campanaEditId=null;
+let centroSeleccionado=null;
+let sugerenciaActiva=-1;
 
 function campanaPorId(id){return CAMPANAS.find(c=>c.id===id)}
 function campanaNombre(id){return (campanaPorId(id)||{}).nombre||id}
 function campanaCeco(id){return (campanaPorId(id)||{}).ceco||'—'}
+function centroPorId(id){return CENTROS_SALUD.find(c=>c.id===id)||null}
+function etiquetaCentro(c){return c?`${c.nombre} · ${c.distrito}, ${c.provincia}`:'Sin centro asignado'}
 function territorio(c){return c?[c.distrito,c.provincia,c.region].filter(Boolean).join(', '):'—'}
 function fmtFecha(v){if(!v) return '—'; const [y,m,d]=v.split('-'); return `${d}/${m}/${y}`}
 function periodoCampana(c){return `${fmtFecha(c.inicio)} - ${fmtFecha(c.fin)}`}
@@ -271,34 +366,125 @@ function renderDashboard(){
 function renderCampanas(){
   const q=(document.getElementById('buscarCampana')?.value||'').trim().toLowerCase();
   const tipo=document.getElementById('filtroTipoCampana')?.value||'';
-  const rows=CAMPANAS.filter(c=>(!tipo||c.tipo===tipo)&&(!q||[c.id,c.nombre,c.ceco,c.region,c.distrito].join(' ').toLowerCase().includes(q)));
-  const thead='<tr><th>Código</th><th>Campaña</th><th>Tipo</th><th>Territorio</th><th>CECO / Proyecto</th><th>Periodo</th><th>Estado</th><th></th></tr>';
-  const body=rows.map(c=>`<tr>
+  const rows=CAMPANAS.filter(c=>{
+    const centro=centroPorId(c.centroId);
+    return (!tipo||c.tipo===tipo)&&(!q||[c.id,c.nombre,c.ceco,c.region,c.distrito,centro&&centro.nombre].join(' ').toLowerCase().includes(q));
+  });
+  const thead='<tr><th>Código</th><th>Campaña</th><th>Tipo</th><th>Territorio</th><th>Centro de salud</th><th>CECO / Proyecto</th><th>Periodo</th><th>Estado</th><th></th></tr>';
+  const body=rows.map(c=>{
+    const centro=centroPorId(c.centroId);
+    return `<tr>
     <td>${c.id}</td>
     <td>${escapeHtml(c.nombre)}<br><small class="muted">${escapeHtml((c.intervenciones||[]).join(' · ')||'Sin intervención')}</small></td>
     <td>${escapeHtml(c.tipo)}</td>
     <td>${escapeHtml(territorio(c))}${c.centroPoblado?`<br><small class="muted">${escapeHtml(c.centroPoblado)}</small>`:''}</td>
+    <td>${centro?`${escapeHtml(centro.nombre)}<br><small class="muted">${escapeHtml(centro.distrito)}</small>`:'—'}</td>
     <td>${escapeHtml(c.ceco||'—')}</td>
     <td>${periodoCampana(c)}</td>
     <td>${badgeEstado(c.estado)}</td>
     <td class="actions"><button class="btn sm" type="button" onclick="openModal('campana','${c.id}')">Editar</button><button class="btn sm" type="button" onclick="openModal('detalle','${c.id}')">Ver detalle</button></td>
-  </tr>`).join('');
-  document.getElementById('tablaCampanas').innerHTML=thead+(body||'<tr><td colspan="8" class="muted">No hay campañas con esos filtros.</td></tr>');
+  </tr>`;
+  }).join('');
+  document.getElementById('tablaCampanas').innerHTML=thead+(body||'<tr><td colspan="9" class="muted">No hay campañas con esos filtros.</td></tr>');
 }
 function regiones(){return Object.keys(UBIGEO)}
 function provinciasDe(region){return Object.keys(UBIGEO[region]||{})}
 function distritosDe(region,provincia){return (UBIGEO[region]||{})[provincia]||[]}
+function resetCentroReferente(){
+  centroSeleccionado=null;
+  sugerenciaActiva=-1;
+  const txt=document.getElementById('txtCentro');
+  const lista=document.getElementById('listaCentros');
+  const provincia=document.getElementById('selProvincia')?.value||'';
+  if(txt){
+    txt.value='';
+    txt.disabled=!provincia;
+    txt.placeholder=provincia?'Escriba el nombre del centro de salud...':'Primero seleccione una provincia';
+  }
+  if(lista){lista.hidden=true;lista.innerHTML=''}
+  pintarCentroAsignado();
+}
 function onRegionChange(){
   const region=document.getElementById('selRegion').value;
   const selP=document.getElementById('selProvincia');
   const selD=document.getElementById('selDistrito');
   selP.innerHTML='<option value="">Seleccione provincia</option>'+(region?provinciasDe(region).map(p=>`<option>${p}</option>`).join(''):'');
   selD.innerHTML='<option value="">Seleccione distrito</option>';
+  resetCentroReferente();
 }
 function onProvinciaChange(){
   const region=document.getElementById('selRegion').value;
   const provincia=document.getElementById('selProvincia').value;
   document.getElementById('selDistrito').innerHTML='<option value="">Seleccione distrito</option>'+(provincia?distritosDe(region,provincia).map(d=>`<option>${d}</option>`).join(''):'');
+  resetCentroReferente();
+  if(provincia) document.getElementById('txtCentro')?.focus();
+}
+function centrosFiltrados(){
+  const region=document.getElementById('selRegion')?.value||'';
+  const provincia=document.getElementById('selProvincia')?.value||'';
+  const q=(document.getElementById('txtCentro')?.value||'').trim().toLowerCase();
+  return CENTROS_SALUD.filter(c=>c.region===region&&c.provincia===provincia&&(c.nombre.toLowerCase().includes(q)||c.distrito.toLowerCase().includes(q)));
+}
+function filtrarCentros(ev){
+  if(ev&&['ArrowDown','ArrowUp','Enter','Escape'].includes(ev.key)){navegarSugerencias(ev);return}
+  const lista=document.getElementById('listaCentros');
+  const q=(document.getElementById('txtCentro')?.value||'').trim().toLowerCase();
+  sugerenciaActiva=-1;
+  if(centroSeleccionado && centroSeleccionado.nombre.toLowerCase()!==q){
+    centroSeleccionado=null;
+    pintarCentroAsignado();
+  }
+  if(!document.getElementById('selProvincia')?.value||!q){if(lista){lista.hidden=true;lista.innerHTML=''}return}
+  const matches=centrosFiltrados();
+  if(!matches.length){
+    lista.innerHTML='<div class="empty">No se encontraron centros de salud en esta provincia.</div>';
+    lista.hidden=false;
+    return;
+  }
+  lista.innerHTML=matches.slice(0,12).map(c=>`<button type="button" data-id="${c.id}" onmousedown="event.preventDefault();seleccionarCentro('${c.id}')">${escapeHtml(c.nombre)}<span class="meta">${escapeHtml(c.distrito)}</span></button>`).join('');
+  lista.hidden=false;
+}
+function navegarSugerencias(ev){
+  const lista=document.getElementById('listaCentros');
+  const items=[...lista.querySelectorAll('button')];
+  if(!items.length||lista.hidden) return;
+  if(ev.key==='Escape'){lista.hidden=true;return}
+  if(ev.key==='ArrowDown'){ev.preventDefault();sugerenciaActiva=Math.min(items.length-1,sugerenciaActiva+1)}
+  if(ev.key==='ArrowUp'){ev.preventDefault();sugerenciaActiva=Math.max(0,sugerenciaActiva-1)}
+  if(ev.key==='Enter'){
+    ev.preventDefault();
+    const idx=sugerenciaActiva>=0?sugerenciaActiva:0;
+    const id=items[idx]&&items[idx].dataset.id;
+    if(id) seleccionarCentro(id);
+    return;
+  }
+  items.forEach((b,i)=>b.classList.toggle('active',i===sugerenciaActiva));
+}
+function seleccionarCentro(id){
+  const centro=centroPorId(id);
+  if(!centro) return;
+  centroSeleccionado=centro;
+  const txt=document.getElementById('txtCentro');
+  const lista=document.getElementById('listaCentros');
+  const selD=document.getElementById('selDistrito');
+  if(txt) txt.value=centro.nombre;
+  if(lista) lista.hidden=true;
+  if(selD && [...selD.options].some(o=>o.value===centro.distrito)) selD.value=centro.distrito;
+  pintarCentroAsignado();
+}
+function quitarCentro(){
+  centroSeleccionado=null;
+  const txt=document.getElementById('txtCentro');
+  if(txt) txt.value='';
+  pintarCentroAsignado();
+  txt?.focus();
+}
+function pintarCentroAsignado(){
+  const box=document.getElementById('centroAsignado');
+  if(!box) return;
+  if(!centroSeleccionado){box.classList.remove('show');box.innerHTML='';return}
+  box.classList.add('show');
+  box.innerHTML=`<div><span class="muted">Centro de salud asociado a la campaña</span><b>${escapeHtml(centroSeleccionado.nombre)}</b><span class="muted">${escapeHtml(centroSeleccionado.distrito)}, ${escapeHtml(centroSeleccionado.provincia)}</span></div><button class="btn" type="button" onclick="quitarCentro()">Quitar</button>`;
 }
 function tieneTamizaje(){return [...document.querySelectorAll('.chk-int:checked')].some(x=>x.value==='Tamizaje')}
 function onIntervencionChange(){
@@ -348,11 +534,14 @@ function htmlTamizajes(camp){
   }).join('');
 }
 function htmlFormCampana(camp){
+  centroSeleccionado=camp?.centroId?centroPorId(camp.centroId):null;
+  sugerenciaActiva=-1;
   const optsTipo=TIPOS_CAMPANA.map(t=>`<option ${camp?.tipo===t?'selected':''}>${t}</option>`).join('');
   const region=camp?.region||'';
   const optsReg='<option value="">Seleccione región</option>'+regiones().map(r=>`<option ${region===r?'selected':''}>${r}</option>`).join('');
   const optsProv='<option value="">Seleccione provincia</option>'+(region?provinciasDe(region).map(p=>`<option ${camp.provincia===p?'selected':''}>${p}</option>`).join(''):'');
   const optsDist='<option value="">Seleccione distrito</option>'+(region&&camp?.provincia?distritosDe(region,camp.provincia).map(d=>`<option ${camp.distrito===d?'selected':''}>${d}</option>`).join(''):'');
+  const hayProv=!!camp?.provincia;
   const ints=camp?.intervenciones||[];
   const tamOn=ints.includes('Tamizaje');
   return `
@@ -378,6 +567,15 @@ function htmlFormCampana(camp){
       <div><label for="selDistrito">Distrito</label><select id="selDistrito" class="input" style="width:100%">${optsDist}</select></div>
     </div>
     <div style="margin-top:12px"><label for="campCentroPoblado">Centro poblado <span class="hint">(opcional)</span></label><input id="campCentroPoblado" class="input" style="width:100%" value="${escapeHtml(camp?.centroPoblado||'')}"></div>
+  </div>
+  <div class="form-sec"><h3>Centro de salud referente</h3>
+    <p class="hint" style="margin:0 0 10px">Seleccione la provincia y escriba el nombre del establecimiento para asociarlo a la campaña.</p>
+    <div class="suggest-wrap">
+      <label for="txtCentro">Centro de salud</label>
+      <input id="txtCentro" class="input" style="width:100%" value="${escapeHtml(centroSeleccionado?.nombre||'')}" placeholder="${hayProv?'Escriba el nombre del centro de salud...':'Primero seleccione una provincia'}" ${hayProv?'':'disabled'} autocomplete="off" oninput="filtrarCentros()" onkeydown="filtrarCentros(event)" onblur="setTimeout(()=>{const l=document.getElementById('listaCentros'); if(l) l.hidden=true},180)">
+      <div id="listaCentros" class="suggest" hidden></div>
+    </div>
+    <div id="centroAsignado" class="centro-asignado${centroSeleccionado?' show':''}">${centroSeleccionado?`<div><span class="muted">Centro de salud asociado a la campaña</span><b>${escapeHtml(centroSeleccionado.nombre)}</b><span class="muted">${escapeHtml(centroSeleccionado.distrito)}, ${escapeHtml(centroSeleccionado.provincia)}</span></div><button class="btn" type="button" onclick="quitarCentro()">Quitar</button>`:''}</div>
   </div>
   <div class="form-sec"><h3>Fechas</h3>
     <div class="grid" style="grid-template-columns:1fr 1fr">
@@ -409,10 +607,11 @@ function guardarCampana(){
   if(!nombre){msg.textContent='Ingrese el nombre de la campaña.';return}
   if(!ceco){msg.textContent='Ingrese el CECO / código de proyecto.';return}
   if(!region||!provincia||!distrito){msg.textContent='Complete región, provincia y distrito.';return}
+  if(!centroSeleccionado){msg.textContent='Seleccione un centro de salud referente para asociarlo a la campaña.';return}
   if(!inicio||!fin){msg.textContent='Indique las fechas de inicio y fin.';return}
   if(fin<inicio){msg.textContent='La fecha de fin no puede ser anterior al inicio.';return}
   if(!intervenciones.length){msg.textContent='Seleccione al menos una intervención.';return}
-  const payload={nombre,tipo,ceco,region,provincia,distrito,centroPoblado,inicio,fin,intervenciones,tamizajes,tamizajeLibre,registroBeneficiarios:true,consentimiento:document.getElementById('swConsentimiento').checked,resultados:document.getElementById('swResultados').checked};
+  const payload={nombre,tipo,ceco,region,provincia,distrito,centroPoblado,centroId:centroSeleccionado.id,inicio,fin,intervenciones,tamizajes,tamizajeLibre,registroBeneficiarios:true,consentimiento:document.getElementById('swConsentimiento').checked,resultados:document.getElementById('swResultados').checked};
   if(campanaEditId){
     Object.assign(campanaPorId(campanaEditId),payload);
     toast('Campaña actualizada. Puede agregar intervenciones ejecutadas en campo.');
@@ -570,6 +769,7 @@ function openModal(type,id,extra){
     body=`<div class="tabs"><button class="sel">Resumen</button><button>Actividades</button><button>Beneficiarios</button><button>Resultados</button><button>Indicadores</button></div><hr>
     <p><b>Tipo:</b> ${escapeHtml(camp.tipo)} · <b>CECO:</b> ${escapeHtml(camp.ceco||'—')}</p>
     <p><b>Territorio:</b> ${escapeHtml(territorio(camp))}${camp.centroPoblado?' · '+escapeHtml(camp.centroPoblado):''}</p>
+    <p><b>Centro de salud asociado:</b> ${escapeHtml(etiquetaCentro(centroPorId(camp.centroId)))}</p>
     <p><b>Intervenciones:</b> ${escapeHtml((camp.intervenciones||[]).join(', ')||'—')}</p>
     <p><b>Tamizajes:</b> ${escapeHtml([...exams,...libres].join(' · ')||'No aplica')}</p>
     <p><b>Periodo:</b> ${periodoCampana(camp)}</p>
