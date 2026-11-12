@@ -89,7 +89,8 @@
   .field{margin-bottom:14px;}
   .field>label,.flabel{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:5px;line-height:1.35;}
   .opt{font-weight:400;color:var(--ink-faint);}
-  input[type=text],input[type=tel],input[type=number],input[type=email],input[type=password],textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 12px;font:inherit;font-size:14px;color:var(--ink);background:#fff;}
+  input[type=text],input[type=tel],input[type=number],input[type=email],input[type=password],select,textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 12px;font:inherit;font-size:14px;color:var(--ink);background:#fff;}
+  select{appearance:auto;}
   input::placeholder,textarea::placeholder{color:var(--ink-faint);}
   textarea{resize:none;line-height:1.5;}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
@@ -195,6 +196,29 @@
   .tag.pend{background:var(--amber-100);color:var(--amber-600);}
   .syncbar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--plum-50);border-radius:12px;padding:11px 13px;margin-bottom:12px;font-size:12.5px;color:var(--plum-800);line-height:1.4;}
   .syncbar .mini{flex:none;}
+  .kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+  .kpi{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff;}
+  .kpi .l{font-size:11px;color:var(--ink-soft);font-weight:600;}
+  .kpi .n{font-family:'Manrope';font-size:20px;font-weight:800;color:var(--plum-900);margin-top:2px;line-height:1.1;}
+  .kpi .h{font-size:10.5px;color:var(--ink-faint);margin-top:3px;line-height:1.35;}
+  .pie-mini{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:14px;background:#fff;}
+  .pie-mini .pie{width:72px;height:72px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 12px #fff;background:var(--line);}
+  .legend-m{list-style:none;padding:0;margin:0;flex:1;}
+  .legend-m li{display:flex;align-items:center;gap:6px;font-size:11px;margin:3px 0;color:var(--ink-soft);}
+  .dot{width:8px;height:8px;border-radius:50%;flex:none;}
+  .camp .code{font-size:11px;font-weight:700;color:var(--plum-700);}
+  .camp-wrap{margin-bottom:10px;}
+  .camp-wrap .camp{margin-bottom:0;border-radius:14px 14px 0 0;}
+  .camp-wrap .edit-camp{width:100%;border:1px solid var(--line);border-top:0;border-radius:0 0 14px 14px;background:#fff;padding:9px 12px;font-size:12px;font-weight:700;color:var(--plum-700);text-align:center;}
+  .tag.sepa{background:var(--amber-100);color:var(--amber-600);}
+  .tag.alta{background:var(--plum-50);color:var(--plum-700);}
+  .rec-actions{display:flex;gap:6px;margin-top:10px;}
+  .rec-actions .mini{flex:1;text-align:center;}
+  .cancer-box{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;}
+  .cancer-box label{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;}
+  .exams{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0 22px;}
+  .exams label{font-weight:500;font-size:12.5px;}
+  .sheet .card{max-height:86%;overflow:auto;}
 
   .toast{position:absolute;left:16px;right:16px;top:64px;background:var(--plum-900);color:#fff;border-radius:11px;padding:11px 14px;font-size:13px;font-weight:500;opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity .2s,transform .2s;z-index:5;}
   .toast.show{opacity:1;transform:none;}
@@ -258,7 +282,7 @@
   .slide.open .slide-knob{color:var(--teal-700);}
   .slide-knob svg{width:22px;height:22px;pointer-events:none;}
   .jst{font-size:12px;color:var(--ink-soft);margin:8px 2px 0;line-height:1.45;}
-  .camps.locked .camp{opacity:.45;pointer-events:none;}
+  .camps.locked .camp,.camps.locked .edit-camp{opacity:.45;pointer-events:none;}
   .locknote{font-size:12.5px;color:var(--amber-600);background:var(--amber-100);border-radius:10px;padding:10px 12px;margin-bottom:12px;line-height:1.45;}
 
   .sheet{position:absolute;inset:0;background:rgba(26,16,18,.46);display:none;align-items:flex-end;z-index:8;}
@@ -388,18 +412,19 @@
               </div>
               <p class="jst" id="jst">La jornada está cerrada. Sincronice y deslice el control a la derecha para iniciar registros.</p>
             </div>
-            <div id="lockNote" class="locknote">El registro permanece bloqueado hasta que la jornada esté abierta (control en verde).</div>
-            <div class="camps locked" id="camps">
-              <button class="camp" data-ficha="cuello" type="button">
-                <div><div class="nm">Detección de cáncer de cuello uterino</div><div class="tp">Ficha de cuello uterino</div></div>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-              </button>
-              <button class="camp" data-ficha="infantil" type="button">
-                <div><div class="nm">Detección temprana de cáncer infantil</div><div class="tp">Ficha de cáncer infantil</div></div>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-              </button>
+            <div class="kpis">
+              <div class="kpi"><div class="l">Campañas asignadas</div><div class="n" id="kpiCamp">0</div><div class="h">Activas / de esta jornada</div></div>
+              <div class="kpi"><div class="l">Registrados</div><div class="n" id="kpiReg">0</div><div class="h">En este dispositivo</div></div>
+              <div class="kpi"><div class="l">Requieren contacto</div><div class="n" id="kpiDx">0</div><div class="h">Diagnóstico o sospecha</div></div>
+              <div class="kpi"><div class="l">Enrolados SEPA</div><div class="n" id="kpiSepa">0</div><div class="h">Aceptaron tras Call Center</div></div>
             </div>
-            <p class="hint">Las campañas se descargan en la sincronización al abrir la jornada y quedan disponibles sin internet.</p>
+            <div class="pie-mini">
+              <div class="pie" id="pieHome" role="img" aria-label="Tipos de cáncer en esta jornada"></div>
+              <ul class="legend-m" id="leyendaHome"></ul>
+            </div>
+            <div id="lockNote" class="locknote">El registro permanece bloqueado hasta que la jornada esté abierta (control en verde).</div>
+            <div class="camps locked" id="camps"></div>
+            <p class="hint">Las campañas se descargan al sincronizar. Puede agregar intervenciones ejecutadas en campo que no estaban previstas.</p>
           </div>
         </section>
 
@@ -510,8 +535,22 @@
 
         <!-- registros -->
         <section class="view" id="v-registros">
-          <div class="vhead"><h2>Registros del dispositivo</h2><div class="sub">Lo que registró y su estado de envío</div></div>
+          <div class="vhead"><h2>Registros del dispositivo</h2><div class="sub">Código de campaña, CECO, resultado y envío a SEPA</div></div>
           <div class="body" id="registrosBody"></div>
+        </section>
+
+        <section class="view" id="v-contactar">
+          <div class="vhead"><h2>A contactar</h2><div class="sub">Sospecha, positivo o seguimiento, con consentimiento</div></div>
+          <div class="body" id="contactarBody"></div>
+        </section>
+
+        <section class="view" id="v-editreg">
+          <div class="vhead"><h2>Editar registro</h2><div class="sub" id="editRegSub"></div></div>
+          <div class="body" id="editRegBody"></div>
+          <div class="actions">
+            <button class="btn quiet" type="button" data-go="registros">Cancelar</button>
+            <button class="btn" type="button" id="editRegSave">Guardar</button>
+          </div>
         </section>
 
       </div>
@@ -523,6 +562,9 @@
         <button type="button" data-go="registros" id="tab-registros">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg>Registros<span class="badge-n" id="pendBadge" style="display:none"></span>
         </button>
+        <button type="button" data-go="contactar" id="tab-contactar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v2.2a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h2.2a2 2 0 012 1.7c.1.9.3 1.7.6 2.5a2 2 0 01-.5 2.1L7.1 9.6a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.5c.8.3 1.6.5 2.5.6a2 2 0 011.7 2z"/></svg>Contactar<span class="badge-n" id="contBadge" style="display:none"></span>
+        </button>
       </nav>
 
       <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -533,6 +575,24 @@
           <div class="bar" id="syncBar"><i></i></div>
           <button class="btn" type="button" id="syncDo" style="width:100%">Sincronizar ahora</button>
           <button class="btn quiet" type="button" id="syncCancel" style="width:100%;margin-top:8px">Cancelar</button>
+        </div>
+      </div>
+      <div class="sheet" id="campSheet" role="dialog" aria-labelledby="campSheetT" aria-modal="true">
+        <div class="card">
+          <h3 id="campSheetT">Editar intervenciones</h3>
+          <p>Agregue intervenciones o exámenes ejecutados en campo que no estaban previstos al crear la campaña.</p>
+          <div id="campSheetBody"></div>
+          <button class="btn" type="button" id="campSheetSave" style="width:100%;margin-top:8px">Guardar cambios</button>
+          <button class="btn quiet" type="button" id="campSheetCancel" style="width:100%;margin-top:8px">Cancelar</button>
+        </div>
+      </div>
+      <div class="sheet" id="sepaSheet" role="dialog" aria-labelledby="sepaSheetT" aria-modal="true">
+        <div class="card">
+          <h3 id="sepaSheetT">Validar y enviar a SEPA</h3>
+          <p id="sepaSheetP"></p>
+          <label class="check" style="margin:4px 0 14px"><input type="checkbox" id="sepaEnrolChk"><span>La persona aceptó ingresar al Programa SEPA</span></label>
+          <button class="btn" type="button" id="sepaConfirm" style="width:100%">Validar y enviar</button>
+          <button class="btn quiet" type="button" id="sepaCancel" style="width:100%;margin-top:8px">Cancelar</button>
         </div>
       </div>
     </div>
@@ -575,6 +635,25 @@
     cuello:{name:'Cuello uterino', full:'Detección de cáncer de cuello uterino'},
     infantil:{name:'Cáncer infantil', full:'Detección temprana de cáncer infantil'}
   };
+  const CANCER_COLORES={Mama:'#E30613','Cuello Uterino':'#C9552E',Infantil:'#D9951B',Próstata:'#0F6E56',Colon:'#1D4ED8',Piel:'#8F8486'};
+  const TAMIZAJES={
+    'Cuello Uterino':['PAP','Prueba VPH','IVAA'],
+    Mama:['Examen clínico','Ecografía de mama','Mamografía'],
+    Próstata:['PSA','Examen Rectal'],
+    Colon:['FIT','gFBOT'],
+    Infantil:[], Piel:[], Otros:[]
+  };
+  const RESULTADOS=['Sospecha','Positivo','Negativo'];
+  const CAMPS=[
+    {id:'CAM-026',nombre:'Prevención Integral 2026',tipo:'Campaña de salud',ficha:'cuello',intervenciones:['Tamizaje','Sensibilización y Concientización'],tamizajes:{'Cuello Uterino':['PAP','Prueba VPH'],Mama:['Examen clínico','Mamografía']},tamizajeLibre:{},region:'Lima',provincia:'Lima',distrito:'San Juan de Lurigancho',centroPoblado:'',ceco:'ASPERSUD - 804'},
+    {id:'CAM-021',nombre:'Tamizaje Mama SJL',tipo:'Campaña de salud',ficha:'cuello',intervenciones:['Tamizaje'],tamizajes:{Mama:['Ecografía de mama','Mamografía']},tamizajeLibre:{},region:'Lima',provincia:'Lima',distrito:'San Juan de Lurigancho',centroPoblado:'Huáscar',ceco:'ASPERSUD - 804'},
+    {id:'CAM-019',nombre:'Caravana Sur',tipo:'Caravanas',ficha:'infantil',intervenciones:['Tamizaje'],tamizajes:{'Cuello Uterino':['PAP']},tamizajeLibre:{Infantil:'Control de crecimiento y signos de alarma'},region:'Tacna',provincia:'Tacna',distrito:'Ciudad Nueva',centroPoblado:'',ceco:'ASPERSUD - 804'}
+  ];
+  function campById(id){return CAMPS.find(c=>c.id===id)}
+  function campLabel(id){const c=campById(id||S.campana); return c?`${c.id} · ${c.nombre}`:(CAMP[S.ficha]||{}).full||'';}
+  function esDx(r){return r.resultado==='Sospecha'||r.resultado==='Positivo'}
+  function entraContactar(r){return (esDx(r)||r.seguimiento) && r.consent==='signed' && r.sepa!=='enviado'}
+  function campHasTamizaje(c){return (c.intervenciones||[]).includes('Tamizaje')}
   const SAMPLE = {
     cuello:{nombre:'Marisol Huamán Torres',dni:'45231678',edad:'39',cel:'987654321',cel2name:'Rosa Huamán · hermana',cel2:'912345678',seguro:'SIS',prueba:'Sí'},
     infantil:{nombre:'Renzo Castillo Paredes',dni:'71234567',peso:'26',talla:'125',tutor:'Lucía Paredes Rojas',cel:'987123456',cel2name:'',cel2:'',seguro:'SIS',sintoma:'Dolor en la pierna al caminar desde hace tres semanas.'}
@@ -585,7 +664,7 @@
   };
 
   const blank = () => ({
-    ficha:'cuello', f:{}, alarm:Array(21).fill(null), obs:'', enrol:false, result:'Pendiente', indic:'',
+    ficha:'cuello', campana:'CAM-026', f:{}, alarm:Array(21).fill(null), obs:'', enrol:false, seguimiento:false, examenes:[],
     consent:{status:'pending',sig:null,at:null,by:''}
   });
   const OTP_DEMO = '482910';
@@ -593,8 +672,9 @@
     conn:true, last:null, auth:false, mail:'rosa.medina@fpc.org.pe',
     synced:false, syncedAt:null, jornada:false, pendingOpen:false,
     records:[
-      {id:1,name:'Jazmín Rojas Del Carpio',ficha:'cuello',consent:'signed',enrol:false,sync:true,at:Date.now()-86400000*1.2},
-      {id:2,name:'Elena Farfán Quispe',ficha:'cuello',consent:'refused',enrol:false,sync:false,at:Date.now()-3600000*5}
+      {id:1,name:'Jazmín Rojas Del Carpio',dni:'45231678',campana:'CAM-026',ficha:'cuello',ceco:'ASPERSUD - 804',consent:'signed',enrol:true,seguimiento:true,resultado:'Sospecha',sepa:'por-enviar',enroladoSepa:false,sync:true,at:Date.now()-86400000*1.2},
+      {id:2,name:'Elena Farfán Quispe',dni:'40112233',campana:'CAM-026',ficha:'cuello',ceco:'ASPERSUD - 804',consent:'refused',enrol:false,seguimiento:false,resultado:'Negativo',sepa:'por-enviar',enroladoSepa:false,sync:false,at:Date.now()-3600000*5},
+      {id:3,name:'Nora Chávez',dni:'44556677',campana:'CAM-021',ficha:'cuello',ceco:'ASPERSUD - 804',consent:'signed',enrol:true,seguimiento:true,resultado:'Positivo',sepa:'enviado',enroladoSepa:true,sync:true,at:Date.now()-86400000*2}
     ]
   });
   let current = 'login';
@@ -603,26 +683,28 @@
   const NOTES = {
     login:['Acceso del tratante','Correo y contraseña, luego un código OTP enviado al correo institucional (doble factor). Sin verificar el código no entra a la app.',['Prototipo: rosa.medina@fpc.org.pe / sepa2026','Código OTP de demostración: 482910']],
     otp:['Doble factor (OTP)','El segundo paso pide el código de 6 dígitos del correo. Así se evita que alguien use el celular si solo conoce la contraseña.',['Reenviar código al correo','Volver cambia el correo si está mal escrito']],
-    campanas:['Mis campañas','Al entrar, primero sincroniza. Luego desliza el control a la derecha (verde) para abrir la jornada. Solo entonces puede registrar. Deslizar a la izquierda (rojo) cierra la jornada.',['Sincronización obligatoria al abrir la jornada','Registro bloqueado si el control está en rojo']],
+    campanas:['Mis campañas','Al entrar, primero sincroniza. Luego desliza el control a la derecha (verde) para abrir la jornada. Las tarjetas muestran tipo, territorio, CECO e intervenciones. Editar permite agregar exámenes hechos en campo.',['Indicadores: sospecha/positivo y enrolados SEPA','Editar intervenciones ejecutadas en campo']],
     datos:['Datos del beneficiario','Formulario según la ficha de la campaña. La autorización de contacto de la ficha en papel pasa a ser una fila que abre la pantalla de firma.',['Valida DNI (8 dígitos) y celular (9 dígitos)','Cuello uterino: edad y si recibió la prueba','Infantil: peso, talla y datos del tutor']],
     consent:['Consentimiento con firma','El texto se muestra completo, con el nombre de quien firma, más una versión en palabras simples para que sepa qué está firmando. Se firma con el dedo; también se puede registrar que no autoriza.',['Se entrega el celular al paciente (o al tutor si es menor)','No se puede firmar sin dibujar la firma y marcar que leyó','La firma queda guardada con fecha y hora']],
     alarma:['Señales de alarma','Las 21 preguntas Sí/No de la ficha de cáncer infantil, en una sola lista. Se puede marcar el resto en No para ir más rápido.',['Cuenta cuántas señales se marcaron','Sugiere evaluar enrolamiento si hay alertas']],
     obs:['Observación por voz','El tratante dicta y el texto aparece en el campo, editable antes de guardar. Si el dispositivo no tiene dictado, también se puede escribir.',['Usa el reconocimiento de voz del teléfono','En este prototipo, sin micrófono disponible se simula un dictado']],
-    enrol:['Enrolamiento y resultado','Se indica si el caso aplica para enrolamiento (seguimiento posterior). Cuello uterino registra el resultado si hubo prueba; infantil registra la indicación médica.',['Avisa si no hay autorización firmada','El registro no se guarda sin decidir el consentimiento']],
+    enrol:['Enrolamiento y resultado','El resultado de tamizaje solo admite Sospecha, Positivo o Negativo. El seguimiento (Sí/No) y el enrolamiento SEPA se marcan aquí.',['Avisa si no hay autorización firmada','El registro no se guarda sin decidir el consentimiento']],
     listo:['Registro guardado','Queda guardado en el dispositivo, con la firma, y se envía a la plataforma web cuando haya conexión.',['Sin internet: pendiente de sincronizar','Con internet: se sincroniza automáticamente']],
-    registros:['Registros del dispositivo','Lista de lo registrado en este celular con su estado de envío. Alterne «En línea / Sin conexión» arriba para ver cómo se sincroniza.',['Al recuperar conexión se envían los pendientes']]
+    registros:['Registros del dispositivo','Cada ficha muestra código de campaña, CECO, resultado y estado SEPA (Por enviar / Enviado). Se puede editar o enviar a la cola SEPA.',['Edición de resultado, seguimiento y consentimiento','Enviar a SEPA transfiere al Call Center']],
+    contactar:['Bandeja a contactar','Entran personas con (Sospecha o Positivo o seguimiento) y consentimiento firmado. Validar y enviar las pasa a la cola del Call Center SEPA.',['Criterio alineado con la plataforma web','Se puede marcar el enrolamiento al programa']],
+    editreg:['Editar registro','Actualiza resultado, flag de seguimiento y consentimiento de un registro ya capturado en campo.',['Resultado: Sospecha, Positivo o Negativo','Seguimiento y consentimiento en Sí / No']]
   };
   const RAIL = [
     ['login','Acceso y OTP'],['campanas','Campañas'],['datos','Datos del beneficiario'],['consent','Consentimiento y firma','feature'],
     ['alarma','Señales de alarma (infantil)'],['obs','Observación por voz'],['enrol','Enrolamiento y examen'],
-    ['listo','Confirmación'],['registros','Registros y sincronización']
+    ['listo','Confirmación'],['registros','Registros y SEPA'],['contactar','A contactar']
   ];
   function buildRail(){
     $('#rail').innerHTML = '<p class="rail-title">Pantallas</p>' + RAIL.map((r,i)=>
       `<button type="button" data-rail="${r[0]}" class="${r[2]||''}"><span class="n">${i+1}</span>${r[1]}</button>`).join('');
   }
   function renderNote(id){
-    const n = NOTES[id];
+    const n = NOTES[id] || NOTES.campanas;
     $('#note').innerHTML = `<h3>${n[0]}</h3><p>${n[1]}</p><ul>${n[2].map(x=>`<li>${x}</li>`).join('')}</ul>
       <div class="tools"><button type="button" id="fill">Cargar datos de ejemplo</button><button type="button" id="reset">Reiniciar demostración</button></div>`;
   }
@@ -637,13 +719,16 @@
   function go(id){
     current = id;
     $$('.view').forEach(v=>v.classList.toggle('on', v.id==='v-'+id));
+    // tab-contactar is optional if the chrome is hidden
     $$('[data-rail]').forEach(b=>b.classList.toggle('on', b.dataset.rail===id || (id==='otp' && b.dataset.rail==='login')));
     const gated = !['login','otp'].includes(id);
     $('#appbar').style.display = gated ? 'flex' : 'none';
-    const showTabs = gated && ['campanas','registros','listo'].includes(id);
+    const showTabs = gated && ['campanas','registros','listo','contactar'].includes(id);
     $('#tabbar').style.display = showTabs ? 'flex' : 'none';
-    $('#tab-campanas').classList.toggle('on', id==='campanas' || id==='listo');
-    $('#tab-registros').classList.toggle('on', id==='registros');
+    const tabC=$('#tab-campanas'), tabR=$('#tab-registros'), tabK=$('#tab-contactar');
+    if(tabC) tabC.classList.toggle('on', id==='campanas' || id==='listo');
+    if(tabR) tabR.classList.toggle('on', id==='registros' || id==='editreg');
+    if(tabK) tabK.classList.toggle('on', id==='contactar');
     if(id==='campanas'){ applyJornada(); requestAnimationFrame(placeKnob); }
     $('#screen').classList.toggle('authmode', !gated);
     if(id==='otp'){ $('#otpTo').innerHTML = `Enviamos un código de 6 dígitos a <b>${esc(S.mail)}</b>.`; resetOtp(); }
@@ -655,7 +740,8 @@
     if(id==='consent') initConsent();
     if(id==='listo') renderListo();
     if(id==='registros') renderRegistros();
-    ['datos','alarma','obs','enrol'].forEach(v=>{ if(id===v){ progress(v); $('#'+v+'Camp').textContent = CAMP[S.ficha].full; } });
+    if(id==='contactar') renderContactar();
+    ['datos','alarma','obs','enrol'].forEach(v=>{ if(id===v){ progress(v); const chip=$('#'+v+'Camp'); if(chip) chip.textContent = campLabel(); } });
     const body = document.querySelector('#v-'+id+' .body') || document.querySelector('#v-'+id+' .auth-body');
     if(body) body.scrollTop = 0;
     renderNote(id==='otp'?'otp':id);
@@ -764,27 +850,39 @@
   function refreshAlarmCount(){ const c = alarmCounts(); const el=$('#alarmCount'); if(el) el.textContent = `${c.done} de 21 respondidas · ${c.yes} con alerta`; setErr('alarm',''); $('#e-alarm').classList.remove('show'); }
 
   /* ---------- enrolamiento ---------- */
+  function examenesCampana(c){
+    const out=[];
+    Object.entries((c&&c.tamizajes)||{}).forEach(([tipo,exs])=>(exs||[]).forEach(ex=>out.push(`${tipo}: ${ex}`)));
+    Object.entries((c&&c.tamizajeLibre)||{}).forEach(([tipo,txt])=>{ if((txt||'').trim()) out.push(`${tipo}: ${txt}`); });
+    return out;
+  }
   function renderEnrol(){
-    const inf = S.ficha==='infantil', f = S.f, c = alarmCounts();
-    let h = `<div class="switch-row"><div><div class="t" id="enrolLbl">¿Aplica para enrolamiento?</div><div class="d">El equipo de seguimiento se comunicará con el paciente.</div></div>
+    const inf = S.ficha==='infantil', f = S.f, c = alarmCounts(), camp = campById(S.campana);
+    const exams = examenesCampana(camp);
+    const conTamiz = campHasTamizaje(camp);
+    const pideResultado = conTamiz && (inf || f.prueba==='Sí');
+    if(inf && !f.result && c.yes>0) S.f.result = 'Sospecha';
+    let h = `<div class="switch-row"><div><div class="t" id="enrolLbl">¿Aplica para enrolamiento SEPA?</div><div class="d">El Call Center del Programa SEPA se comunicará con el paciente.</div></div>
       <button type="button" class="sw" id="enrolSw" role="switch" aria-labelledby="enrolLbl" aria-checked="${S.enrol}"></button></div>`;
+    h += `<div class="switch-row"><div><div class="t" id="segLbl">Requiere seguimiento</div><div class="d">Flag Sí / No para la bandeja de contacto.</div></div>
+      <button type="button" class="sw" id="segSw" role="switch" aria-labelledby="segLbl" aria-checked="${S.seguimiento}"></button></div>`;
     h += `<div id="enrolMsg"></div>`;
-    if(inf){
-      h += fArea('indic','Indicación médica',{opt:1,rows:4,ph:'Indicación para la familia'});
-    } else if(f.prueba==='Sí'){
-      h += fChips('result','Resultado del examen',['Normal','Anormal','Pendiente']);
-    } else {
-      h += `<div class="alert info">No se tomó la prueba, así que no hay resultado que registrar.</div>`;
+    if(exams.length){
+      h += `<div class="flabel">Exámenes de esta campaña</div><div class="chips">`;
+      h += exams.map(ex=>`<button type="button" class="chip" data-ex="${esc(ex)}" aria-checked="${(S.examenes||[]).includes(ex)}">${esc(ex)}</button>`).join('');
+      h += `</div>`;
     }
+    if(inf) h += fArea('indic','Indicación médica',{opt:1,rows:4,ph:'Indicación para la familia'});
+    if(pideResultado) h += fChips('result','Resultado de tamizaje', RESULTADOS);
+    else if(conTamiz && !inf) h += `<div class="alert info">No se tomó la prueba, así que no hay resultado que registrar.</div>`;
     h += `<div class="flabel" style="margin-top:6px">Resumen</div><div class="sumcard">
       <div class="r"><span>Beneficiario</span><span>${esc(f.nombre||'—')}</span></div>
-      <div class="r"><span>Campaña</span><span>${CAMP[S.ficha].name}</span></div>
+      <div class="r"><span>Campaña</span><span>${esc(campLabel())}</span></div>
+      <div class="r"><span>CECO</span><span>${esc(camp?camp.ceco:'—')}</span></div>
       ${inf?`<div class="r"><span>Señales de alarma</span><span>${c.yes} marcadas</span></div>`:''}
       <div class="r"><span>Observación</span><span>${S.obs.trim()?'Registrada':'Sin observación'}</span></div>
       <div class="r"><span>Autorización de contacto</span><span>${S.consent.status==='signed'?'Firmada':S.consent.status==='refused'?'No autoriza':'Pendiente'}</span></div></div>`;
     $('#enrolBody').innerHTML = h;
-    if(S.ficha==='cuello' && f.prueba==='Sí' && !f.result) S.f.result = 'Pendiente';
-    if(S.ficha==='cuello' && f.prueba==='Sí') document.querySelectorAll('[data-chip="result"]').forEach(b=>b.setAttribute('aria-checked', String(S.f.result===b.dataset.v)));
     enrolMsg();
   }
   function enrolMsg(){
@@ -877,7 +975,9 @@
   function stopDictado(){
     if(rec){ try{rec.stop();}catch(e){} rec=null; }
     if(simTimer){ clearInterval(simTimer); simTimer=null; }
-    $('#mic').classList.remove('rec'); $('#micSt').textContent = 'Toque para dictar';
+    const mic=$('#mic'), st=$('#micSt');
+    if(mic) mic.classList.remove('rec');
+    if(st) st.textContent = 'Toque para dictar';
   }
   function simulate(){
     const words = DICTADO[S.ficha].split(' '); let i = 0;
@@ -906,10 +1006,21 @@
   /* ---------- guardar / confirmación / registros ---------- */
   function save(){
     if(S.consent.status==='pending'){ toast('Falta decidir la autorización de contacto'); go('datos'); setErr('consent','Falta la autorización: pida que firme o registre que no autoriza.'); return; }
-    const rc = {id:Date.now(), name:S.f.nombre, ficha:S.ficha, consent:S.consent.status, enrol:S.enrol, sync:false, at:Date.now(), sig:S.consent.sig};
-    if(S.conn) rc.sync = true;
+    const camp = campById(S.campana);
+    const resultado = S.f.result||'';
+    const rc = {
+      id:Date.now(), name:S.f.nombre, dni:S.f.dni, tel:S.f.cel, campana:S.campana, ficha:S.ficha,
+      ceco:camp?camp.ceco:'', consent:S.consent.status, enrol:S.enrol,
+      seguimiento:S.seguimiento||esDx({resultado}), resultado, sepa:'por-enviar', enroladoSepa:false,
+      sync:!!S.conn, at:Date.now(), sig:S.consent.sig
+    };
     S.records.unshift(rc); S.last = rc;
     go('listo');
+  }
+  function sepaTag(r){
+    if(r.enroladoSepa) return '<span class="tag sync">Enrolado SEPA</span>';
+    if(r.sepa==='enviado') return '<span class="tag sync">Enviado</span>';
+    return '<span class="tag sepa">Por enviar</span>';
   }
   function renderListo(){
     const r = S.last; if(!r){ $('#listoBody').innerHTML=''; return; }
@@ -917,21 +1028,58 @@
       <div class="center"><h2>Registro guardado</h2><p>${r.sync?'Enviado a la plataforma web.':'Guardado en este celular. Se enviará cuando haya conexión.'}</p></div>
       <div class="sumcard">
         <div class="r"><span>Beneficiario</span><span>${esc(r.name)}</span></div>
-        <div class="r"><span>Campaña</span><span>${CAMP[r.ficha].name}</span></div>
-        <div class="r"><span>Enrolamiento</span><span>${r.enrol?'Sí aplica':'No aplica'}</span></div>
+        <div class="r"><span>Código de campaña</span><span>${esc(r.campana||'—')}</span></div>
+        <div class="r"><span>CECO / Proyecto</span><span>${esc(r.ceco||'—')}</span></div>
+        <div class="r"><span>Resultado</span><span>${esc(r.resultado||'—')}</span></div>
+        <div class="r"><span>Seguimiento</span><span>${r.seguimiento?'Sí':'No'}</span></div>
+        <div class="r"><span>SEPA</span><span>${r.enroladoSepa?'Enrolado':r.sepa==='enviado'?'Enviado':'Por enviar'}</span></div>
         <div class="r"><span>Autorización</span><span>${r.consent==='signed'?'Firmada':'No autoriza'}</span></div>
         <div class="r"><span>Envío</span><span>${r.sync?'Sincronizado':'Pendiente'}</span></div></div>
       ${r.sig?`<div class="sigthumb"><img src="${r.sig}" alt="Firma del paciente"><span>Firma guardada ${fmt(r.at)}</span></div>`:''}`;
   }
   function pending(){ return S.records.filter(r=>!r.sync).length; }
-  function updateBadge(){ const n = pending(), b = $('#pendBadge'); b.style.display = n?'flex':'none'; b.textContent = n; }
+  function updateBadge(){
+    const n = pending(), b = $('#pendBadge'); b.style.display = n?'flex':'none'; b.textContent = n;
+    const c = S.records.filter(entraContactar).length, cb = $('#contBadge');
+    if(cb){ cb.style.display = c?'flex':'none'; cb.textContent = c; }
+  }
+  function recById(id){ return S.records.find(r=>String(r.id)===String(id)); }
   function renderRegistros(){
     const n = pending();
-    let h = n ? `<div class="syncbar"><span>${n} registro${n>1?'s':''} por enviar${S.conn?'':'. Sin conexión'}.</span><button class="mini" type="button" id="syncNow">Sincronizar</button></div>`
-              : `<div class="syncbar"><span>Todo está sincronizado.</span></div>`;
-    h += S.records.map(r=>`<div class="rec-item"><div class="top"><div class="nm">${esc(r.name)}</div><span class="tag ${r.sync?'sync':'pend'}">${r.sync?'Enviado':'Pendiente'}</span></div>
-      <div class="meta">${CAMP[r.ficha].name} · ${fmt(r.at)}<br>${r.consent==='signed'?'Autorización firmada':'No autoriza contacto'} · ${r.enrol?'Con enrolamiento':'Sin enrolamiento'}</div></div>`).join('');
+    let h = n ? `<div class="syncbar"><span>${n} registro${n>1?'s':''} por sincronizar${S.conn?'':'. Sin conexión'}.</span><button class="mini" type="button" id="syncNow">Sincronizar</button></div>`
+              : `<div class="syncbar"><span>Todo está sincronizado con la plataforma.</span></div>`;
+    h += S.records.map(r=>`<div class="rec-item">
+      <div class="top"><div class="nm">${esc(r.name)}</div>${sepaTag(r)}</div>
+      <div class="meta">${esc(r.campana||'—')} · ${esc(r.ceco||'—')}<br>Resultado: ${esc(r.resultado||'—')} · Seguimiento: ${r.seguimiento?'Sí':'No'} · ${r.consent==='signed'?'Consentimiento Sí':'Consentimiento No'}<br>${fmt(r.at)} · ${r.sync?'Sincronizado':'Pendiente de envío'}</div>
+      <div class="rec-actions">
+        <button class="mini" type="button" data-edit-reg="${r.id}">Editar</button>
+        ${r.sepa==='por-enviar'?`<button class="mini" type="button" data-send-sepa="${r.id}">Enviar a SEPA</button>`:`<button class="mini" type="button" disabled>Enviado</button>`}
+      </div></div>`).join('');
     $('#registrosBody').innerHTML = h;
+  }
+  function renderContactar(){
+    const rows = S.records.filter(entraContactar);
+    let h = `<div class="syncbar"><span>${rows.length} persona${rows.length===1?'':'s'} en bandeja. Criterio: Sospecha o Positivo o seguimiento, con consentimiento.</span></div>`;
+    h += rows.length ? rows.map(r=>{
+      const motivo = r.resultado==='Positivo'?'Diagnóstico / positivo':r.resultado==='Sospecha'?'Sospecha de cáncer':'Requiere seguimiento';
+      const prio = esDx(r)?'Alta':'Media';
+      return `<div class="rec-item">
+        <div class="top"><div class="nm">${esc(r.name)} · ${esc(r.dni||'')}</div><span class="tag ${esDx(r)?'alta':'sepa'}">${prio}</span></div>
+        <div class="meta">${esc(campLabel(r.campana))}<br>${esc(r.resultado||'—')} · ${motivo}</div>
+        <div class="rec-actions"><button class="mini" type="button" data-validar="${r.id}">Validar y enviar</button></div>
+      </div>`;
+    }).join('') : `<p class="hint">No hay beneficiarios que cumplan el criterio de entrada.</p>`;
+    $('#contactarBody').innerHTML = h;
+  }
+  function enviarASepa(id, enrolado){
+    const r = recById(id); if(!r) return;
+    r.sepa = 'enviado';
+    if(enrolado) r.enroladoSepa = true;
+    updateBadge();
+    if(current==='registros') renderRegistros();
+    if(current==='contactar') renderContactar();
+    if(current==='campanas') renderHome();
+    toast(enrolado ? `${r.name} fue enviado a SEPA y marcado como enrolado.` : `${r.name} pasó a la cola del Call Center SEPA.`);
   }
   function syncAll(silent){
     const n = pending(); if(!n) return;
@@ -949,10 +1097,132 @@
 
   let tt; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),2400); }
 
-  function newRegistration(ficha){
+  function newRegistration(campId){
     stopDictado();
+    const camp = campById(campId) || CAMPS[0];
     const keep = {conn:S.conn, records:S.records, last:S.last, auth:S.auth, mail:S.mail, synced:S.synced, syncedAt:S.syncedAt, jornada:S.jornada};
-    Object.assign(S, blank(), keep, {ficha});
+    Object.assign(S, blank(), keep, {ficha:camp.ficha, campana:camp.id});
+  }
+  let editCampId = null, sepaTarget = null, editRegId = null;
+  function territorio(c){ return c ? [c.distrito,c.provincia,c.region].filter(Boolean).join(', ') : '—'; }
+  function renderHome(){
+    const activas = CAMPS.length;
+    $('#kpiCamp').innerHTML = `${activas}<span style="font-size:13px;color:var(--ink-faint);font-weight:600">/${activas}</span>`;
+    $('#kpiReg').textContent = S.records.length;
+    $('#kpiDx').textContent = S.records.filter(esDx).length;
+    $('#kpiSepa').textContent = S.records.filter(r=>r.enroladoSepa).length;
+    const counts={};
+    CAMPS.forEach(c=>{
+      Object.keys(c.tamizajes||{}).forEach(k=>counts[k]=(counts[k]||0)+1);
+      Object.keys(c.tamizajeLibre||{}).forEach(k=>{ if((c.tamizajeLibre[k]||'').trim()) counts[k]=(counts[k]||0)+1; });
+    });
+    const data = Object.keys(CANCER_COLORES).map(tipo=>({tipo,n:counts[tipo]||0})).filter(x=>x.n);
+    const total = data.reduce((s,i)=>s+i.n,0) || 1;
+    let acc=0;
+    const parts = data.map(it=>{
+      const start=acc/total*100; acc+=it.n; return `${CANCER_COLORES[it.tipo]} ${start}% ${acc/total*100}%`;
+    });
+    const pie = $('#pieHome');
+    if(pie) pie.style.background = data.length ? `conic-gradient(${parts.join(',')})` : 'var(--line)';
+    const ley = $('#leyendaHome');
+    if(ley) ley.innerHTML = data.map(it=>`<li><span class="dot" style="background:${CANCER_COLORES[it.tipo]}"></span>${it.tipo}</li>`).join('') || '<li>Sin tipos de cáncer configurados</li>';
+    renderCampList();
+    updateBadge();
+  }
+  function renderCampList(){
+    const chev = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+    $('#camps').innerHTML = CAMPS.map(c=>{
+      const ints = (c.intervenciones||[]).join(' · ') || 'Sin intervención';
+      const exams = examenesCampana(c).join(' · ');
+      return `<div class="camp-wrap">
+        <button class="camp" data-camp="${c.id}" type="button">
+          <div>
+            <div class="code">${esc(c.id)} · ${esc(c.ceco)}</div>
+            <div class="nm">${esc(c.nombre)}</div>
+            <div class="tp">${esc(c.tipo)} · ${esc(ints)}<br>${esc(territorio(c))}${c.centroPoblado?' · '+esc(c.centroPoblado):''}${exams?'<br>'+esc(exams):''}</div>
+          </div>${chev}
+        </button>
+        <button class="edit-camp" type="button" data-edit-camp="${c.id}">Editar intervenciones de campo</button>
+      </div>`;
+    }).join('');
+  }
+  function openCampEdit(id){
+    const c = campById(id); if(!c) return;
+    editCampId = id;
+    $('#campSheetT').textContent = `Editar ${c.id}`;
+    const ints = c.intervenciones||[];
+    const tamOn = ints.includes('Tamizaje');
+    let h = `<div class="flabel">Intervención</div><div class="chips" style="margin-bottom:10px">
+      <button type="button" class="chip" data-int="Tamizaje" aria-checked="${tamOn}">Tamizaje</button>
+      <button type="button" class="chip" data-int="Sensibilización y Concientización" aria-checked="${ints.includes('Sensibilización y Concientización')}">Sensibilización y Concientización</button>
+    </div>
+    <div id="tamizEdit" style="display:${tamOn?'block':'none'}">
+      <div class="flabel">Tipo de cáncer y exámenes</div>`;
+    Object.entries(TAMIZAJES).forEach(([tipo,exams])=>{
+      const on = !!(c.tamizajes[tipo] || (c.tamizajeLibre||{})[tipo]);
+      const idt = tipo.replace(/\s/g,'-');
+      h += `<div class="cancer-box"><label><input type="checkbox" data-cancer="${esc(tipo)}" ${on?'checked':''}> ${esc(tipo)}</label>`;
+      if(exams.length){
+        h += `<div class="exams" style="display:${on?'flex':'none'}">${exams.map(ex=>`<label><input type="checkbox" data-exam="${esc(tipo)}|${esc(ex)}" ${(c.tamizajes[tipo]||[]).includes(ex)?'checked':''}> ${esc(ex)}</label>`).join('')}</div>`;
+      } else {
+        h += `<input class="input" data-libre="${esc(tipo)}" placeholder="Especifique examen o camilla" value="${esc((c.tamizajeLibre||{})[tipo]||'')}" style="margin-top:8px;display:${on?'block':'none'}">`;
+      }
+      h += `</div>`;
+    });
+    h += `</div>`;
+    $('#campSheetBody').innerHTML = h;
+    $('#campSheet').classList.add('on');
+  }
+  function saveCampEdit(){
+    const c = campById(editCampId); if(!c) return;
+    c.intervenciones = $$('#campSheetBody [data-int][aria-checked="true"]').map(b=>b.dataset.int);
+    const tamizajes={}; const tamizajeLibre={};
+    if(c.intervenciones.includes('Tamizaje')){
+      $$('#campSheetBody [data-cancer]:checked').forEach(ch=>{
+        const tipo=ch.dataset.cancer;
+        const exams = TAMIZAJES[tipo]||[];
+        if(exams.length){
+          tamizajes[tipo] = $$('#campSheetBody [data-exam]').filter(x=>x.dataset.exam.startsWith(tipo+'|') && x.checked).map(x=>x.dataset.exam.split('|')[1]);
+        } else {
+          const inp = $(`#campSheetBody [data-libre="${tipo}"]`);
+          tamizajeLibre[tipo] = inp ? inp.value.trim() : '';
+        }
+      });
+    }
+    c.tamizajes = tamizajes; c.tamizajeLibre = tamizajeLibre;
+    $('#campSheet').classList.remove('on');
+    renderCampList(); renderHome();
+    toast('Intervenciones de campo actualizadas');
+  }
+  function openEditReg(id){
+    const r = recById(id); if(!r) return;
+    editRegId = id;
+    $('#editRegSub').textContent = `${r.name} · ${r.campana||''}`;
+    $('#editRegBody').innerHTML = `
+      <div class="field"><label for="er-res">Resultado de tamizaje</label>
+        <select id="er-res">${RESULTADOS.map(v=>`<option ${r.resultado===v?'selected':''}>${v}</option>`).join('')}</select></div>
+      <div class="field"><div class="flabel">Seguimiento</div>
+        <div class="chips" role="radiogroup">${['Sí','No'].map(v=>`<button type="button" class="chip" data-er-seg="${v==='Sí'}" aria-checked="${!!r.seguimiento===(v==='Sí')}">${v}</button>`).join('')}</div></div>
+      <div class="field"><div class="flabel">Consentimiento</div>
+        <div class="chips" role="radiogroup">${['Sí','No'].map(v=>`<button type="button" class="chip" data-er-con="${v==='Sí'?'signed':'refused'}" aria-checked="${r.consent===(v==='Sí'?'signed':'refused')}">${v}</button>`).join('')}</div></div>`;
+    go('editreg');
+  }
+  function saveEditReg(){
+    const r = recById(editRegId); if(!r) return;
+    r.resultado = $('#er-res').value;
+    const seg = $('#editRegBody [data-er-seg][aria-checked="true"]');
+    r.seguimiento = seg ? seg.dataset.erSeg==='true' : r.seguimiento;
+    const con = $('#editRegBody [data-er-con][aria-checked="true"]');
+    if(con) r.consent = con.dataset.erCon;
+    toast('Registro actualizado');
+    go('registros');
+  }
+  function openSepaSheet(id){
+    const r = recById(id); if(!r) return;
+    sepaTarget = id;
+    $('#sepaEnrolChk').checked = false;
+    $('#sepaSheetP').textContent = `${r.name} (${r.dni||'s/DNI'}) · ${r.campana||''} · ${r.resultado||'sin resultado'}. Al confirmar pasa a la cola operativa del Call Center del Programa SEPA.`;
+    $('#sepaSheet').classList.add('on');
   }
 
   /* ---------- acceso OTP ---------- */
@@ -1030,6 +1300,7 @@
       ? ('Última descarga: ' + fmt(S.syncedAt) + '. Puede volver a sincronizar.')
       : 'Obligatorio al abrir la jornada. Descarga fichas y catálogos.';
     $('#syncCtaP').textContent = S.synced ? 'Listo' : 'Sincronizar';
+    renderHome();
     const svg = $('#slideKnob svg path');
     if(svg) svg.setAttribute('d', open ? 'M15 6l-6 6 6 6' : 'M9 6l6 6-6 6');
     placeKnob();
@@ -1120,7 +1391,7 @@
       if(['datos','consent','alarma','obs','enrol','listo'].includes(id) && !S.jornada){
         S.synced = true; S.syncedAt = S.syncedAt||Date.now(); S.jornada = true;
       }
-      if(id==='alarma' && S.ficha!=='infantil'){ newRegistration('infantil'); }
+      if(id==='alarma' && S.ficha!=='infantil'){ newRegistration('CAM-019'); }
       if(['consent','alarma','obs','enrol','listo'].includes(id) && !(S.f.nombre||'').trim()){
         S.f = Object.assign({}, SAMPLE[S.ficha]);
         if(S.ficha==='infantil'){ S.alarm = Array(21).fill(false); S.alarm[7]=true; S.alarm[18]=true; }
@@ -1128,12 +1399,16 @@
       if(id==='listo' && !S.last) S.last = S.records[0];
       go(id); return;
     }
+    if(t.dataset.editCamp){ openCampEdit(t.dataset.editCamp); return; }
+    if(t.dataset.editReg){ openEditReg(t.dataset.editReg); return; }
+    if(t.dataset.sendSepa){ openSepaSheet(t.dataset.sendSepa); return; }
+    if(t.dataset.validar){ openSepaSheet(t.dataset.validar); return; }
     if(t.classList.contains('camp')){
       if(!S.jornada){ toast('Abra la jornada (deslice a la derecha) para registrar.'); return; }
-      newRegistration(t.dataset.ficha); go('datos'); return;
+      newRegistration(t.dataset.camp); go('datos'); return;
     }
     if(t.dataset.go==='consent'){ stopDictado(); openConsent(); return; }
-    if(t.dataset.go==='campanas' || t.dataset.go==='registros'){
+    if(t.dataset.go==='campanas' || t.dataset.go==='registros' || t.dataset.go==='contactar'){
       if(!S.auth){ go('login'); return; }
       stopDictado(); go(t.dataset.go); return;
     }
@@ -1152,13 +1427,36 @@
     else if(t.id==='obsBack'){ stopDictado(); S.obs=$('#obsTxt').value; go(S.ficha==='infantil'?'alarma':'datos'); }
     else if(t.id==='enrolBack') go('obs');
     else if(t.id==='enrolSw'){ S.enrol=!S.enrol; t.setAttribute('aria-checked',String(S.enrol)); enrolMsg(); }
+    else if(t.id==='segSw'){ S.seguimiento=!S.seguimiento; t.setAttribute('aria-checked',String(S.seguimiento)); }
     else if(t.id==='enrolSave') save();
+    else if(t.id==='campSheetSave') saveCampEdit();
+    else if(t.id==='campSheetCancel'){ $('#campSheet').classList.remove('on'); }
+    else if(t.id==='sepaConfirm'){ $('#sepaSheet').classList.remove('on'); enviarASepa(sepaTarget, $('#sepaEnrolChk').checked); }
+    else if(t.id==='sepaCancel'){ $('#sepaSheet').classList.remove('on'); sepaTarget=null; }
+    else if(t.id==='editRegSave') saveEditReg();
+    else if(t.dataset.int){
+      const on = t.getAttribute('aria-checked')!=='true';
+      t.setAttribute('aria-checked', String(on));
+      if(t.dataset.int==='Tamizaje'){ const box=$('#tamizEdit'); if(box) box.style.display=on?'block':'none'; }
+    }
+    else if(t.dataset.ex){
+      S.examenes = S.examenes||[];
+      const i = S.examenes.indexOf(t.dataset.ex);
+      if(i>=0) S.examenes.splice(i,1); else S.examenes.push(t.dataset.ex);
+      t.setAttribute('aria-checked', String(i<0));
+    }
+    else if(t.dataset.erSeg!==undefined){
+      t.parentElement.querySelectorAll('[data-er-seg]').forEach(b=>b.setAttribute('aria-checked', String(b===t)));
+    }
+    else if(t.dataset.erCon){
+      t.parentElement.querySelectorAll('[data-er-con]').forEach(b=>b.setAttribute('aria-checked', String(b===t)));
+    }
     else if(t.id==='sigClear') clearPad();
     else if(t.id==='signOk') signOk();
     else if(t.id==='signNo') signNo();
     else if(t.id==='again'){
       if(!S.jornada){ go('campanas'); toast('La jornada está cerrada. Ábrala para registrar otro.'); return; }
-      newRegistration(S.ficha); go('datos');
+      newRegistration(S.campana); go('datos');
     }
     else if(t.id==='syncNow') syncAll();
     else if(t.id==='syncCta'){
@@ -1179,7 +1477,18 @@
     else if(t.id==='otpBack') go('login');
     else if(t.id==='fill'){ fillSample(); }
     else if(t.id==='reset'){ location.reload(); }
-    else if(t.dataset.chip){ S.f[t.dataset.chip]=t.dataset.v; t.parentElement.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-checked',String(b===t))); setErr(t.dataset.chip,''); if(t.dataset.chip==='result'||t.dataset.chip==='prueba'){} }
+    else if(t.dataset.chip){
+      S.f[t.dataset.chip]=t.dataset.v;
+      t.parentElement.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-checked',String(b===t)));
+      setErr(t.dataset.chip,'');
+      if(t.dataset.chip==='result' && (t.dataset.v==='Sospecha'||t.dataset.v==='Positivo')){
+        S.seguimiento = true; S.enrol = true;
+        const sw=$('#segSw'), en=$('#enrolSw');
+        if(sw) sw.setAttribute('aria-checked','true');
+        if(en) en.setAttribute('aria-checked','true');
+        enrolMsg();
+      }
+    }
   });
   document.addEventListener('input',e=>{
     const el = e.target;
@@ -1207,7 +1516,17 @@
     paintOtp(); otpError('');
     const next = $$('#otpRow input')[Math.min(t.length,5)]; if(next) next.focus();
   });
-  document.addEventListener('change',e=>{ if(e.target.id==='readChk') $('#e-read').classList.remove('show'); });
+  document.addEventListener('change',e=>{
+    if(e.target.id==='readChk') $('#e-read').classList.remove('show');
+    if(e.target.dataset && e.target.dataset.cancer){
+      const box = e.target.closest('.cancer-box');
+      if(!box) return;
+      const exams = box.querySelector('.exams');
+      const libre = box.querySelector('[data-libre]');
+      if(exams) exams.style.display = e.target.checked ? 'flex' : 'none';
+      if(libre) libre.style.display = e.target.checked ? 'block' : 'none';
+    }
+  });
   document.addEventListener('keydown',e=>{
     if(e.key==='Enter' && e.target.matches('input')){
       e.preventDefault();
@@ -1219,7 +1538,7 @@
   function fillSample(){
     if(!S.auth){ S.auth=true; }
     if(!S.jornada){ S.synced=true; S.syncedAt=Date.now(); S.jornada=true; }
-    const keep = {records:S.records,conn:S.conn,last:S.last,ficha:S.ficha,auth:S.auth,mail:S.mail,synced:S.synced,syncedAt:S.syncedAt,jornada:S.jornada};
+    const keep = {records:S.records,conn:S.conn,last:S.last,ficha:S.ficha,campana:S.campana,auth:S.auth,mail:S.mail,synced:S.synced,syncedAt:S.syncedAt,jornada:S.jornada};
     if(!['datos','consent','alarma','obs','enrol'].includes(current)){ go('datos'); }
     S.f = Object.assign({}, SAMPLE[S.ficha]);
     if(S.ficha==='infantil'){ S.alarm = Array(21).fill(false); S.alarm[7]=true; S.alarm[18]=true; S.f.indic='Evaluación en oncología pediátrica en 4 semanas.'; }

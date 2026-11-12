@@ -12,14 +12,32 @@
 header{height:64px;background:#fff;color:var(--ink);display:flex;align-items:center;padding:0 24px;gap:16px;border-bottom:1px solid var(--line)}header img.brand-logo{height:40px;width:auto;display:block}header .sep{width:1px;height:28px;background:var(--line);flex:none}header .product{font-weight:600;font-size:14px;color:var(--grey-dark)}.top{margin-left:auto;color:var(--muted);font-size:13px}
 aside{position:fixed;top:64px;bottom:0;width:235px;background:#fff;border-right:1px solid var(--line);padding:18px}.nav{padding:11px 12px;border-radius:9px;margin:4px 0;color:var(--grey-dark);cursor:pointer}.nav:hover{background:var(--grey-light)}.nav.active{background:var(--red-light);color:var(--primary);font-weight:700}a.nav{display:block;text-decoration:none;color:inherit}
 main{margin-left:235px;padding:26px 30px;max-width:1500px}h1{margin:0 0 5px;font-size:27px}h2{margin:0 0 15px}.sub{color:var(--muted);margin-bottom:24px}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}.metric{font-size:27px;font-weight:800;margin-top:6px}.muted{color:var(--muted)}.toolbar{display:flex;gap:10px;align-items:center;margin:22px 0;flex-wrap:wrap}.toolbar .input.camp{min-width:260px;font-weight:600}.btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 13px;cursor:pointer;color:var(--ink)}.btn:hover{background:var(--grey-light)}.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}.btn.primary:hover{background:var(--primary-dark)}.btn.green{background:var(--green);border-color:var(--green);color:#fff}.btn.green:hover{background:#047857}.input{padding:9px;border:1px solid var(--line);border-radius:8px;background:#fff}.input:focus{outline:2px solid var(--primary);outline-offset:1px;border-color:var(--primary)}.table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}.table th,.table td{padding:12px;border-bottom:1px solid var(--line);text-align:left}.table th{font-size:12px;text-transform:uppercase;color:var(--muted);background:var(--grey-light)}.badge{display:inline-block;padding:4px 8px;border-radius:99px;font-size:12px;font-weight:700}.bgreen{background:#ecfdf5;color:var(--green)}.bblue{background:var(--grey-light);color:var(--grey-dark)}.bamber{background:#fffbeb;color:var(--amber)}.bred{background:var(--red-light);color:var(--primary-dark)}
-.section{margin-top:25px}.split{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}.flow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.step{padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#fff}.arrow{color:var(--muted)}.check{color:var(--green);font-weight:700}
-.modal{display:none;position:fixed;inset:0;background:rgba(15,23,42,.60);align-items:center;justify-content:center}.modal.open{display:flex}.modalbox{background:#fff;width:min(900px,92vw);max-height:90vh;overflow:auto;border-radius:14px;padding:24px}.close{float:right;font-size:22px;cursor:pointer;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}.metric{font-size:27px;font-weight:800;margin-top:6px}.den{font-size:16px;font-weight:600;color:var(--muted)}.muted{color:var(--muted)}.toolbar{display:flex;gap:10px;align-items:center;margin:22px 0;flex-wrap:wrap}.toolbar .input.camp{min-width:260px;font-weight:600}.btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 13px;cursor:pointer;color:var(--ink)}.btn:hover{background:var(--grey-light)}.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}.btn.primary:hover{background:var(--primary-dark)}.btn.green{background:var(--green);border-color:var(--green);color:#fff}.btn.green:hover{background:#047857}.btn.sm{padding:6px 10px;font-size:12px}.btn:disabled{opacity:.45;cursor:not-allowed}.input{padding:9px;border:1px solid var(--line);border-radius:8px;background:#fff}.input:focus{outline:2px solid var(--primary);outline-offset:1px;border-color:var(--primary)}.table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}.table th,.table td{padding:12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.table th{font-size:12px;text-transform:uppercase;color:var(--muted);background:var(--grey-light)}.badge{display:inline-block;padding:4px 8px;border-radius:99px;font-size:12px;font-weight:700}.bgreen{background:#ecfdf5;color:var(--green)}.bblue{background:var(--grey-light);color:var(--grey-dark)}.bamber{background:#fffbeb;color:var(--amber)}.bred{background:var(--red-light);color:var(--primary-dark)}
+.section{margin-top:25px}.split{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}.flow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.step{padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#fff}.arrow{color:var(--muted)}
+.modal{display:none;position:fixed;inset:0;background:rgba(15,23,42,.60);align-items:center;justify-content:center;z-index:40}.modal.open{display:flex}.modalbox{background:#fff;width:min(980px,94vw);max-height:90vh;overflow:auto;border-radius:14px;padding:24px}.close{float:right;font-size:22px;cursor:pointer;color:var(--muted)}
 .tabs button{border:0;background:transparent;padding:10px 14px;cursor:pointer;color:var(--muted)}.tabs .sel{color:var(--primary);font-weight:800;border-bottom:2px solid var(--primary)}
 .filebox{border:1px dashed var(--line);border-radius:12px;padding:16px;background:var(--grey-light);margin-top:12px}
 .filebox input[type=file]{margin-top:8px}
 #importMsg{margin-top:12px;font-size:13px}
+label{display:block;margin:0 0 6px;font-weight:600;font-size:13px}
 .map-frame{height:calc(100vh - 170px);min-height:480px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}.map-frame iframe{width:100%;height:100%;border:0;display:block}
+.pie-wrap{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+.pie{width:168px;height:168px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 22px #fff;background:#e2e8f0}
+.legend{list-style:none;padding:0;margin:0;flex:1;min-width:220px}
+.legend li{display:flex;align-items:center;gap:8px;margin:7px 0;font-size:13px}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.form-sec{margin-top:18px}.form-sec h3{margin:0 0 10px;font-size:15px}
+.checks{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.checks label,.exams label,.cancer-box>label{display:flex;align-items:center;gap:8px;font-weight:500;margin:0;cursor:pointer}
+.cancer-box{border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:8px;background:#fff}
+.exams{display:flex;flex-wrap:wrap;gap:8px 16px;margin:8px 0 0 22px}
+.switch-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin:8px 0;background:var(--grey-light)}
+.switch-row span{font-weight:600}
+.switch-row small{display:block;font-weight:400;color:var(--muted);margin-top:2px}
+.toast{position:fixed;bottom:24px;right:24px;background:#1E293B;color:#fff;padding:12px 16px;border-radius:10px;z-index:50;display:none;max-width:360px;box-shadow:0 10px 28px rgba(15,23,42,.2)}
+.toast.show{display:block}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.hint{font-size:12px;color:var(--muted);margin:4px 0 0;font-weight:400}
 @media(max-width:900px){aside{display:none}main{margin:0}.grid{grid-template-columns:1fr 1fr}.split{grid-template-columns:1fr}}
 </style>
 </head>
@@ -27,7 +45,7 @@ main{margin-left:235px;padding:26px 30px;max-width:1500px}h1{margin:0 0 5px;font
 <header>
 <img class="brand-logo" src="LogoFundacion.png" alt="Fundación Peruana de Cáncer">
 <div class="sep" aria-hidden="true"></div>
-<div class="product">Gestión de campañas y derivación al CRM</div>
+<div class="product">Gestión de campañas y derivación al Programa SEPA</div>
 <div class="top">Administrador ▾</div>
 </header>
 <aside>
@@ -39,31 +57,41 @@ main{margin-left:235px;padding:26px 30px;max-width:1500px}h1{margin:0 0 5px;font
 </aside>
 <main>
 <section id="dashboard">
-<h1>Gestión de campañas</h1><div class="sub">Control integral desde la planificación hasta la identificación de personas que requieren contacto.</div>
+<h1>Gestión de campañas</h1><div class="sub">Control integral desde la planificación hasta el enrolamiento en el Programa SEPA.</div>
 <div class="grid">
-<div class="card"><div class="muted">Campañas activas</div><div class="metric">8</div></div>
-<div class="card"><div class="muted">Beneficiarios registrados</div><div class="metric">4,286</div></div>
-<div class="card"><div class="muted">Requieren contacto</div><div class="metric">327</div></div>
-<div class="card"><div class="muted">Listos para CRM</div><div class="metric">184</div></div>
+<div class="card"><div class="muted">Campañas activas</div><div class="metric" id="metricCampanas">0<span class="den">/0</span></div><div class="hint">Activas / total histórico</div></div>
+<div class="card"><div class="muted">Beneficiarios registrados</div><div class="metric" id="metricBenef">0</div></div>
+<div class="card"><div class="muted">Requieren contacto</div><div class="metric" id="metricContacto">0</div><div class="hint">Diagnóstico o sospecha de cáncer</div></div>
+<div class="card"><div class="muted">Beneficiarios enrolados en Programa SEPA</div><div class="metric" id="metricSepa">0</div><div class="hint">Aceptaron ingreso tras gestión del Call Center</div></div>
 </div>
-<div class="section card"><h2>Embudo de campaña</h2><div class="flow"><div class="step">4,286 Participantes</div><div class="arrow">→</div><div class="step">1,240 Evaluados</div><div class="arrow">→</div><div class="step">327 Requieren seguimiento</div><div class="arrow">→</div><div class="step">241 Contacto validado</div><div class="arrow">→</div><div class="step">184 Prospectos CRM</div></div></div>
+<div class="section card"><h2>Embudo de campaña</h2><div class="flow" id="embudo"></div></div>
 <div class="section split">
-<div class="card"><h2>Campañas recientes</h2><table class="table"><tr><th>Campaña</th><th>Tipo</th><th>Estado</th><th>Participantes</th></tr>
-<tr><td>Prevención Integral 2026</td><td>Médica</td><td><span class="badge bgreen">Activa</span></td><td>1,482</td></tr>
-<tr><td>Nutrición Familiar</td><td>Nutrición</td><td><span class="badge bblue">Cerrada</span></td><td>864</td></tr>
-<tr><td>Educación y Prevención</td><td>Educación</td><td><span class="badge bgreen">Activa</span></td><td>1,126</td></tr></table></div>
-<div class="card"><h2>Alertas operativas</h2><p>⚠ <b>43</b> resultados pendientes de validar por OCR.</p><p>⚠ <b>27</b> beneficiarios con seguimiento requerido.</p><p>✓ <b>184</b> registros validados para derivación al CRM.</p></div>
+<div class="card"><h2>Campañas recientes</h2><table class="table" id="tablaCampanasDash"></table></div>
+<div class="card">
+<h2>Población abordada por tipo de cáncer</h2>
+<div class="pie-wrap">
+<div class="pie" id="pieCancer" role="img" aria-label="Distribución por tipo de cáncer"></div>
+<ul class="legend" id="leyendaCancer"></ul>
+</div>
+</div>
 </div>
 </section>
 
 <section id="campanas" style="display:none">
-<h1>Campañas</h1><div class="sub">Crear, configurar, ejecutar y consultar el detalle de cada campaña.</div>
-<div class="toolbar"><button class="btn primary" onclick="openModal('nueva')">+ Nueva campaña</button><input class="input" placeholder="Buscar campaña..."><select class="input"><option>Todos los tipos</option><option>Sensibilización</option><option>Nutrición</option><option>Educación</option><option>Médica</option></select></div>
-<table class="table"><tr><th>Código</th><th>Campaña</th><th>Tipo</th><th>Periodo</th><th>Estado</th><th>Participantes</th><th></th></tr>
-<tr><td>CAM-026</td><td>Prevención Integral 2026</td><td>Médica</td><td>01/09 - 30/09</td><td><span class="badge bgreen">Activa</span></td><td>1,482</td><td><button class="btn" onclick="openModal('detalle')">Ver detalle</button></td></tr>
-<tr><td>CAM-025</td><td>Nutrición Familiar</td><td>Nutrición</td><td>01/08 - 31/08</td><td><span class="badge bblue">Cerrada</span></td><td>864</td><td><button class="btn">Ver detalle</button></td></tr>
-<tr><td>CAM-024</td><td>Educación y Prevención</td><td>Educación</td><td>15/08 - 15/10</td><td><span class="badge bgreen">Activa</span></td><td>1,126</td><td><button class="btn">Ver detalle</button></td></tr>
-</table>
+<h1>Campañas</h1><div class="sub">Crear, configurar, editar y consultar el detalle de cada campaña.</div>
+<div class="toolbar">
+<button class="btn primary" type="button" onclick="openModal('campana')">+ Nueva campaña</button>
+<input id="buscarCampana" class="input" placeholder="Buscar campaña..." oninput="renderCampanas()">
+<select id="filtroTipoCampana" class="input" onchange="renderCampanas()">
+<option value="">Todos los tipos</option>
+<option>Campaña de salud</option>
+<option>Caravanas</option>
+<option>Ferias multisectoriales</option>
+<option>Talleres y/o charlas</option>
+<option>Otros</option>
+</select>
+</div>
+<table class="table" id="tablaCampanas"></table>
 </section>
 
 <section id="beneficiarios" style="display:none">
@@ -74,25 +102,24 @@ main{margin-left:235px;padding:26px 30px;max-width:1500px}h1{margin:0 0 5px;font
 <input id="filtroTexto" class="input" placeholder="DNI, nombre o teléfono" oninput="renderBeneficiarios()">
 <select id="filtroEstado" class="input" onchange="renderBeneficiarios()">
 <option value="todos">Todos los estados</option>
-<option value="contacto">Requiere contacto</option>
-<option value="no-contacto">No requiere contacto</option>
-<option value="ocr">Pendiente OCR</option>
-<option value="crm">Listo para CRM</option>
+<option value="contacto">Requieren contacto</option>
+<option value="por-enviar">Por enviar a SEPA</option>
+<option value="enviado">Enviado a SEPA</option>
+<option value="enrolado">Enrolados SEPA</option>
 </select>
-<button class="btn primary" type="button" onclick="openModal('importar')">Importar resultados</button>
-<button class="btn" type="button">Exportar</button>
+<button class="btn primary" type="button" onclick="openModal('importar')">Importar lista</button>
+<button class="btn" type="button" onclick="exportarBeneficiarios()">Exportar</button>
 </div>
 <p class="muted" id="benefCount" style="margin:-8px 0 12px"></p>
 <table class="table" id="tablaBeneficiarios"></table>
 </section>
 
 <section id="contactar" style="display:none">
-<h1>Beneficiarios a contactar</h1><div class="sub">Bandeja de validación antes de generar prospectos o acciones en el CRM.</div>
-<div class="card" style="margin-bottom:15px"><b>Reglas activadas:</b> resultado sospechoso · seguimiento solicitado · derivación requerida · interés en programa · resultado pendiente.</div>
-<table class="table"><tr><th>Beneficiario</th><th>Motivo</th><th>Prioridad</th><th>Consentimiento</th><th>Coincidencia CRM</th><th></th></tr>
-<tr><td>María López · 45871236</td><td>Tamizaje sospechoso</td><td><span class="badge bred">Alta</span></td><td>✓ Sí</td><td>Sin coincidencia</td><td><button class="btn green" onclick="openModal('validar')">Validar y enviar</button></td></tr>
-<tr><td>Juan Pérez · 70451289</td><td>Seguimiento nutricional</td><td><span class="badge bamber">Media</span></td><td>✓ Sí</td><td>Prospecto existente</td><td><button class="btn">Revisar</button></td></tr>
-</table>
+<h1>Beneficiarios a contactar</h1>
+<div class="sub">Bandeja operativa: (Sospecha o Positivo o requiere seguimiento) y consentimiento informado.</div>
+<div class="card" style="margin-bottom:15px"><b>Criterio de entrada:</b> resultado Sospecha o Positivo, o flag de seguimiento, con consentimiento = Sí. El envío transfiere al paciente a la cola del Call Center del Programa SEPA.</div>
+<p class="muted" id="contactarCount" style="margin:0 0 12px"></p>
+<table class="table" id="tablaContactar"></table>
 </section>
 
 <section id="mapas" style="display:none">
@@ -105,124 +132,540 @@ main{margin-left:235px;padding:26px 30px;max-width:1500px}h1{margin:0 0 5px;font
 </main>
 
 <div class="modal" id="modal"><div class="modalbox"><span class="close" onclick="closeModal()">×</span><h2 id="mtitle">Detalle</h2><div id="mbody"></div></div></div>
+<div class="toast" id="toast"></div>
 <script>
-const CAMPANAS = [
-  {id:'CAM-026', nombre:'Prevención Integral 2026'},
-  {id:'CAM-025', nombre:'Nutrición Familiar'},
-  {id:'CAM-024', nombre:'Educación y Prevención'}
-];
-const BENEFICIARIOS = [
-  {nombre:'María López', dni:'45871236', tel:'987654321', campana:'CAM-026', resultado:'Resultado sospechoso', seguimiento:'alta', consentimiento:true, crm:'validar'},
-  {nombre:'Rosa Quispe', dni:'40112233', tel:'912345678', campana:'CAM-026', resultado:'Tamizaje normal', seguimiento:'no', consentimiento:true, crm:'no'},
-  {nombre:'Pedro Huamán', dni:'45678901', tel:'998877665', campana:'CAM-026', resultado:'Resultado pendiente OCR', seguimiento:'media', consentimiento:true, crm:'ocr'},
-  {nombre:'Lucía Vargas', dni:'42334455', tel:'956781234', campana:'CAM-026', resultado:'Derivación a SEPA', seguimiento:'alta', consentimiento:true, crm:'crm'},
-  {nombre:'Juan Pérez', dni:'70451289', tel:'987111222', campana:'CAM-025', resultado:'Riesgo nutricional', seguimiento:'media', consentimiento:true, crm:'crm'},
-  {nombre:'Carmen Díaz', dni:'40998877', tel:'934567890', campana:'CAM-025', resultado:'Consejería nutricional', seguimiento:'no', consentimiento:true, crm:'no'},
-  {nombre:'Héctor Ramos', dni:'71223344', tel:'901223344', campana:'CAM-025', resultado:'Seguimiento de peso', seguimiento:'media', consentimiento:false, crm:'validar'},
-  {nombre:'Ana Torres', dni:'42687195', tel:'976543210', campana:'CAM-024', resultado:'Orientación', seguimiento:'no', consentimiento:false, crm:'no'},
-  {nombre:'Miguel Soto', dni:'43881212', tel:'945612378', campana:'CAM-024', resultado:'Interés en programa', seguimiento:'media', consentimiento:true, crm:'validar'},
-  {nombre:'Elena Paredes', dni:'41990011', tel:'911223344', campana:'CAM-024', resultado:'Charla completada', seguimiento:'no', consentimiento:true, crm:'no'}
+const TIPOS_CAMPANA=['Campaña de salud','Caravanas','Ferias multisectoriales','Talleres y/o charlas','Otros'];
+const INTERVENCIONES=['Tamizaje','Sensibilización y Concientización'];
+const RESULTADOS=['Sospecha','Positivo','Negativo'];
+const CANCER_COLORES={Mama:'#E30613','Cuello Uterino':'#F43F5E',Infantil:'#F59E0B',Próstata:'#0F766E',Colon:'#1D4ED8',Piel:'#8A817C'};
+const TAMIZAJES={
+  'Cuello Uterino':['PAP','Prueba VPH','IVAA'],
+  Mama:['Examen clínico','Ecografía de mama','Mamografía'],
+  Próstata:['PSA','Examen Rectal'],
+  Colon:['FIT','gFBOT'],
+  Infantil:[],
+  Piel:[],
+  Otros:[]
+};
+const UBIGEO={
+  Amazonas:{Chachapoyas:['Chachapoyas','Asunción'],Bagua:['Bagua','Aramango']},
+  Áncash:{Huaraz:['Huaraz','Independencia'],Santa:['Chimbote','Nuevo Chimbote']},
+  Apurímac:{Abancay:['Abancay','Tamburco'],Andahuaylas:['Andahuaylas','San Jerónimo']},
+  Arequipa:{Arequipa:['Arequipa','Cayma','Cerro Colorado','Paucarpata','Socabaya','Hunter'],Camaná:['Camaná','Samuel Pastor']},
+  Ayacucho:{Huamanga:['Ayacucho','San Juan Bautista','Carmen Alto']},
+  Cajamarca:{Cajamarca:['Cajamarca','Los Baños del Inca'],Jaén:['Jaén']},
+  Callao:{Callao:['Callao','Bellavista','La Perla','Ventanilla','La Punta','Carmen de la Legua']},
+  Cusco:{Cusco:['Cusco','Santiago','Wanchaq','San Sebastián','San Jerónimo']},
+  Huancavelica:{Huancavelica:['Huancavelica','Ascensión']},
+  Huánuco:{Huánuco:['Huánuco','Amarilis']},
+  Ica:{Ica:['Ica','Parcona','Los Aquijes'],Chincha:['Chincha Alta','Pueblo Nuevo']},
+  Junín:{Huancayo:['Huancayo','El Tambo','Chilca'],Tarma:['Tarma']},
+  'La Libertad':{Trujillo:['Trujillo','El Porvenir','La Esperanza','Florencia de Mora'],'Víctor Larco Herrera':['Víctor Larco Herrera']},
+  Lambayeque:{Chiclayo:['Chiclayo','José Leonardo Ortiz','La Victoria'],Ferreñafe:['Ferreñafe']},
+  Lima:{Lima:['Lima','San Juan de Lurigancho','El Agustino','Villa El Salvador','Comas','Independencia','Los Olivos','San Martín de Porres','Rímac','Surquillo','Chorrillos','Ate','San Juan de Miraflores','Villa María del Triunfo','Carabayllo','Puente Piedra','Breña','Jesús María','San Miguel','Santiago de Surco'],Huaral:['Huaral','Chancay'],Cañete:['San Vicente de Cañete','Imperial']},
+  Loreto:{Maynas:['Iquitos','San Juan Bautista','Punchana']},
+  'Madre de Dios':{Tambopata:['Tambopata','Las Piedras']},
+  Moquegua:{'Mariscal Nieto':['Moquegua','Samegua']},
+  Pasco:{Pasco:['Yanacancha','Chaupimarca']},
+  Piura:{Piura:['Piura','Castilla','Catacaos'],Sullana:['Sullana','Bellavista']},
+  Puno:{Puno:['Puno','Acora'],'San Román':['Juliaca']},
+  'San Martín':{'San Martín':['Tarapoto','La Banda de Shilcayo'],Moyobamba:['Moyobamba']},
+  Tacna:{Tacna:['Tacna','Ciudad Nueva','Alto de la Alianza']},
+  Tumbes:{Tumbes:['Tumbes','Corrales']},
+  Ucayali:{'Coronel Portillo':['Callería','Yarinacocha','Manantay']}
+};
+
+const CAMPANAS=[
+  {id:'CAM-026',nombre:'Prevención Integral 2026',tipo:'Campaña de salud',intervenciones:['Tamizaje','Sensibilización y Concientización'],tamizajes:{'Cuello Uterino':['PAP','Prueba VPH'],Mama:['Examen clínico','Mamografía']},tamizajeLibre:{},region:'Lima',provincia:'Lima',distrito:'San Juan de Lurigancho',centroPoblado:'',ceco:'ASPERSUD - 804',inicio:'2026-09-01',fin:'2026-09-30',estado:'Activa',participantes:1482,registroBeneficiarios:true,consentimiento:true,resultados:true},
+  {id:'CAM-025',nombre:'Nutrición Familiar',tipo:'Talleres y/o charlas',intervenciones:['Sensibilización y Concientización'],tamizajes:{},tamizajeLibre:{},region:'Arequipa',provincia:'Arequipa',distrito:'Paucarpata',centroPoblado:'',ceco:'MSD - 802',inicio:'2026-08-01',fin:'2026-08-31',estado:'Cerrada',participantes:864,registroBeneficiarios:true,consentimiento:false,resultados:false},
+  {id:'CAM-024',nombre:'Educación y Prevención',tipo:'Talleres y/o charlas',intervenciones:['Sensibilización y Concientización'],tamizajes:{},tamizajeLibre:{},region:'Cusco',provincia:'Cusco',distrito:'Cusco',centroPoblado:'',ceco:'ASPERSUD - 804',inicio:'2026-08-15',fin:'2026-10-15',estado:'Activa',participantes:1126,registroBeneficiarios:true,consentimiento:false,resultados:false},
+  {id:'CAM-023',nombre:'Caravana Norte',tipo:'Caravanas',intervenciones:['Tamizaje'],tamizajes:{Próstata:['PSA'],Colon:['FIT']},tamizajeLibre:{},region:'Piura',provincia:'Piura',distrito:'Piura',centroPoblado:'',ceco:'MSD - 802',inicio:'2026-09-10',fin:'2026-09-20',estado:'Activa',participantes:640,registroBeneficiarios:true,consentimiento:true,resultados:true},
+  {id:'CAM-022',nombre:'Feria Salud Callao',tipo:'Ferias multisectoriales',intervenciones:['Tamizaje','Sensibilización y Concientización'],tamizajes:{'Cuello Uterino':['IVAA'],Mama:['Examen clínico']},tamizajeLibre:{},region:'Callao',provincia:'Callao',distrito:'Ventanilla',centroPoblado:'',ceco:'FPC - 801',inicio:'2026-09-05',fin:'2026-09-12',estado:'Activa',participantes:512,registroBeneficiarios:true,consentimiento:true,resultados:true},
+  {id:'CAM-021',nombre:'Tamizaje Mama SJL',tipo:'Campaña de salud',intervenciones:['Tamizaje'],tamizajes:{Mama:['Ecografía de mama','Mamografía']},tamizajeLibre:{},region:'Lima',provincia:'Lima',distrito:'San Juan de Lurigancho',centroPoblado:'Huáscar',ceco:'ASPERSUD - 804',inicio:'2026-10-01',fin:'2026-10-15',estado:'Activa',participantes:430,registroBeneficiarios:true,consentimiento:true,resultados:true},
+  {id:'CAM-020',nombre:'Charlas Comunitarias',tipo:'Talleres y/o charlas',intervenciones:['Sensibilización y Concientización'],tamizajes:{},tamizajeLibre:{},region:'La Libertad',provincia:'Trujillo',distrito:'La Esperanza',centroPoblado:'',ceco:'MSD - 802',inicio:'2026-09-01',fin:'2026-11-30',estado:'Activa',participantes:780,registroBeneficiarios:true,consentimiento:false,resultados:false},
+  {id:'CAM-019',nombre:'Caravana Sur',tipo:'Caravanas',intervenciones:['Tamizaje'],tamizajes:{'Cuello Uterino':['PAP']},tamizajeLibre:{Infantil:'Control de crecimiento y signos de alarma'},region:'Tacna',provincia:'Tacna',distrito:'Ciudad Nueva',centroPoblado:'',ceco:'ASPERSUD - 804',inicio:'2026-10-05',fin:'2026-10-18',estado:'Activa',participantes:355,registroBeneficiarios:true,consentimiento:true,resultados:true},
+  {id:'CAM-018',nombre:'Campaña Piel Verano',tipo:'Campaña de salud',intervenciones:['Tamizaje'],tamizajes:{},tamizajeLibre:{Piel:'Inspección de lunares y lesiones'},region:'Ica',provincia:'Ica',distrito:'Ica',centroPoblado:'',ceco:'FPC - 801',inicio:'2026-02-01',fin:'2026-03-15',estado:'Cerrada',participantes:290,registroBeneficiarios:true,consentimiento:true,resultados:true},
+  {id:'CAM-017',nombre:'Feria Multisectorial Junín',tipo:'Ferias multisectoriales',intervenciones:['Sensibilización y Concientización'],tamizajes:{},tamizajeLibre:{},region:'Junín',provincia:'Huancayo',distrito:'El Tambo',centroPoblado:'',ceco:'MSD - 802',inicio:'2026-09-20',fin:'2026-09-22',estado:'Activa',participantes:410,registroBeneficiarios:true,consentimiento:false,resultados:false}
 ];
 
-function campanaNombre(id){return (CAMPANAS.find(c=>c.id===id)||{}).nombre||id}
-function badgeSeguimiento(s){
-  if(s==='alta') return '<span class="badge bred">Sí - Alta</span>';
-  if(s==='media') return '<span class="badge bamber">Sí - Media</span>';
-  return 'No';
+const BENEFICIARIOS=[
+  {nombre:'María López',dni:'45871236',tel:'987654321',campana:'CAM-026',resultado:'Sospecha',seguimiento:true,consentimiento:true,sepa:'por-enviar',enroladoSepa:false},
+  {nombre:'Rosa Quispe',dni:'40112233',tel:'912345678',campana:'CAM-026',resultado:'Negativo',seguimiento:false,consentimiento:true,sepa:'por-enviar',enroladoSepa:false},
+  {nombre:'Pedro Huamán',dni:'45678901',tel:'998877665',campana:'CAM-026',resultado:'Sospecha',seguimiento:true,consentimiento:true,sepa:'por-enviar',enroladoSepa:false},
+  {nombre:'Lucía Vargas',dni:'42334455',tel:'956781234',campana:'CAM-026',resultado:'Positivo',seguimiento:true,consentimiento:true,sepa:'enviado',enroladoSepa:true},
+  {nombre:'Sofía Mendoza',dni:'44778899',tel:'900112233',campana:'CAM-026',resultado:'Positivo',seguimiento:true,consentimiento:true,sepa:'por-enviar',enroladoSepa:false},
+  {nombre:'Juan Pérez',dni:'70451289',tel:'987111222',campana:'CAM-025',resultado:'Negativo',seguimiento:true,consentimiento:true,sepa:'por-enviar',enroladoSepa:false},
+  {nombre:'Carmen Díaz',dni:'40998877',tel:'934567890',campana:'CAM-025',resultado:'Negativo',seguimiento:false,consentimiento:true,sepa:'por-enviar',enroladoSepa:false},
+  {nombre:'Héctor Ramos',dni:'71223344',tel:'901223344',campana:'CAM-025',resultado:'Negativo',seguimiento:true,consentimiento:false,sepa:'por-enviar',enroladoSepa:false},
+  {nombre:'Ana Torres',dni:'42687195',tel:'976543210',campana:'CAM-024',resultado:'Negativo',seguimiento:false,consentimiento:false,sepa:'por-enviar',enroladoSepa:false},
+  {nombre:'Miguel Soto',dni:'43881212',tel:'945612378',campana:'CAM-024',resultado:'Negativo',seguimiento:true,consentimiento:true,sepa:'por-enviar',enroladoSepa:false},
+  {nombre:'Elena Paredes',dni:'41990011',tel:'911223344',campana:'CAM-024',resultado:'Negativo',seguimiento:false,consentimiento:true,sepa:'por-enviar',enroladoSepa:false},
+  {nombre:'Ricardo Salas',dni:'40115577',tel:'988776655',campana:'CAM-023',resultado:'Sospecha',seguimiento:true,consentimiento:true,sepa:'por-enviar',enroladoSepa:false},
+  {nombre:'Nora Chávez',dni:'44556677',tel:'922334455',campana:'CAM-021',resultado:'Positivo',seguimiento:true,consentimiento:true,sepa:'enviado',enroladoSepa:true},
+  {nombre:'Paola Ríos',dni:'40990022',tel:'933221100',campana:'CAM-022',resultado:'Sospecha',seguimiento:true,consentimiento:true,sepa:'por-enviar',enroladoSepa:false},
+  {nombre:'Luis Quispe',dni:'70889900',tel:'944556677',campana:'CAM-018',resultado:'Negativo',seguimiento:false,consentimiento:true,sepa:'enviado',enroladoSepa:false}
+];
+
+let campanaEditId=null;
+
+function campanaPorId(id){return CAMPANAS.find(c=>c.id===id)}
+function campanaNombre(id){return (campanaPorId(id)||{}).nombre||id}
+function campanaCeco(id){return (campanaPorId(id)||{}).ceco||'—'}
+function territorio(c){return c?[c.distrito,c.provincia,c.region].filter(Boolean).join(', '):'—'}
+function fmtFecha(v){if(!v) return '—'; const [y,m,d]=v.split('-'); return `${d}/${m}/${y}`}
+function periodoCampana(c){return `${fmtFecha(c.inicio)} - ${fmtFecha(c.fin)}`}
+function badgeEstado(e){return e==='Activa'?'<span class="badge bgreen">Activa</span>':'<span class="badge bblue">Cerrada</span>'}
+function esDiagnostico(b){return b.resultado==='Sospecha'||b.resultado==='Positivo'}
+function entraContactar(b){return (esDiagnostico(b)||b.seguimiento) && b.consentimiento && b.sepa!=='enviado'}
+function toast(msg){const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),2800)}
+function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+function poblacionPorCancer(){
+  const tipos=Object.keys(CANCER_COLORES);
+  const counts=Object.fromEntries(tipos.map(t=>[t,0]));
+  CAMPANAS.forEach(c=>{
+    Object.keys(c.tamizajes||{}).forEach(k=>{ if(counts[k]!==undefined) counts[k]+=c.participantes||0 });
+    Object.keys(c.tamizajeLibre||{}).forEach(k=>{ if(counts[k]!==undefined && (c.tamizajeLibre[k]||'').trim()) counts[k]+=c.participantes||0 });
+  });
+  return tipos.map(tipo=>({tipo,n:counts[tipo]}));
 }
-function badgeCrm(c){
-  if(c==='validar') return '<span class="badge bamber">Por validar</span>';
-  if(c==='ocr') return '<span class="badge bamber">Pendiente OCR</span>';
-  if(c==='crm') return '<span class="badge bblue">Listo</span>';
-  return 'No corresponde';
+function renderPie(){
+  const data=poblacionPorCancer();
+  const total=data.reduce((s,i)=>s+i.n,0);
+  let acc=0;
+  const parts=data.map(it=>{
+    const start=total?acc/total*100:0;
+    acc+=it.n;
+    const end=total?acc/total*100:0;
+    return `${CANCER_COLORES[it.tipo]} ${start}% ${end}%`;
+  });
+  document.getElementById('pieCancer').style.background=total?`conic-gradient(${parts.join(',')})`:'#e2e8f0';
+  document.getElementById('leyendaCancer').innerHTML=data.map(it=>{
+    const pct=total?Math.round(it.n/total*100):0;
+    return `<li><span class="dot" style="background:${CANCER_COLORES[it.tipo]}"></span><span>${it.tipo}</span><span class="muted" style="margin-left:auto">${it.n.toLocaleString('es-PE')} · ${pct}%</span></li>`;
+  }).join('');
 }
-function pasaEstado(b, estado){
+function renderDashboard(){
+  const activas=CAMPANAS.filter(c=>c.estado==='Activa').length;
+  const total=CAMPANAS.length;
+  const registrados=BENEFICIARIOS.length;
+  const contacto=BENEFICIARIOS.filter(esDiagnostico).length;
+  const enrolados=BENEFICIARIOS.filter(b=>b.enroladoSepa).length;
+  const evaluados=BENEFICIARIOS.filter(b=>RESULTADOS.includes(b.resultado)).length;
+  const enviados=BENEFICIARIOS.filter(b=>b.sepa==='enviado').length;
+  document.getElementById('metricCampanas').innerHTML=`${activas}<span class="den">/${total}</span>`;
+  document.getElementById('metricBenef').textContent=registrados.toLocaleString('es-PE');
+  document.getElementById('metricContacto').textContent=contacto.toLocaleString('es-PE');
+  document.getElementById('metricSepa').textContent=enrolados.toLocaleString('es-PE');
+  document.getElementById('embudo').innerHTML=`
+    <div class="step">${registrados.toLocaleString('es-PE')} Participantes</div><div class="arrow">→</div>
+    <div class="step">${evaluados.toLocaleString('es-PE')} Evaluados</div><div class="arrow">→</div>
+    <div class="step">${contacto.toLocaleString('es-PE')} Diagnóstico / sospecha</div><div class="arrow">→</div>
+    <div class="step">${enviados.toLocaleString('es-PE')} En cola SEPA</div><div class="arrow">→</div>
+    <div class="step">${enrolados.toLocaleString('es-PE')} Enrolados SEPA</div>`;
+  const rec=CAMPANAS.slice(0,3).map(c=>`<tr><td>${escapeHtml(c.nombre)}</td><td>${escapeHtml(c.tipo)}</td><td>${badgeEstado(c.estado)}</td><td>${(c.participantes||0).toLocaleString('es-PE')}</td></tr>`).join('');
+  document.getElementById('tablaCampanasDash').innerHTML=`<tr><th>Campaña</th><th>Tipo</th><th>Estado</th><th>Participantes</th></tr>${rec}`;
+  renderPie();
+}
+function renderCampanas(){
+  const q=(document.getElementById('buscarCampana')?.value||'').trim().toLowerCase();
+  const tipo=document.getElementById('filtroTipoCampana')?.value||'';
+  const rows=CAMPANAS.filter(c=>(!tipo||c.tipo===tipo)&&(!q||[c.id,c.nombre,c.ceco,c.region,c.distrito].join(' ').toLowerCase().includes(q)));
+  const thead='<tr><th>Código</th><th>Campaña</th><th>Tipo</th><th>Territorio</th><th>CECO / Proyecto</th><th>Periodo</th><th>Estado</th><th></th></tr>';
+  const body=rows.map(c=>`<tr>
+    <td>${c.id}</td>
+    <td>${escapeHtml(c.nombre)}<br><small class="muted">${escapeHtml((c.intervenciones||[]).join(' · ')||'Sin intervención')}</small></td>
+    <td>${escapeHtml(c.tipo)}</td>
+    <td>${escapeHtml(territorio(c))}${c.centroPoblado?`<br><small class="muted">${escapeHtml(c.centroPoblado)}</small>`:''}</td>
+    <td>${escapeHtml(c.ceco||'—')}</td>
+    <td>${periodoCampana(c)}</td>
+    <td>${badgeEstado(c.estado)}</td>
+    <td class="actions"><button class="btn sm" type="button" onclick="openModal('campana','${c.id}')">Editar</button><button class="btn sm" type="button" onclick="openModal('detalle','${c.id}')">Ver detalle</button></td>
+  </tr>`).join('');
+  document.getElementById('tablaCampanas').innerHTML=thead+(body||'<tr><td colspan="8" class="muted">No hay campañas con esos filtros.</td></tr>');
+}
+function regiones(){return Object.keys(UBIGEO)}
+function provinciasDe(region){return Object.keys(UBIGEO[region]||{})}
+function distritosDe(region,provincia){return (UBIGEO[region]||{})[provincia]||[]}
+function onRegionChange(){
+  const region=document.getElementById('selRegion').value;
+  const selP=document.getElementById('selProvincia');
+  const selD=document.getElementById('selDistrito');
+  selP.innerHTML='<option value="">Seleccione provincia</option>'+(region?provinciasDe(region).map(p=>`<option>${p}</option>`).join(''):'');
+  selD.innerHTML='<option value="">Seleccione distrito</option>';
+}
+function onProvinciaChange(){
+  const region=document.getElementById('selRegion').value;
+  const provincia=document.getElementById('selProvincia').value;
+  document.getElementById('selDistrito').innerHTML='<option value="">Seleccione distrito</option>'+(provincia?distritosDe(region,provincia).map(d=>`<option>${d}</option>`).join(''):'');
+}
+function tieneTamizaje(){return [...document.querySelectorAll('.chk-int:checked')].some(x=>x.value==='Tamizaje')}
+function onIntervencionChange(){
+  const box=document.getElementById('bloqueTamizaje');
+  if(!box) return;
+  const on=tieneTamizaje();
+  box.style.display=on?'block':'none';
+  if(on){
+    const cons=document.getElementById('swConsentimiento');
+    const res=document.getElementById('swResultados');
+    if(cons) cons.checked=true;
+    if(res) res.checked=true;
+  }
+}
+function onCancerToggle(tipo,el){
+  const exams=document.getElementById('exams-'+tipo.replace(/\s/g,'-'));
+  if(exams) exams.style.display=el.checked?'flex':'none';
+  const libre=document.getElementById('libre-'+tipo.replace(/\s/g,'-'));
+  if(libre) libre.style.display=el.checked?'block':'none';
+}
+function recogerTamizajes(){
+  const tamizajes={}; const tamizajeLibre={};
+  if(!tieneTamizaje()) return {tamizajes,tamizajeLibre};
+  Object.keys(TAMIZAJES).forEach(tipo=>{
+    const id=tipo.replace(/\s/g,'-');
+    const on=document.getElementById('can-'+id)?.checked;
+    if(!on) return;
+    const exams=TAMIZAJES[tipo];
+    if(exams.length){
+      tamizajes[tipo]=[...document.querySelectorAll('.ex-'+id+':checked')].map(x=>x.value);
+    }else{
+      tamizajeLibre[tipo]=(document.getElementById('txt-'+id)?.value||'').trim();
+    }
+  });
+  return {tamizajes,tamizajeLibre};
+}
+function htmlTamizajes(camp){
+  const selT=camp?.tamizajes||{};
+  const libres=camp?.tamizajeLibre||{};
+  return Object.entries(TAMIZAJES).map(([tipo,exams])=>{
+    const id=tipo.replace(/\s/g,'-');
+    const checked=!!(selT[tipo]||libres[tipo]);
+    const examHtml=exams.length
+      ? `<div class="exams" id="exams-${id}" style="display:${checked?'flex':'none'}">${exams.map(ex=>`<label><input type="checkbox" class="ex-${id}" value="${ex}" ${ (selT[tipo]||[]).includes(ex)?'checked':'' }> ${ex}</label>`).join('')}</div>`
+      : `<input id="txt-${id}" class="input" style="width:100%;margin-top:8px;display:${checked?'block':'none'}" placeholder="Especifique examen, camilla u observación" value="${escapeHtml(libres[tipo]||'')}">`;
+    return `<div class="cancer-box"><label><input type="checkbox" id="can-${id}" ${checked?'checked':''} onchange="onCancerToggle('${tipo}',this)"> ${tipo}</label>${examHtml}</div>`;
+  }).join('');
+}
+function htmlFormCampana(camp){
+  const optsTipo=TIPOS_CAMPANA.map(t=>`<option ${camp?.tipo===t?'selected':''}>${t}</option>`).join('');
+  const region=camp?.region||'';
+  const optsReg='<option value="">Seleccione región</option>'+regiones().map(r=>`<option ${region===r?'selected':''}>${r}</option>`).join('');
+  const optsProv='<option value="">Seleccione provincia</option>'+(region?provinciasDe(region).map(p=>`<option ${camp.provincia===p?'selected':''}>${p}</option>`).join(''):'');
+  const optsDist='<option value="">Seleccione distrito</option>'+(region&&camp?.provincia?distritosDe(region,camp.provincia).map(d=>`<option ${camp.distrito===d?'selected':''}>${d}</option>`).join(''):'');
+  const ints=camp?.intervenciones||[];
+  const tamOn=ints.includes('Tamizaje');
+  return `
+  <div class="form-sec"><h3>Identificación</h3>
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+      <div><label for="campTipo">Tipo de campaña</label><select id="campTipo" class="input" style="width:100%">${optsTipo}</select></div>
+      <div><label for="campCeco">Vínculo financiero (CECO)</label><input id="campCeco" class="input" style="width:100%" placeholder="Ej. ASPERSUD - 804" value="${escapeHtml(camp?.ceco||'')}">
+        <p class="hint">Centro de costos / código de proyecto FPC</p></div>
+    </div>
+    <div style="margin-top:12px"><label for="campNombre">Nombre</label><input id="campNombre" class="input" style="width:100%" value="${escapeHtml(camp?.nombre||'')}"></div>
+  </div>
+  <div class="form-sec"><h3>Intervención</h3>
+    <div class="checks">${INTERVENCIONES.map(i=>`<label><input type="checkbox" class="chk-int" value="${i}" ${ints.includes(i)?'checked':''} onchange="onIntervencionChange()"> ${i}</label>`).join('')}</div>
+    <div id="bloqueTamizaje" style="display:${tamOn?'block':'none'};margin-top:10px">
+      <p class="muted" style="margin:0 0 8px">Tipo de cáncer y exámenes de tamizaje</p>
+      ${htmlTamizajes(camp)}
+    </div>
+  </div>
+  <div class="form-sec"><h3>Configuración territorial</h3>
+    <div class="grid" style="grid-template-columns:1fr 1fr 1fr">
+      <div><label for="selRegion">Región</label><select id="selRegion" class="input" style="width:100%" onchange="onRegionChange()">${optsReg}</select></div>
+      <div><label for="selProvincia">Provincia</label><select id="selProvincia" class="input" style="width:100%" onchange="onProvinciaChange()">${optsProv}</select></div>
+      <div><label for="selDistrito">Distrito</label><select id="selDistrito" class="input" style="width:100%">${optsDist}</select></div>
+    </div>
+    <div style="margin-top:12px"><label for="campCentroPoblado">Centro poblado <span class="hint">(opcional)</span></label><input id="campCentroPoblado" class="input" style="width:100%" value="${escapeHtml(camp?.centroPoblado||'')}"></div>
+  </div>
+  <div class="form-sec"><h3>Fechas</h3>
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+      <div><label for="campInicio">Inicio</label><input id="campInicio" type="date" class="input" style="width:100%" value="${camp?.inicio||''}"><p class="hint">Formato dd/mm/aaaa</p></div>
+      <div><label for="campFin">Fin</label><input id="campFin" type="date" class="input" style="width:100%" value="${camp?.fin||''}"><p class="hint">Formato dd/mm/aaaa</p></div>
+    </div>
+  </div>
+  <div class="form-sec"><h3>Configuración</h3>
+    <div class="switch-row"><div><span>Registro de beneficiarios</span><small>Obligatorio. Activo por defecto.</small></div><input id="swRegistro" type="checkbox" checked disabled></div>
+    <div class="switch-row"><div><span>Consentimiento</span><small>Opcional. Se habilita si hay tamizaje.</small></div><input id="swConsentimiento" type="checkbox" ${(camp?camp.consentimiento:tamOn)?'checked':''}></div>
+    <div class="switch-row"><div><span>Resultados</span><small>Opcional. Se habilita si hay tamizaje.</small></div><input id="swResultados" type="checkbox" ${(camp?camp.resultados:tamOn)?'checked':''}></div>
+  </div>
+  <p id="campMsg" class="muted" style="color:var(--red);min-height:18px;margin:12px 0 0"></p>
+  <button class="btn primary" type="button" onclick="guardarCampana()">${camp?'Guardar cambios':'Crear campaña'}</button>`;
+}
+function guardarCampana(){
+  const nombre=(document.getElementById('campNombre').value||'').trim();
+  const tipo=document.getElementById('campTipo').value;
+  const ceco=(document.getElementById('campCeco').value||'').trim();
+  const region=document.getElementById('selRegion').value;
+  const provincia=document.getElementById('selProvincia').value;
+  const distrito=document.getElementById('selDistrito').value;
+  const centroPoblado=(document.getElementById('campCentroPoblado').value||'').trim();
+  const inicio=document.getElementById('campInicio').value;
+  const fin=document.getElementById('campFin').value;
+  const intervenciones=[...document.querySelectorAll('.chk-int:checked')].map(x=>x.value);
+  const {tamizajes,tamizajeLibre}=recogerTamizajes();
+  const msg=document.getElementById('campMsg');
+  if(!nombre){msg.textContent='Ingrese el nombre de la campaña.';return}
+  if(!ceco){msg.textContent='Ingrese el CECO / código de proyecto.';return}
+  if(!region||!provincia||!distrito){msg.textContent='Complete región, provincia y distrito.';return}
+  if(!inicio||!fin){msg.textContent='Indique las fechas de inicio y fin.';return}
+  if(fin<inicio){msg.textContent='La fecha de fin no puede ser anterior al inicio.';return}
+  if(!intervenciones.length){msg.textContent='Seleccione al menos una intervención.';return}
+  const payload={nombre,tipo,ceco,region,provincia,distrito,centroPoblado,inicio,fin,intervenciones,tamizajes,tamizajeLibre,registroBeneficiarios:true,consentimiento:document.getElementById('swConsentimiento').checked,resultados:document.getElementById('swResultados').checked};
+  if(campanaEditId){
+    Object.assign(campanaPorId(campanaEditId),payload);
+    toast('Campaña actualizada. Puede agregar intervenciones ejecutadas en campo.');
+  }else{
+    const n=CAMPANAS.reduce((max,c)=>Math.max(max,parseInt((c.id||'').replace(/\D/g,''),10)||0),0)+1;
+    CAMPANAS.unshift({id:'CAM-'+String(n).padStart(3,'0'),estado:'Activa',participantes:0,...payload});
+    toast('Campaña creada.');
+  }
+  initFiltroCampanas();
+  renderCampanas();
+  renderDashboard();
+  closeModal();
+  show('campanas');
+}
+function badgeSepa(b){
+  if(b.enroladoSepa) return '<span class="badge bgreen">Enrolado SEPA</span>';
+  if(b.sepa==='enviado') return '<span class="badge bblue">Enviado</span>';
+  return '<span class="badge bamber">Por enviar</span>';
+}
+function pasaEstado(b,estado){
   if(estado==='todos') return true;
-  if(estado==='contacto') return b.seguimiento==='alta'||b.seguimiento==='media';
-  if(estado==='no-contacto') return b.seguimiento==='no';
-  if(estado==='ocr') return b.crm==='ocr';
-  if(estado==='crm') return b.crm==='crm';
+  if(estado==='contacto') return esDiagnostico(b);
+  if(estado==='por-enviar') return b.sepa==='por-enviar';
+  if(estado==='enviado') return b.sepa==='enviado';
+  if(estado==='enrolado') return b.enroladoSepa;
   return true;
 }
 function renderBeneficiarios(){
-  const sel = document.getElementById('filtroCampana');
-  const q = (document.getElementById('filtroTexto').value||'').trim().toLowerCase();
-  const estado = document.getElementById('filtroEstado').value;
-  const campanaId = sel.value;
-  const camp = CAMPANAS.find(c=>c.id===campanaId);
-  const rows = BENEFICIARIOS.filter(b => b.campana===campanaId)
-    .filter(b => pasaEstado(b, estado))
-    .filter(b => !q || [b.nombre,b.dni,b.tel].join(' ').toLowerCase().includes(q));
-  document.getElementById('benefCount').textContent = camp
-    ? `${rows.length} beneficiario${rows.length===1?'':'s'} de ${camp.nombre}`
-    : '';
-  const thead = '<tr><th>Beneficiario</th><th>Campaña</th><th>Resultado</th><th>Seguimiento</th><th>Consentimiento</th><th>Estado CRM</th><th>Acción</th></tr>';
-  const body = rows.length
-    ? rows.map(b => `<tr><td>${b.nombre}<br><small>${b.dni}</small></td><td>${campanaNombre(b.campana)}</td><td>${b.resultado}</td><td>${badgeSeguimiento(b.seguimiento)}</td><td>${b.consentimiento?'<span class="badge bgreen">Sí</span>':'—'}</td><td>${badgeCrm(b.crm)}</td><td><button class="btn" type="button">Revisar</button></td></tr>`).join('')
-    : '<tr><td colspan="7" class="muted">No hay beneficiarios para la campaña seleccionada con los filtros actuales.</td></tr>';
-  document.getElementById('tablaBeneficiarios').innerHTML = thead + body;
+  const sel=document.getElementById('filtroCampana');
+  const q=(document.getElementById('filtroTexto').value||'').trim().toLowerCase();
+  const estado=document.getElementById('filtroEstado').value;
+  const campanaId=sel.value;
+  const camp=campanaPorId(campanaId);
+  const rows=BENEFICIARIOS.filter(b=>b.campana===campanaId)
+    .filter(b=>pasaEstado(b,estado))
+    .filter(b=>!q||[b.nombre,b.dni,b.tel].join(' ').toLowerCase().includes(q));
+  document.getElementById('benefCount').textContent=camp?`${rows.length} beneficiario${rows.length===1?'':'s'} de ${camp.nombre}`:'';
+  const thead='<tr><th>Beneficiario</th><th>Código de campaña</th><th>CECO / Proyecto</th><th>Resultado</th><th>Seguimiento</th><th>Consentimiento</th><th>SEPA</th><th>Acción</th></tr>';
+  const body=rows.length
+    ? rows.map(b=>`<tr>
+        <td>${escapeHtml(b.nombre)}<br><small>${b.dni}</small></td>
+        <td>${b.campana}</td>
+        <td>${escapeHtml(campanaCeco(b.campana))}</td>
+        <td>${escapeHtml(b.resultado||'—')}</td>
+        <td>${b.seguimiento?'<span class="badge bamber">Sí</span>':'No'}</td>
+        <td>${b.consentimiento?'<span class="badge bgreen">Sí</span>':'No'}</td>
+        <td>${badgeSepa(b)}</td>
+        <td class="actions">
+          <button class="btn sm" type="button" onclick="openModal('editarBenef','${b.campana}','${b.dni}')">Editar</button>
+          ${b.sepa==='por-enviar'?`<button class="btn sm green" type="button" onclick="enviarASepa('${b.campana}','${b.dni}')">Enviar a SEPA</button>`:'<button class="btn sm" type="button" disabled>Enviado</button>'}
+        </td>
+      </tr>`).join('')
+    : '<tr><td colspan="8" class="muted">No hay beneficiarios para la campaña seleccionada con los filtros actuales.</td></tr>';
+  document.getElementById('tablaBeneficiarios').innerHTML=thead+body;
+}
+function buscarBenef(campana,dni){return BENEFICIARIOS.find(b=>b.campana===campana && b.dni===dni)}
+function enviarASepa(campana,dni){
+  const b=buscarBenef(campana,dni);
+  if(!b) return;
+  b.sepa='enviado';
+  renderBeneficiarios();
+  renderContactar();
+  renderDashboard();
+  toast(`${b.nombre} fue transferido a la cola del Call Center SEPA.`);
+}
+function motivoContacto(b){
+  if(b.resultado==='Positivo') return 'Diagnóstico / positivo';
+  if(b.resultado==='Sospecha') return 'Sospecha de cáncer';
+  if(b.seguimiento) return 'Requiere seguimiento';
+  return '—';
+}
+function prioridadContacto(b){
+  if(b.resultado==='Positivo'||b.resultado==='Sospecha') return '<span class="badge bred">Alta</span>';
+  return '<span class="badge bamber">Media</span>';
+}
+function renderContactar(){
+  const rows=BENEFICIARIOS.filter(entraContactar);
+  document.getElementById('contactarCount').textContent=`${rows.length} persona${rows.length===1?'':'s'} en bandeja`;
+  const thead='<tr><th>Beneficiario</th><th>Campaña</th><th>Resultado</th><th>Motivo</th><th>Prioridad</th><th>Consentimiento</th><th></th></tr>';
+  const body=rows.length
+    ? rows.map(b=>`<tr>
+        <td>${escapeHtml(b.nombre)} · ${b.dni}</td>
+        <td>${b.campana}<br><small class="muted">${escapeHtml(campanaNombre(b.campana))}</small></td>
+        <td>${escapeHtml(b.resultado||'—')}</td>
+        <td>${motivoContacto(b)}</td>
+        <td>${prioridadContacto(b)}</td>
+        <td><span class="badge bgreen">Sí</span></td>
+        <td><button class="btn green" type="button" onclick="openModal('validar','${b.campana}','${b.dni}')">Validar y enviar</button></td>
+      </tr>`).join('')
+    : '<tr><td colspan="7" class="muted">No hay beneficiarios que cumplan el criterio de entrada.</td></tr>';
+  document.getElementById('tablaContactar').innerHTML=thead+body;
+}
+function confirmarValidacion(campana,dni){
+  const b=buscarBenef(campana,dni);
+  if(!b) return;
+  b.sepa='enviado';
+  b.enroladoSepa=document.getElementById('chkEnrolado')?.checked||false;
+  closeModal();
+  renderBeneficiarios();
+  renderContactar();
+  renderDashboard();
+  toast(b.enroladoSepa
+    ? `${b.nombre} fue enviado a SEPA y marcado como enrolado.`
+    : `${b.nombre} fue transferido a la cola operativa del Call Center SEPA.`);
+}
+function guardarBeneficiario(campana,dni){
+  const b=buscarBenef(campana,dni);
+  if(!b) return;
+  const resultado=document.getElementById('editResultado').value;
+  b.resultado=resultado;
+  b.seguimiento=document.getElementById('editSeguimiento').value==='si';
+  b.consentimiento=document.getElementById('editConsentimiento').value==='si';
+  closeModal();
+  renderBeneficiarios();
+  renderContactar();
+  renderDashboard();
+  toast('Registro actualizado.');
 }
 function initFiltroCampanas(){
-  const sel = document.getElementById('filtroCampana');
-  sel.innerHTML = CAMPANAS.map(c => `<option value="${c.id}">${c.id} · ${c.nombre}</option>`).join('');
-  sel.value = 'CAM-026';
+  const sel=document.getElementById('filtroCampana');
+  const actual=sel.value;
+  sel.innerHTML=CAMPANAS.map(c=>`<option value="${c.id}">${c.id} · ${c.nombre}</option>`).join('');
+  sel.value=CAMPANAS.some(c=>c.id===actual)?actual:'CAM-026';
   renderBeneficiarios();
 }
-
 function show(id){
   document.querySelectorAll('main section').forEach(x=>x.style.display='none');
   document.getElementById(id).style.display='block';
   document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));
-  const idx = {dashboard:0, campanas:1, beneficiarios:2, contactar:3, mapas:4}[id];
+  const idx={dashboard:0,campanas:1,beneficiarios:2,contactar:3,mapas:4}[id];
   if(idx!==undefined) document.querySelectorAll('aside .nav')[idx].classList.add('active');
+  if(id==='dashboard') renderDashboard();
+  if(id==='campanas') renderCampanas();
   if(id==='beneficiarios') renderBeneficiarios();
+  if(id==='contactar') renderContactar();
   if(id==='mapas'){
-    const frame = document.getElementById('mapaFrame');
-    if(frame && !frame.getAttribute('src')) frame.src = 'https://saludmapdemo-app-afgfow-c79cb2-178-156-230-233.sslip.io/';
+    const frame=document.getElementById('mapaFrame');
+    if(frame && !frame.getAttribute('src')) frame.src='https://saludmapdemo-app-afgfow-c79cb2-178-156-230-233.sslip.io/';
   }
 }
-initFiltroCampanas();
-function openModal(type){
-let title='',body='';
-if(type==='nueva'){title='Nueva campaña';body=`<div class="grid"><div><label>Nombre</label><input class="input" style="width:100%" value="Campaña de Prevención"></div><div><label>Tipo</label><select class="input" style="width:100%"><option>Médica</option><option>Sensibilización</option><option>Nutrición</option><option>Educación</option></select></div><div><label>Inicio</label><input type="date" class="input" style="width:100%"></div><div><label>Fin</label><input type="date" class="input" style="width:100%"></div></div><br><label>Objetivo</label><textarea class="input" style="width:100%;height:70px">Definir objetivo de la campaña...</textarea><br><br><h3>Configuración</h3><p>☑ Registro de beneficiarios　☑ Consentimiento　☑ Resultados　☑ Seguimiento　☑ Reglas de segmentación</p><button class="btn primary">Crear campaña</button>`}
-if(type==='detalle'){title='CAM-026 · Prevención Integral 2026';body=`<div class="tabs"><button class="sel">Resumen</button><button>Actividades</button><button>Beneficiarios</button><button>Resultados</button><button>Reglas</button><button>Indicadores</button></div><hr><div class="grid"><div class="card"><span class="muted">Estado</span><div class="metric" style="font-size:20px">Activa</div></div><div class="card"><span class="muted">Participantes</span><div class="metric" style="font-size:20px">1,482</div></div><div class="card"><span class="muted">Seguimiento</span><div class="metric" style="font-size:20px">112</div></div><div class="card"><span class="muted">Prospectos CRM</span><div class="metric" style="font-size:20px">74</div></div></div><h3>Actividades</h3><p>Centro comunitario · 06/09 · 318 participantes</p><p>Jornada médica · 12/09 · 522 participantes</p><p>Campaña móvil · 18/09 · 642 participantes</p><h3>Reglas de derivación</h3><p>✓ Resultado sospechoso → contacto prioritario</p><p>✓ Seguimiento solicitado → contacto</p><p>✓ Interés en programa + consentimiento → prospecto CRM</p>`}
-if(type==='validar'){title='Validar beneficiario para CRM';body=`<div class="card"><h3>María López</h3><p>DNI: 45871236 · Teléfono: 987654321</p><p><b>Campaña:</b> Prevención Integral 2026</p><p><b>Resultado:</b> Tamizaje sospechoso</p><p><b>Acción:</b> Contacto prioritario y evaluación de enrolamiento</p><p><b>Consentimiento de contacto:</b> ✓ Registrado</p></div><br><label>Resultado de validación</label><select class="input" style="width:100%"><option>Enviar como prospecto al CRM</option><option>Enviar actualización a paciente existente</option><option>No enviar / corregir datos</option></select><br><br><button class="btn green">Confirmar proceso CRM</button>`}
-if(type==='importar'){
-  const camp = CAMPANAS.find(c=>c.id===document.getElementById('filtroCampana').value);
-  title='Importar resultados de examen';
-  body=`<p class="sub" style="margin:0 0 14px">Los resultados se aplicarán a los beneficiarios de <strong>${camp?camp.nombre:''}</strong>. El Excel debe tener <strong>solo dos columnas</strong>.</p>
-  <div class="card" style="padding:14px;margin-bottom:14px">
-    <h3 style="margin:0 0 8px;font-size:15px">Plantilla obligatoria</h3>
-    <p class="muted" style="margin:0 0 10px">Fila 1 = encabezados. No agregue más columnas.</p>
-    <table class="table"><tr><th>documento_identidad</th><th>resultado_examen</th></tr>
-    <tr><td>45871236</td><td>Resultado sospechoso</td></tr>
-    <tr><td>40112233</td><td>Tamizaje normal</td></tr>
-    <tr><td>45678901</td><td>Pendiente de lectura</td></tr></table>
-    <button class="btn" type="button" style="margin-top:12px" onclick="descargarPlantillaResultados()">Descargar plantilla Excel</button>
-  </div>
-  <div class="filebox">
-    <label for="archivoResultados"><strong>Subir archivo Excel</strong></label>
-    <p class="muted" style="margin:4px 0 0">Formatos: .xlsx o .xls</p>
-    <input id="archivoResultados" type="file" accept=".xlsx,.xls,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" onchange="importarResultadosExcel(this.files[0])">
-  </div>
-  <p id="importMsg" class="muted"></p>`;
+function openModal(type,id,extra){
+  let title='',body='';
+  campanaEditId=null;
+  if(type==='campana'){
+    const camp=id?campanaPorId(id):null;
+    campanaEditId=id||null;
+    title=camp?`Editar ${camp.id}`:'Nueva campaña';
+    body=htmlFormCampana(camp);
+  }
+  if(type==='detalle'){
+    const camp=campanaPorId(id)||CAMPANAS[0];
+    const exams=Object.entries(camp.tamizajes||{}).map(([k,v])=>`${k}: ${(v||[]).join(', ')||'—'}`);
+    const libres=Object.entries(camp.tamizajeLibre||{}).filter(([,v])=>v).map(([k,v])=>`${k}: ${v}`);
+    title=`${camp.id} · ${camp.nombre}`;
+    body=`<div class="tabs"><button class="sel">Resumen</button><button>Actividades</button><button>Beneficiarios</button><button>Resultados</button><button>Indicadores</button></div><hr>
+    <p><b>Tipo:</b> ${escapeHtml(camp.tipo)} · <b>CECO:</b> ${escapeHtml(camp.ceco||'—')}</p>
+    <p><b>Territorio:</b> ${escapeHtml(territorio(camp))}${camp.centroPoblado?' · '+escapeHtml(camp.centroPoblado):''}</p>
+    <p><b>Intervenciones:</b> ${escapeHtml((camp.intervenciones||[]).join(', ')||'—')}</p>
+    <p><b>Tamizajes:</b> ${escapeHtml([...exams,...libres].join(' · ')||'No aplica')}</p>
+    <p><b>Periodo:</b> ${periodoCampana(camp)}</p>
+    <div class="grid"><div class="card"><span class="muted">Estado</span><div class="metric" style="font-size:20px">${camp.estado||'Activa'}</div></div><div class="card"><span class="muted">Participantes</span><div class="metric" style="font-size:20px">${(camp.participantes||0).toLocaleString('es-PE')}</div></div><div class="card"><span class="muted">Diagnóstico / sospecha</span><div class="metric" style="font-size:20px">${BENEFICIARIOS.filter(b=>b.campana===camp.id&&esDiagnostico(b)).length}</div></div><div class="card"><span class="muted">Enrolados SEPA</span><div class="metric" style="font-size:20px">${BENEFICIARIOS.filter(b=>b.campana===camp.id&&b.enroladoSepa).length}</div></div></div>
+    <p style="margin-top:16px"><button class="btn primary" type="button" onclick="openModal('campana','${camp.id}')">Editar campaña</button></p>`;
+  }
+  if(type==='validar'){
+    const b=buscarBenef(id,extra);
+    if(!b){return}
+    title='Validar y enviar a SEPA';
+    body=`<div class="card"><h3 style="margin-top:0">${escapeHtml(b.nombre)}</h3>
+      <p>DNI: ${b.dni} · Teléfono: ${escapeHtml(b.tel||'—')}</p>
+      <p><b>Campaña:</b> ${b.campana} · ${escapeHtml(campanaNombre(b.campana))}</p>
+      <p><b>Resultado:</b> ${escapeHtml(b.resultado)} · <b>Motivo:</b> ${motivoContacto(b)}</p>
+      <p><b>Consentimiento de contacto:</b> ✓ Registrado</p></div>
+      <p style="margin:14px 0 8px">Al confirmar, el paciente pasa a la cola operativa del Call Center del Programa SEPA.</p>
+      <label style="display:flex;align-items:center;gap:8px;font-weight:500;margin:12px 0"><input id="chkEnrolado" type="checkbox"> La persona aceptó ingresar al Programa SEPA</label>
+      <button class="btn green" type="button" onclick="confirmarValidacion('${b.campana}','${b.dni}')">Validar y enviar</button>`;
+  }
+  if(type==='editarBenef'){
+    const b=buscarBenef(id,extra);
+    if(!b){return}
+    title=`Editar registro · ${b.dni}`;
+    body=`<p class="muted" style="margin-top:0">${escapeHtml(b.nombre)} · ${b.campana}</p>
+      <label for="editResultado">Resultado de tamizaje</label>
+      <select id="editResultado" class="input" style="width:100%">${RESULTADOS.map(r=>`<option ${b.resultado===r?'selected':''}>${r}</option>`).join('')}</select>
+      <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:12px">
+        <div><label for="editSeguimiento">Seguimiento</label><select id="editSeguimiento" class="input" style="width:100%"><option value="si" ${b.seguimiento?'selected':''}>Sí</option><option value="no" ${!b.seguimiento?'selected':''}>No</option></select></div>
+        <div><label for="editConsentimiento">Consentimiento</label><select id="editConsentimiento" class="input" style="width:100%"><option value="si" ${b.consentimiento?'selected':''}>Sí</option><option value="no" ${!b.consentimiento?'selected':''}>No</option></select></div>
+      </div>
+      <p style="margin-top:16px"><button class="btn primary" type="button" onclick="guardarBeneficiario('${b.campana}','${b.dni}')">Guardar</button></p>`;
+  }
+  if(type==='importar'){
+    const camp=campanaPorId(document.getElementById('filtroCampana').value);
+    title='Importar lista de beneficiarios';
+    body=`<p class="sub" style="margin:0 0 14px">Plantilla para cargar pacientes con diagnóstico o sospecha registrados en campo, en <strong>${camp?escapeHtml(camp.nombre):''}</strong>.</p>
+    <div class="card" style="padding:14px;margin-bottom:14px">
+      <h3 style="margin:0 0 8px;font-size:15px">Columnas obligatorias</h3>
+      <p class="muted" style="margin:0 0 10px">El resultado solo admite Sospecha, Positivo o Negativo. Seguimiento y consentimiento: Sí / No.</p>
+      <table class="table"><tr><th>documento_identidad</th><th>nombres</th><th>telefono</th><th>resultado</th><th>seguimiento</th><th>consentimiento</th></tr>
+      <tr><td>45871236</td><td>María López</td><td>987654321</td><td>Sospecha</td><td>Sí</td><td>Sí</td></tr>
+      <tr><td>40112233</td><td>Rosa Quispe</td><td>912345678</td><td>Negativo</td><td>No</td><td>Sí</td></tr></table>
+      <button class="btn" type="button" style="margin-top:12px" onclick="descargarPlantillaBeneficiarios()">Descargar plantilla Excel</button>
+    </div>
+    <div class="filebox">
+      <label for="archivoResultados"><strong>Subir archivo Excel</strong></label>
+      <p class="muted" style="margin:4px 0 0">Formatos: .xlsx o .xls</p>
+      <input id="archivoResultados" type="file" accept=".xlsx,.xls,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" onchange="importarBeneficiariosExcel(this.files[0])">
+    </div>
+    <p id="importMsg" class="muted"></p>`;
+  }
+  document.getElementById('mtitle').innerText=title;
+  document.getElementById('mbody').innerHTML=body;
+  document.getElementById('modal').classList.add('open');
 }
-document.getElementById('mtitle').innerText=title;document.getElementById('mbody').innerHTML=body;document.getElementById('modal').classList.add('open')}
 function closeModal(){document.getElementById('modal').classList.remove('open')}
 function normalizarDni(v){return String(v??'').replace(/\s+/g,'').replace(/\.0$/,'')}
-function descargarPlantillaResultados(){
+function siNo(v){return /^(s[ií]|true|1|yes)$/i.test(String(v??'').trim())}
+function normalizarResultado(v){
+  const t=String(v??'').trim().toLowerCase();
+  if(t.startsWith('sosp')) return 'Sospecha';
+  if(t.startsWith('pos')) return 'Positivo';
+  if(t.startsWith('neg')||t==='normal') return 'Negativo';
+  return '';
+}
+function descargarPlantillaBeneficiarios(){
   if(typeof XLSX==='undefined'){alert('No se pudo cargar la librería de Excel.');return}
   const ws=XLSX.utils.aoa_to_sheet([
-    ['documento_identidad','resultado_examen'],
-    ['45871236','Resultado sospechoso'],
-    ['40112233','Tamizaje normal']
+    ['documento_identidad','nombres','telefono','resultado','seguimiento','consentimiento'],
+    ['45871236','María López','987654321','Sospecha','Sí','Sí'],
+    ['40112233','Rosa Quispe','912345678','Negativo','No','Sí']
   ]);
-  ws['!cols']=[{wch:22},{wch:28}];
+  ws['!cols']=[{wch:22},{wch:22},{wch:14},{wch:14},{wch:14},{wch:16}];
   const wb=XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb,ws,'Resultados');
-  XLSX.writeFile(wb,'plantilla_resultados_examen.xlsx');
+  XLSX.utils.book_append_sheet(wb,ws,'Beneficiarios');
+  XLSX.writeFile(wb,'plantilla_beneficiarios_campana.xlsx');
 }
-function importarResultadosExcel(file){
+function exportarBeneficiarios(){
+  if(typeof XLSX==='undefined'){alert('No se pudo cargar la librería de Excel.');return}
+  const campanaId=document.getElementById('filtroCampana').value;
+  const rows=BENEFICIARIOS.filter(b=>b.campana===campanaId).map(b=>({
+    documento_identidad:b.dni,nombres:b.nombre,telefono:b.tel,resultado:b.resultado,
+    seguimiento:b.seguimiento?'Sí':'No',consentimiento:b.consentimiento?'Sí':'No',
+    sepa:b.enroladoSepa?'Enrolado':(b.sepa==='enviado'?'Enviado':'Por enviar'),
+    codigo_campana:b.campana,ceco:campanaCeco(b.campana)
+  }));
+  const ws=XLSX.utils.json_to_sheet(rows);
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'Beneficiarios');
+  XLSX.writeFile(wb,`beneficiarios_${campanaId}.xlsx`);
+}
+function headerIndex(header,names){
+  const n=header.map(h=>String(h).trim().toLowerCase());
+  for(const name of names){const i=n.indexOf(name); if(i>=0) return i}
+  return -1;
+}
+function importarBeneficiariosExcel(file){
   const msg=document.getElementById('importMsg');
   if(!file){return}
   if(typeof XLSX==='undefined'){msg.textContent='No se pudo cargar la librería de Excel.';msg.style.color='var(--red)';return}
@@ -234,36 +677,62 @@ function importarResultadosExcel(file){
       const sheet=wb.Sheets[wb.SheetNames[0]];
       const rows=XLSX.utils.sheet_to_json(sheet,{header:1,defval:''});
       if(!rows.length){msg.textContent='El archivo está vacío.';msg.style.color='var(--red)';return}
-      const header=(rows[0]||[]).map(h=>String(h).trim()).filter(h=>h!=='');
-      if(header.length!==2){
-        msg.textContent='La plantilla debe tener solo dos columnas: documento_identidad y resultado_examen.';
+      const header=(rows[0]||[]).map(h=>String(h).trim());
+      const iDni=headerIndex(header,['documento_identidad','dni','documento']);
+      const iNom=headerIndex(header,['nombres','nombre','beneficiario']);
+      const iTel=headerIndex(header,['telefono','teléfono','celular']);
+      const iRes=headerIndex(header,['resultado','resultado_examen']);
+      const iSeg=headerIndex(header,['seguimiento']);
+      const iCon=headerIndex(header,['consentimiento']);
+      if(iDni<0||iNom<0||iRes<0){
+        msg.textContent='Faltan columnas: documento_identidad, nombres y resultado.';
         msg.style.color='var(--red)';
         return;
       }
-      let ok=0, noEncontrados=[];
+      let ok=0, nuevos=0, invalidos=0;
       rows.slice(1).forEach(r=>{
-        const dni=normalizarDni(r[0]);
-        const resultado=String(r[1]??'').trim();
-        if(!dni||!resultado) return;
-        const persona=BENEFICIARIOS.find(b=>b.campana===campanaId && normalizarDni(b.dni)===dni);
-        if(!persona){noEncontrados.push(dni);return}
-        persona.resultado=resultado;
-        if(/sospechos|positivo|deriv/i.test(resultado)){persona.seguimiento='alta';persona.crm='validar'}
-        else if(/pendiente|ocr/i.test(resultado)){persona.crm='ocr';persona.seguimiento='media'}
-        else {persona.crm=persona.crm==='ocr'?'validar':persona.crm}
+        const dni=normalizarDni(r[iDni]);
+        const nombre=String(r[iNom]??'').trim();
+        const resultado=normalizarResultado(r[iRes]);
+        if(!dni||!nombre) return;
+        if(!resultado){invalidos++;return}
+        const tel=iTel>=0?String(r[iTel]??'').trim():'';
+        const seguimiento=iSeg>=0?siNo(r[iSeg]):esDiagnostico({resultado});
+        const consentimiento=iCon>=0?siNo(r[iCon]):true;
+        let persona=BENEFICIARIOS.find(b=>b.campana===campanaId && normalizarDni(b.dni)===dni);
+        if(!persona){
+          persona={nombre,dni,tel,campana:campanaId,resultado,seguimiento,consentimiento,sepa:'por-enviar',enroladoSepa:false};
+          BENEFICIARIOS.push(persona);
+          nuevos++;
+        }else{
+          persona.nombre=nombre;
+          if(tel) persona.tel=tel;
+          persona.resultado=resultado;
+          persona.seguimiento=seguimiento;
+          persona.consentimiento=consentimiento;
+        }
         ok++;
       });
+      const camp=campanaPorId(campanaId);
+      if(camp) camp.participantes=Math.max(camp.participantes||0, BENEFICIARIOS.filter(b=>b.campana===campanaId).length);
       renderBeneficiarios();
-      let texto=`Se actualizaron ${ok} resultado${ok===1?'':'s'} en la campaña seleccionada.`;
-      if(noEncontrados.length) texto+=` ${noEncontrados.length} documento${noEncontrados.length===1?'':'s'} no coinciden con beneficiarios de esta campaña.`;
+      renderContactar();
+      renderDashboard();
+      let texto=`Se procesaron ${ok} registro${ok===1?'':'s'} (${nuevos} nuevo${nuevos===1?'':'s'}).`;
+      if(invalidos) texto+=` ${invalidos} fila${invalidos===1?'':'s'} con resultado inválido (use Sospecha, Positivo o Negativo).`;
       msg.textContent=texto;
       msg.style.color=ok?'var(--green)':'var(--red)';
     }catch(err){
-      msg.textContent='No se pudo leer el Excel. Use la plantilla de dos columnas.';
+      msg.textContent='No se pudo leer el Excel. Use la plantilla descargable.';
       msg.style.color='var(--red)';
     }
   };
   reader.readAsArrayBuffer(file);
 }
+
+initFiltroCampanas();
+renderCampanas();
+renderDashboard();
+renderContactar();
 </script>
 </body></html>
